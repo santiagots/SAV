@@ -1,0 +1,134 @@
+﻿@using SAV.Models
+@model SAV.Models.DetailsViajeViewModel
+@{
+    Layout = "";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+</head>
+
+<style type="text/css">
+.site-title {
+    color: #000000;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.headTables1{
+    background-color:#dbdbdb;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    border: solid;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.headTables2{
+    color: #000000;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.datosInputs {
+    color: #000000;
+    font-family: Calibri;
+    font-size: 17px;
+	width: 100px;
+    border: solid;
+    min-height:40px;
+}
+</style>
+
+<table style="border: solid">
+    <tr>
+        <td colspan="7" class="site-title">Buses La Estación</td>
+    </tr>
+    <tr>
+        <td colspan="7" class="headTables2">Hoja de Viaje - Cod. Viaje: @ViewBag.IdVaije</td>
+    </tr>
+
+    @if(Model.Pasajero.Count > 0){
+        <tr>
+            <td colspan="7" class="headTables2">Pasajeros</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="headTables1">Origen: @ViewBag.Origen - Destino: @ViewBag.Destino</td>
+            <td colspan="4" class="headTables1">Salida: @ViewBag.Salida - Arribo: @ViewBag.Arribo</td>
+        </tr>
+        <tr>
+            <td class="headTables1" style="width:175px">Apellido y Nombre </td>
+            <td class="headTables1" style="width:100px">DNI</td>
+            <td class="headTables1" style="width:240px">Ascenso</td>
+            <td class="headTables1" style="width:240px">Descenso</td>
+            <td class="headTables1" style="width:145px">Telefono</td>
+            <td class="headTables1" style="width:60px">Valor</td>
+            <td class="headTables1" style="width:50px">Pago</td>
+        </tr>
+        foreach (var item in Model.Pasajero){
+        <tr>
+            <td class="datosInputs" style="width:175px">@Html.DisplayFor(modelItem => item.Apellido) @Html.DisplayFor(modelItem => item.Nombre)</td>
+            <td class="datosInputs" style="width:100px">@Html.DisplayFor(modelItem => item.DNI)</td>
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.Ascenso)</td>
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.Descenso)</td>
+            <td class="datosInputs" style="width:145px">@Html.DisplayFor(modelItem => item.Telefono)</td>
+            <td class="datosInputs" style="width:60px">@Html.DisplayFor(modelItem => item.Costo)</td>
+
+            @if (item.Pago){
+            <td class="datosInputs"style="width:50px">Si</td>
+            }
+            else{
+            <td class="datosInputs"style="width:50px">No</td>
+            }
+        </tr>
+        }
+    }
+
+    @if(Model.Comisiones.Count > 0){
+        <tr>
+            <td colspan="7" class="headTables2">Comisiones</td>
+        </tr>
+        <tr>
+            <td class="headTables1" style="width:175px">Contacto</td>
+            <td class="headTables1" style="width:100px">Accion</td>
+            <td class="headTables1" style="width:240px">Retira</td>
+            <td class="headTables1" style="width:240px">Entrega</td>
+            <td class="headTables1" style="width:145px">Telefono</td>
+            <td class="headTables1" style="width:60px">Valor</td>
+            <td class="headTables1" style="width:50px">Pago</td>
+        </tr>
+        foreach (var item in Model.Comisiones){
+        <tr>
+            <td class="datosInputs" style="width:175px">@Html.DisplayFor(modelItem => item.Contacto)</td>
+            <td class="datosInputs" style="width:100px">@Html.DisplayFor(modelItem => item.Accion)</td>
+
+             @if(item.Servicio == ComisionServicio.Puerta){
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.Accion)</td>
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.EntregarPuerta)</td>
+            }
+            @if(item.Servicio == ComisionServicio.Directo){
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.RetirarDirecto)</td>
+            <td class="datosInputs" style="width:240px">@Html.DisplayFor(modelItem => item.EntregarDirecto)</td>
+            }
+            <td class="datosInputs" style="width:145px">@Html.DisplayFor(modelItem => item.Telefono)</td>
+            <td class="datosInputs" style="width:60px">@Html.DisplayFor(modelItem => item.Costo)</td>
+            @if (item.Pago){
+            <td class="datosInputs"style="width:50px">Si</td>
+            }
+            else{
+            <td class="datosInputs"style="width:50px">No</td>
+            }
+        </tr>
+        <tr>
+            <td class="headTables1" style="width:85px">Comt.</td>
+            <td class="datosInputs" colspan="6">@Html.DisplayFor(modelItem => item.Comentaro)</td>
+        </tr>
+        }
+    }
+</table>

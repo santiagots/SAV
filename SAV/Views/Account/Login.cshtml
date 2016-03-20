@@ -1,0 +1,85 @@
+﻿@model SAV.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+@{
+    Layout = "";
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">SAV</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="content">
+            <div class="headTables selected">
+                <p>LogIn</p>
+            </div>
+            <div class="contenidoDatos">
+                <div class="datosInputs">
+                    <p class="edicion">@Html.LabelFor(model => model.UserName)</p>
+                    @Html.TextBoxFor(m => m.UserName)
+
+                    <p class="edicion">@Html.LabelFor(m => m.Password)</p>
+                    @Html.PasswordFor(m => m.Password)
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion">@Html.LabelFor(m => m.RememberMe)</p>
+                    @Html.CheckBoxFor(m => m.RememberMe)
+
+                </div>
+
+                <div class="botones">
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="ingresar" class="centroBotonGris waiting" type="submit" value="Ingresar"></input>
+                        <div class="finBotonGris"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footerTables"></div>
+            <div class="contenidoDatosError">
+                <p>@Html.ValidationSummary(true)</p>
+                <p>@Html.ValidationMessageFor(m => m.UserName)</p>
+                <p>@Html.ValidationMessageFor(m => m.Password)</p>
+            </div>
+        </div>
+    }
+    <div id="loading"></div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - SAV Application</p>
+            </div>
+        </div>
+    </footer>
+</body>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/custom")
+@Scripts.Render("~/bundles/Waiting")
+</html>

@@ -1,0 +1,92 @@
+﻿@model SAV.Models.BalanceViewModel
+
+@{
+    ViewBag.Title = "Balance";
+}
+
+
+<div id="content">
+    <div class="headTables selected">
+        <p>Buscar</p>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Fecha)</p>
+                <div class="divFecha">
+                    @Html.TextBoxFor(model => model.Fecha, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
+                </div>
+            </div>
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                @if (Model.Items.Count > 0)
+                {
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input type="button" class="centroBotonGris" value="Exportar" onclick="location.href='@Url.Action("ExportBalance", new { fechaBusqueda = Model.Fecha })    '"></input>
+                        <div class="finBotonGris"></div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="footerTables"></div>
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.Fecha)</p>
+        </div>
+    }
+
+
+    <div class="alertTablesExtended" id="alertTablesExtended">
+        <div class="seccion">
+            <div class="headAlertTablesExtended selected">
+                <p>Moviminetos</p>
+                <a id="Balance" name="Balance" href="#" class="desplegado"></a>
+            </div>
+            <div id="tablaBalance" class="desplegableTablaCamp" style="display: block;">
+                <table id="tablaParts" class="tablesorter">
+                    <thead>
+                        <tr class="headTitles noBorder">
+                            <th class="type2 type214">
+                                <p>@Html.DisplayNameFor(model => model.Items.First().Concepto)</p>
+                                <span class="ordenamiento"></span></th>
+                            <th class="type203">
+                                <p>@Html.DisplayNameFor(model => model.Items.First().Importe)</p>
+                                <span class="ordenamiento"></span></th>
+                        </tr>
+
+                    </thead>
+                    <tbody id="tablaPasajeros">
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="type2 type214 waiting">
+                                    <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
+                                </td>
+                                <td class="type203 waiting">
+                                    <p>@Html.DisplayFor(modelItem => item.Importe)</p>
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.Items.Count > 0)
+                        {
+                            <tr class="headTitles noBorder" style="font-weight: bold">
+                                <td class="type2 type214">
+                                    <p>Total:</p>
+                                </td>
+                                <td class="type203">
+                                    <p>@ViewBag.total</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

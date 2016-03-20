@@ -1,0 +1,198 @@
+﻿@model SAV.Models.ComisionViewModel
+@using SAV.Models
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm((string)ViewBag.Action, "Comision", new { @idViaje = ViewBag.IdViaje }, FormMethod.Post, new { @id = "Create" }))
+{
+    @Html.ValidationSummary(true)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Datos del Cliente</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Contacto)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Contacto)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Telefono)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Telefono)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Costo)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)</p>
+                @Html.EditorFor(model => model.Pago)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Servicio)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ComisionServicio))
+                                                               select new SelectListItem
+                                                               {
+                                                                   Text = c,
+                                                                   Value = c
+                                                               })
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Accion)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Accion, from c in Enum.GetNames(typeof(SAV.Models.ComisionAccion))
+                                                             select new SelectListItem
+                                                             {
+                                                                 Text = c,
+                                                                 Value = c
+                                                             })
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Comentario)</p>
+                @Html.TextBoxFor(model => model.Comentario, new { @style = "width:566px;" })
+            </div>
+
+            @if (ViewBag.IdViaje != null)
+            {
+                <div class="datosInputs">
+                   <p class="edicion obligatorio">@Html.LabelFor(model => model.Responsable)<b>(*)</b></p>
+                        @Html.DropDownListFor(model => model.SelectResponsable, new SelectList(Model.Responsable, "Key", "Value"), "Elija una opción")
+
+                    <div class="boton">
+                        <input id="AgregarResponsable" class="centroBotonGris" type="button" value="Responsable"  ></input>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+        <div class="headTables medio">
+            <p>Servicio Directo</p>
+        </div>
+        <div class="contenidoDatos" id="servicioDirecto">
+            <div class="datosInputs" id="servicioDirectoRetirar">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoRetirar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectServicioDirectoRetirar, new SelectList(Model.ServicioDirectoRetirar, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs" id="servicioDirectoEntregar">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoEntregar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectServicioDirectoEntregar, new SelectList(Model.ServicioDirectoEntregar, "Key", "Value"), "Elija una opción")
+            </div>
+        </div>
+
+
+        <div class="headTables medio">
+            <p>Servicio Puerta domicilio Retirar</p>
+        </div>
+        <div class="contenidoDatos" id="servicioPuertaRetirar">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaRetirar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvinciaRetirar, new SelectList(Model.ProvinciaRetirar, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadRetirar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidadRetirar, new SelectList(Model.LocalidadRetirar, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleRetirar)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleRetirar)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumeroRetirar)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleNumeroRetirar)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePisoRetirar)</p>
+                @Html.EditorFor(model => model.CallePisoRetirar)
+            </div>
+        </div>
+
+        <div class="headTables medio">
+            <p>Servicio Puerta domicilio Entregar</p>
+        </div>
+        <div class="contenidoDatos" id="servicioPuertaEntrega">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaEntregar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvinciaEntregar, new SelectList(Model.ProvinciaEntregar, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadEntregar)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidadEntregar, new SelectList(Model.LocalidadEntregar, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleEntregar)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleEntregar)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumeroEntregar)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleNumeroEntregar)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePisoEntregar)</p>
+                @Html.EditorFor(model => model.CallePisoEntregar)
+            </div>
+        </div>
+
+        <div class="contenidoDatos">
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="Guardar" class="centroBotonGris waiting" onclick="$(this).resetValidation();" type="submit" value="Guardar" />
+                    <div class="finBotonGris"></div>
+                </div>
+                @if (ViewBag.IdViaje != null)
+                {
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search",  new { IdViaje = ViewBag.IdViaje })    '" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                }
+                else
+                {
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search")    '" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+        <div id="dialog">
+            <div id="loadingPopUp"></div>
+        </div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.Contacto)</p>
+            <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectResponsable)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidadEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectProvinciaEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleNumeroEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CallePisoEntregar)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidadRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectProvinciaRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleNumeroRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.CallePisoRetirar)</p>
+            <p>@Html.ValidationMessageFor(model => model.Accion)</p>
+            <p>@Html.ValidationMessageFor(model => model.Costo)</p>
+        </div>
+        <div id="Error" class="contenidoDatosError">
+        </div>
+    </div>
+    
+    <input type="hidden" id="IdViaje" value="@ViewBag.IdViaje" />
+    <input type="hidden" id="Servicio" value="@ViewBag.Servicio" />
+}
+
+@section Scripts {
+    <script src="/Scripts/ComisionCreate.js"></script>
+    <script src="/Scripts/ComisionesResponsable.js"></script>
+}
+

@@ -1,0 +1,95 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using SAV.Models
+@model IPagedList<SAV.Models.Comisiones>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("DetailsPagingComisiones", new { IdViaje = ViewBag.IdViaje, pageNumber = page })
+                                                                                                    , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "partialViewComisiones" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Comisiones</p>
+            <a id="Comisiones" name="Comisiones" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaComisiones" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type203">
+                            <p>@Html.DisplayNameFor(model => model.First().Contacto)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type119">
+                            <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
+                            <span class="ordenamiento"></span></th>
+                         <th class="type2 type119">
+                            <p>@Html.DisplayNameFor(model => model.First().Accion)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type203">
+                            <p>Entregar</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type203">
+                            <p>Retirar</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type179">
+                            <p>Pago</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type49">&nbsp;&nbsp;&nbsp;</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="waiting" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ComisionID, fromViaje = "true", idViaje = ViewBag.idViaje})'">
+                            <td class="type2 type203">
+                                <p>@Html.DisplayFor(modelItem => item.Contacto)</p>
+                            </td>
+                            <td class="type2 type119">
+                                <p>@Html.DisplayFor(modelItem => item.Telefono)</p>
+                            </td>
+                            <td class="type2 type119">
+                                <p>@Html.DisplayFor(modelItem => item.Accion)</p>
+                            </td>
+                            @if(item.Servicio == ComisionServicio.Puerta)
+                            {
+                            <td class="type2 type203">
+                                <p>@Html.DisplayFor(modelItem => item.EntregarPuerta)</p>
+                            </td>
+                            <td class="type2 type203">
+                                <p>@Html.DisplayFor(modelItem => item.RetirarPuerta)</p>
+                            </td>
+                            }
+                            @if(item.Servicio == ComisionServicio.Directo)
+                            {
+                            <td class="type2 type203">
+                                <p>@Html.DisplayFor(modelItem => item.EntregarDirecto)</p>
+                            </td>
+                            <td class="type2 type203">
+                                <p>@Html.DisplayFor(modelItem => item.RetirarDirecto)</p>
+                            </td>
+                            }
+                            <td class="type2 type179">
+                                <p>@Html.DisplayFor(modelItem => item.Pago)</p>
+                            </td>
+                            <td class="type49">
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", "Comision", new { id = item.ComisionID, idViaje = ViewBag.idViaje })">
+                                    <span id="Span43" class="action retirar" title="Eliminar" />
+</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="botones">
+    <div class="boton">
+        <div class="inicioBotonGris"></div>
+        <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Comision" onclick="location.href='@Url.Action("Search", "Comision", new { IdViaje = ViewBag.IdViaje })    '"></input>
+        <div class="finBotonGris"></div>
+    </div>
+</div>
+

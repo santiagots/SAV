@@ -1,0 +1,2341 @@
+body {
+    color: #333333;
+    direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    unicode-bidi: embed;
+}
+
+#header {
+    width: 1000px;
+    float: left;
+    margin-top: 5px;
+}
+
+    #header .bottom {
+        width: 1000px;
+        float: left;
+        height: 27px;
+        background: url(../img/headerPixel2.png) repeat-x;
+    }
+
+        #header .bottom ul {
+            background: url(../img/headerListPixel.png) no-repeat top right;
+            height: 27px;
+            margin-left: 15px;
+            float: left;
+        }
+
+            #header .bottom ul li {
+                background: url(../img/headerListPixel.png) no-repeat top left;
+                width: auto;
+                float: left;
+                height: 27px;
+                padding: 0 0 0 2px;
+            }
+
+                #header .bottom ul li a {
+                    float: left;
+                    height: 21px;
+                    font-family: verdana;
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 6px 8px 0 5px;
+                }
+
+                    #header .bottom ul li a:hover, #header .bottom ul li a.selected {
+                        background: url(../img/headerPixelHover.png) repeat-x;
+                    }
+
+.action {
+    width: 23px;
+    height: 23px;
+    float: left;
+    margin: 0 1px;
+    cursor: pointer;
+}
+
+    .action.retirar {
+        background: url("../img/masterFase2.png") no-repeat scroll -1181px -151px transparent;
+    }
+
+    .action.exportar {
+        background: url("../img/masterFase2.png") no-repeat scroll -1211px -179px transparent;
+    }
+
+
+body, td, input, textarea, select {
+    font-family: arial,sans-serif;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+body {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #333333;
+    direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    unicode-bidi: embed;
+}
+
+tbody tr {
+    float: left;
+    width: 100%;
+}
+    /*#gridresult tbody tr{ height:22px;}*/
+    tbody tr:hover {
+        font-weight: bold;
+    }
+
+    tbody tr td {
+        width: 222px;
+        padding: 7px 0 0 10px;
+        font-size: 12px;
+        font-family: verdana;
+        text-decoration: none;
+        color: #333333;
+        cursor: pointer;
+    }
+
+thead th span {
+    float: right;
+    cursor: pointer;
+}
+
+.ui-helper-clearfix:before, .ui-helper-clearfix:after {
+    content: "";
+    display: table;
+}
+
+.ui-helper-clearfix:after {
+    clear: both;
+}
+
+.ui-helper-clearfix {
+    zoom: 1;
+}
+
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 11px;
+}
+
+.ui-widget-content {
+    border: 1px solid #999999;
+    background: #ffffff url(../img/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    color: #222222;
+}
+
+
+.ui-widget :active {
+    outline: none;
+}
+
+.ui-corner-all {
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -khtml-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -khtml-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -khtml-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -khtml-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.ui-datepicker {
+    width: 17em;
+    padding: .2em .2em 0;
+    display: none;
+}
+
+thead tr th span {
+    float: none;
+    width: auto;
+    background: none;
+}
+
+table p {
+    word-wrap: break-word;
+}
+
+div.boton {
+    float: left;
+}
+
+.inicioBotonGris {
+    float: left;
+    background: url('../img/masterFase2.png') no-repeat -831px -735px;
+    width: 4px;
+    height: 22px;
+    margin-left: 10px;
+}
+
+.centroBotonGris {
+    float: left;
+    background: url('../img/fondoBotonGris.png') repeat-x;
+    width: auto;
+    height: 22px;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: verdana;
+    font-size: 11px;
+    cursor: pointer;
+    padding-bottom: 2px;
+}
+
+.finBotonGris {
+    float: left;
+    background: url('../img/masterFase2.png') no-repeat -433px -1429px;
+    width: 4px;
+    height: 22px;
+}
+
+
+.headTitles {
+    background: url('../img/masterFase2.png') no-repeat -1px -1618px;
+    width: 965px;
+    height: 31px;
+    float: left;
+}
+
+
+    .headTitles th.type63 {
+        border-bottom: 1px solid #EEEBEB;
+    }
+
+
+table.tablaPopUpHist tbody tr td..type3 {
+    border-left: 1px solid #a9a9a9;
+}
+
+
+table input {
+    width: 90%;
+    min-width: 10px;
+    max-width: 90%;
+}
+
+.alertTablesExtended {
+    float: left;
+    width: 967px;
+    height: auto;
+    margin: 0 0 0 15px;
+}
+
+.headAlertTablesExtended {
+    float: left;
+    margin: 10px 0 0 0;
+    background: url('../img/masterFase2.png') no-repeat -1px -972px;
+    width: 967px;
+    height: 30px;
+    cursor: pointer;
+}
+
+    .headAlertTablesExtended.selected {
+        background: url('../img/masterFase2.png') no-repeat -1px -1004px;
+    }
+
+    .headAlertTablesExtended p {
+        float: left;
+        color: #ffffff;
+        font-size: 12px;
+        font-family: verdana;
+        font-weight: bold;
+        margin: 8px 0 0 10px;
+        cursor: pointer;
+    }
+
+    .headAlertTablesExtended a {
+        float: right;
+        width: 11px;
+        height: 10px;
+        margin: 10px 10px 0 0;
+    }
+
+        .headAlertTablesExtended a.desplegado {
+            background: url('../img/masterFase2.png') no-repeat -946px -137px;
+        }
+
+.alertTablesExtended table {
+    float: left;
+    width: 100%;
+    border-right: 1px solid #999999;
+    border-left: 1px solid #999999;
+}
+
+.alertTablesExtended .seccion table {
+    border-bottom: 1px solid #999999;
+}
+
+.alertTablesExtended table thead th {
+    float: left;
+    padding: 7px 0 0 0;
+    height: 23px;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: verdana;
+}
+
+.alertTablesExtended table thead .noBorder {
+    height: 30px;
+}
+
+.alertTablesExtended table thead th {
+    text-align: center;
+}
+
+
+
+.type2 {
+    width: 114px;
+    text-align: left;
+    border-right: 1px solid #a9a9a9;
+}
+
+table tbody tr td {
+    color: #333333;
+    cursor: pointer;
+    font-family: verdana;
+    font-size: 12px;
+    padding: 6px 0 5px 0;
+    text-decoration: none;
+}
+
+.type5 {
+    width: 63px;
+}
+
+.type13 {
+    width: 76px;
+}
+
+.type22 {
+    width: 105px;
+}
+
+.type36 {
+    width: 72px;
+}
+
+.type39 {
+    width: 303px;
+}
+
+.type49 {
+    width: 48px;
+    text-align: center;
+}
+
+.type57 {
+    width: 189px;
+}
+
+.type60 {
+    width: 187px;
+}
+
+.type63 {
+    width: 174px;
+}
+
+.type106 {
+    width: 156px;
+}
+
+.type112 {
+    width: 40px;
+}
+
+.type119 {
+    width: 99px;
+}
+
+.type122 {
+    width: 50px;
+}
+
+.type140 {
+    width: 115px;
+}
+
+.type166 {
+    width: 89px;
+}
+
+.type174 {
+    width: 110px;
+}
+
+.type179 {
+    width: 65px;
+}
+
+.type203 {
+    width: 207px;
+}
+
+.type204 {
+    width: 66px;
+}
+
+.type209 {
+    width: 180px;
+}
+
+.alertTablesExtended table p, .alertTablesExtended table a {
+    font-size: 10px;
+    font-family: verdana;
+    margin: 0 0 0 5px;
+    width: auto;
+    text-decoration: none;
+    color: #333333;
+}
+
+.alertTablesExtended table th p {
+    margin: 2px 0;
+}
+
+}
+
+.alertTablesExtended table tbody span.seg.especial {
+    background: url('../img/masterFase2.png') no-repeat -390px -756px;
+}
+
+}
+
+.alertTablesExtended table tbody span.seg.especial2 {
+    background: url('../img/masterFase2.png') no-repeat -390px -756px;
+}
+
+.boton {
+    float: left;
+}
+
+.divFecha {
+    float: left;
+    margin-right: 10px;
+}
+
+    .divFecha img {
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+body {
+    color: #333333;
+    direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    unicode-bidi: embed;
+}
+
+#header {
+    width: 1000px;
+    float: left;
+    margin-top: 5px;
+}
+
+    #header .bottom {
+        width: 1000px;
+        float: left;
+        height: 27px;
+        background: url(../img/headerPixel2.png) repeat-x;
+    }
+
+        #header .bottom ul {
+            background: url(../img/headerListPixel.png) no-repeat top right;
+            height: 27px;
+            margin-left: 15px;
+            float: left;
+        }
+
+            #header .bottom ul li {
+                background: url(../img/headerListPixel.png) no-repeat top left;
+                width: auto;
+                float: left;
+                height: 27px;
+                padding: 0 0 0 2px;
+            }
+
+                #header .bottom ul li a {
+                    float: left;
+                    height: 21px;
+                    font-family: verdana;
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 6px 8px 0 5px;
+                }
+
+                    #header .bottom ul li a:hover, #header .bottom ul li a.selected {
+                        background: url(../img/headerPixelHover.png) repeat-x;
+                    }
+
+.action {
+    width: 23px;
+    height: 23px;
+    float: left;
+    margin: 0 1px;
+    cursor: pointer;
+}
+
+    .action.retirar {
+        background: url("../img/masterFase2.png") no-repeat scroll -1181px -151px transparent;
+    }
+
+    .action.exportar {
+        background: url("../img/masterFase2.png") no-repeat scroll -1211px -179px transparent;
+    }
+
+body, td, input, textarea, select {
+    font-family: arial,sans-serif;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+body {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #333333;
+    direction: ltr;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    unicode-bidi: embed;
+}
+
+tbody tr {
+    float: left;
+    width: 100%;
+}
+
+    tbody tr:hover {
+        font-weight: bold;
+    }
+
+    tbody tr td {
+        width: 222px;
+        padding: 7px 0 0 10px;
+        font-size: 12px;
+        font-family: verdana;
+        text-decoration: none;
+        color: #333333;
+        cursor: pointer;
+    }
+
+thead th span {
+    float: right;
+    cursor: pointer;
+}
+
+.ui-helper-clearfix:before, .ui-helper-clearfix:after {
+    content: "";
+    display: table;
+}
+
+.ui-helper-clearfix:after {
+    clear: both;
+}
+
+.ui-helper-clearfix {
+    zoom: 1;
+}
+
+
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 11px;
+}
+
+.ui-widget-content {
+    border: 1px solid #999999;
+    background: #ffffff url(../img/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    color: #222222;
+}
+
+.ui-widget :active {
+    outline: none;
+}
+
+.ui-corner-all {
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -khtml-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -khtml-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -khtml-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.ui-corner-all {
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -khtml-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.ui-datepicker {
+    width: 17em;
+    padding: .2em .2em 0;
+    display: none;
+}
+
+thead tr th span {
+    float: none;
+    width: auto;
+    background: none;
+}
+
+table p {
+    word-wrap: break-word;
+}
+
+div.boton {
+    float: left;
+}
+
+.inicioBotonGris {
+    float: left;
+    background: url('../img/masterFase2.png') no-repeat -831px -735px;
+    width: 4px;
+    height: 22px;
+    margin-left: 10px;
+}
+
+.centroBotonGris {
+    float: left;
+    background: url('../img/fondoBotonGris.png') repeat-x;
+    width: auto;
+    height: 22px;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: verdana;
+    font-size: 11px;
+    cursor: pointer;
+    padding-bottom: 2px;
+}
+
+.finBotonGris {
+    float: left;
+    background: url('../img/masterFase2.png') no-repeat -433px -1429px;
+    width: 4px;
+    height: 22px;
+}
+
+
+.headTitles {
+    background: url('../img/masterFase2.png') no-repeat -1px -1618px;
+    width: 965px;
+    height: 31px;
+    float: left;
+}
+
+
+    .headTitles th.type63 {
+        border-bottom: 1px solid #EEEBEB;
+    }
+
+
+table.tablaPopUpHist tbody tr td..type3 {
+    border-left: 1px solid #a9a9a9;
+}
+
+table input {
+    width: 90%;
+    min-width: 10px;
+    max-width: 90%;
+}
+
+.alertTablesExtended {
+    float: left;
+    width: 967px;
+    height: auto;
+    margin: 0 0 0 15px;
+}
+
+.headAlertTablesExtended {
+    float: left;
+    margin: 10px 0 0 0;
+    background: url('../img/masterFase2.png') no-repeat -1px -972px;
+    width: 967px;
+    height: 30px;
+    cursor: pointer;
+}
+
+    .headAlertTablesExtended.selected {
+        background: url('../img/masterFase2.png') no-repeat -1px -1004px;
+    }
+
+    .headAlertTablesExtended p {
+        float: left;
+        color: #ffffff;
+        font-size: 12px;
+        font-family: verdana;
+        font-weight: bold;
+        margin: 8px 0 0 10px;
+        cursor: pointer;
+    }
+
+    .headAlertTablesExtended a {
+        float: right;
+        width: 11px;
+        height: 10px;
+        margin: 10px 10px 0 0;
+    }
+
+        .headAlertTablesExtended a.desplegado {
+            background: url('../img/masterFase2.png') no-repeat -946px -137px;
+        }
+
+.alertTablesExtended table {
+    float: left;
+    width: 100%;
+    border-right: 1px solid #999999;
+    border-left: 1px solid #999999;
+}
+
+.alertTablesExtended .seccion table {
+    border-bottom: 1px solid #999999;
+}
+
+.alertTablesExtended table thead th {
+    float: left;
+    padding: 7px 0 0 0;
+    height: 23px;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: verdana;
+}
+
+.alertTablesExtended table thead .noBorder {
+    height: 30px;
+}
+
+.alertTablesExtended table thead th {
+    text-align: center;
+}
+
+.type2 {
+    width: 114px;
+    text-align: left;
+    border-right: 1px solid #a9a9a9;
+}
+
+table tbody tr td {
+    color: #333333;
+    cursor: pointer;
+    font-family: verdana;
+    font-size: 12px;
+    padding: 6px 0 5px 0;
+    text-decoration: none;
+}
+
+.type5 {
+    width: 63px;
+}
+
+.type13 {
+    width: 76px;
+}
+
+.type22 {
+    width: 105px;
+}
+
+.type36 {
+    width: 72px;
+}
+
+.type39 {
+    width: 303px;
+}
+
+.type49 {
+    width: 48px;
+    text-align: center;
+}
+
+.type57 {
+    width: 189px;
+}
+
+.type60 {
+    width: 187px;
+}
+
+.type63 {
+    width: 174px;
+}
+
+.type106 {
+    width: 156px;
+}
+
+.type112 {
+    width: 40px;
+}
+
+.type119 {
+    width: 99px;
+}
+
+.type122 {
+    width: 50px;
+}
+
+.type140 {
+    width: 115px;
+}
+
+.type166 {
+    width: 89px;
+}
+
+.type174 {
+    width: 110px;
+}
+
+.type179 {
+    width: 65px;
+}
+
+.type203 {
+    width: 207px;
+}
+
+.type204 {
+    width: 66px;
+}
+
+.type209 {
+    width: 180px;
+}
+
+.alertTablesExtended table p, .alertTablesExtended table a {
+    font-size: 10px;
+    font-family: verdana;
+    margin: 0 0 0 5px;
+    width: auto;
+    text-decoration: none;
+    color: #333333;
+}
+
+.alertTablesExtended table th p {
+    margin: 2px 0;
+}
+
+}
+
+.alertTablesExtended table tbody span.seg.especial {
+    background: url('../img/masterFase2.png') no-repeat -390px -756px;
+}
+
+}
+
+.alertTablesExtended table tbody span.seg.especial2 {
+    background: url('../img/masterFase2.png') no-repeat -390px -756px;
+}
+
+.boton {
+    float: left;
+}
+
+.divFecha {
+    float: left;
+    margin-right: 10px;
+}
+
+    .divFecha img {
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+html {
+    background-color: #e2e2e2;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+    font-size: .85em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+}
+
+a:link, a:visited,
+a:active, a:hover {
+    color: #333;
+}
+
+a:hover {
+    background-color: #c7d1d6;
+}
+
+header, footer, hgroup,
+nav, section {
+    display: block;
+}
+
+mark {
+    background-color: #a6dbed;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+
+h1, h2, h3,
+h4, h5, h6 {
+    color: #000;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.75em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1.1em;
+}
+
+h5, h6 {
+    font-size: 1em;
+}
+
+.content-wrapper {
+    margin: 0 auto;
+    max-width: 960px;
+}
+
+#body {
+    background-color: #FFFFFF;
+    clear: both;
+    padding-bottom: 35px;
+}
+
+
+
+header .content-wrapper {
+    padding-top: 20px;
+}
+
+footer {
+    clear: both;
+    background-color: #e2e2e2;
+    font-size: .8em;
+    height: 100px;
+}
+
+.site-title {
+    color: #c8c8c8;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    font-size: 2.3em;
+    margin: 0;
+}
+
+#login {
+    display: block;
+    font-size: 1em;
+    margin: 0 0 10px;
+    text-align: right;
+}
+
+    #login a {
+        background-color: #d3dce0;
+        margin-left: 10px;
+        margin-right: 3px;
+        padding: 2px 3px;
+        text-decoration: none;
+    }
+
+        #login a:hover {
+            background-color: #BFC8CC;
+        }
+
+        #login a.username {
+            background: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+article {
+    float: left;
+    width: 70%;
+}
+
+aside {
+    float: right;
+    width: 25%;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+input, textarea {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 1.2em;
+    margin: 5px 0 6px 0;
+    padding: 5px;
+    width: 300px;
+}
+
+textarea {
+    font-family: inherit;
+    width: 500px;
+}
+
+    input:focus, textarea:focus {
+        border: 1px solid #7ac0da;
+    }
+
+input[type="checkbox"] {
+    background: transparent;
+    border: inherit;
+    width: auto;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+@media only screen and (max-width: 850px) {
+
+    header .float-left,
+    header .float-right {
+        float: none;
+    }
+
+    /* logo */
+    header .site-title {
+        margin: 10px;
+        text-align: center;
+    }
+
+    /* login */
+    #login {
+        font-size: .85em;
+        margin: 0 0 12px;
+        text-align: center;
+    }
+
+
+
+        #login a {
+            background: none;
+            color: #999;
+            font-weight: 600;
+            margin: 2px;
+            padding: 0;
+        }
+
+            #login a:hover {
+                color: #333;
+            }
+
+    /* menu */
+    nav {
+        margin-bottom: 5px;
+    }
+
+    .content-wrapper {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+
+    /* page content */
+    article, aside {
+        float: none;
+        width: 100%;
+    }
+
+    input {
+        width: 90%;
+    }
+
+    /* login page */
+
+
+
+    table tr td a {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+
+
+    /* footer
+----------------------------------------------------------*/
+    footer .float-left {
+        float: none;
+    }
+
+    footer {
+        text-align: center;
+        height: auto;
+        padding: 10px 0;
+    }
+
+        footer p {
+            margin: 0;
+        }
+}
+
+.ui-widget-content {
+    border: none!important;
+}
+
+table p {
+    word-wrap: break-word;
+}
+
+.headTables {
+    background: url('../img/masterFase2.png') no-repeat -1px -972px;
+    float: left;
+    height: 30px;
+    margin: 10px 14px 0;
+    width: 967px;
+}
+
+    .headTables.medio {
+        background-color: #626060;
+        float: left;
+        height: 30px;
+        margin: 0px 14px 0;
+        width: 967px;
+    }
+
+    .headTables.selected {
+        background: url("../img/masterFase2.png") no-repeat scroll -1px -1004px transparent;
+    }
+
+    .headTables p {
+        color: #FFFFFF;
+        cursor: pointer;
+        float: left;
+        font-family: verdana;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 8px 0 0 10px;
+    }
+
+.contenidoDatos {
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    float: left;
+    width: 965px;
+    margin-left: 14px;
+}
+
+.contenidoDatosError {
+    float: left;
+    width: 965px;
+    margin-left: 14px;
+}
+
+.contenidoDatos.medio {
+    border-bottom: 1px solid #999999;
+}
+
+.datosInputs {
+    height: 25px;
+    margin: 10px 0;
+}
+
+    .datosInputs p {
+        color: #666666;
+        float: left;
+        font-family: verdana;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 3px 10px 0;
+        width: 200px;
+    }
+
+        .datosInputs p b {
+            color: #e0302a;
+        }
+
+        .datosInputs p.anchoFijo {
+            width: 143px;
+        }
+
+        .datosInputs p.anchoCP {
+            width: 34px;
+        }
+
+        .datosInputs p.anchoFijo.edicion {
+            width: 90px;
+        }
+
+    .datosInputs input, .datosInputs select {
+        float: left;
+        height: 20px;
+        margin: 0 10px 0 0;
+        width: 167px;
+        font-family: verdana;
+        font-size: 12px;
+    }
+
+
+.footerTables {
+    background: url("../img/masterFase2.png") no-repeat scroll -1px -1074px transparent;
+    float: left;
+    height: 5px;
+    width: 967px;
+    margin-left: 14px;
+}
+
+div.botones {
+    float: right;
+    margin: 10px 18px 0;
+}
+
+.contenidoDatos div.botones {
+    margin-bottom: 10px;
+}
+
+div.boton {
+    float: left;
+}
+
+.inicioBotonGris {
+    background: url("../img/masterFase2.png") no-repeat scroll -831px -735px transparent;
+    float: left;
+    height: 22px;
+    margin-left: 10px;
+    width: 4px;
+}
+
+.centroBotonGris {
+    background: url("../img/fondoBotonGris.png") repeat-x scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: left;
+    font-family: verdana;
+    font-size: 11px;
+    font-weight: normal;
+    height: 22px;
+    padding-bottom: 2px;
+    width: auto;
+}
+
+.finBotonGris {
+    background: url("../img/masterFase2.png") no-repeat scroll -433px -1429px transparent;
+    float: left;
+    height: 22px;
+    width: 4px;
+}
+
+.desplegableTablaCamp {
+    float: right;
+}
+
+.divFecha {
+    float: left;
+    margin-right: 10px;
+}
+
+
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada {
+    background-color: #dedef4;
+}
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada.CRM {
+        background-color: #f9e1e0;
+    }
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada.noBorder {
+        border-top: none;
+        height: 32px;
+    }
+
+        .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada.noBorder span.indicador {
+            height: 32px;
+        }
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada span.pestania {
+        float: right;
+        margin: 0px;
+    }
+
+.contenidoDatos.agendar div.agenda div.headDias {
+    background: url('../img/masterFase2.png') no-repeat -1px -1652px;
+    width: 965px;
+    height: 30px;
+    float: left;
+}
+
+    .contenidoDatos.agendar div.agenda div.headDias div.dia.semanal, .contenidoDatos.agendar div.agenda div.headDias div.hora.semanal {
+        float: left;
+        width: 180px;
+        border-top: 1px solid #b8b8b8;
+        border-left: 1px solid #b8b8b8;
+        height: 30px;
+        text-align: center;
+    }
+
+    .contenidoDatos.agendar div.agenda div.headDias div.hora.semanal {
+        width: 61px;
+    }
+
+    .contenidoDatos.agendar div.agenda div.headDias div.dia.semanal p {
+        margin-top: 6px;
+        font-weight: bold;
+    }
+
+    .contenidoDatos.agendar div.agenda div.headDias div.dia.semanal.primero, .contenidoDatos.agendar div.agenda div.headDias div.hora.semanal {
+        border-left: none;
+    }
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.dia.semanal {
+    height: 31px;
+    background-color: #fdffd5;
+    float: left;
+}
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.dia.semanal div.reunion {
+        width: 180px;
+        border-left: 1px solid #b8b8b8;
+    }
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.dia.semanal.lunes div.reunion {
+        width: 184px;
+        border-left: none;
+    }
+
+.descripcionAgenda {
+    float: left;
+    font-family: verdana;
+    font-size: 11px;
+    margin-top: 10px;
+    width: auto;
+    margin-left: 15px;
+}
+
+    .descripcionAgenda .campoDescripcion {
+        float: left;
+        margin-right: 17px;
+        width: 106px;
+    }
+
+        .descripcionAgenda .campoDescripcion span.referencia {
+            margin-right: 5px;
+        }
+
+.tooltip {
+    color: #000000;
+    display: none;
+    font-family: verdana;
+    font-size: 10px;
+    height: 40px;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: auto;
+    z-index: 3;
+}
+
+    .tooltip.masDatos, .tooltip.edicion {
+        display: block;
+    }
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos .tooltip-arriba {
+    background: url("../img/masterFase2.png") no-repeat -245px -2346px;
+    width: 225px;
+    height: 9px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos .tooltip-x {
+    background-color: #FFFFFF;
+    border-left: 1px solid #E1312B;
+    border-right: 1px solid #E1312B;
+    padding: 5px 38px 10px 10px;
+    width: 175px;
+}
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos .tooltip-x p {
+        margin: 12px 0px 0px 0px;
+        text-align: left;
+    }
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos .tooltip-abajo {
+    background: url("../img/masterFase2.png") no-repeat -245px -2365px;
+    width: 225px;
+    height: 9px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos .tooltip-cen {
+    background: url("../img/masterFase2.png") no-repeat -245px -2323px transparent;
+    width: 24px;
+    height: 14px;
+    float: left;
+    margin: -13px 0 0 160px;
+}
+
+.contenidoDatos.agendar div.headTitles div.vista.miAgenda {
+    float: left;
+}
+
+.contenidoDatos.agendar div.headTitles div.dia.miAgenda, .contenidoDatos.agendar div.headTitles div.semanal.miAgenda {
+    float: left;
+    width: 629px;
+}
+
+.contenidoDatos.agendar .calendario.miAgenda.divFecha {
+    float: left;
+    margin: 0;
+}
+
+    .contenidoDatos.agendar .calendario.miAgenda.divFecha p {
+        float: left;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+div.iconosEditables {
+    margin-left: 159px;
+    margin-top: 0;
+    position: absolute;
+}
+
+span.lapiz.agenda {
+    background: url('../img/masterFase2.png') no-repeat -522px -2047px;
+    width: 8px;
+    height: 9px;
+}
+
+span.cruz.agenda {
+    background: url('../img/masterFase2.png') no-repeat -543px -2048px;
+    width: 8px;
+    height: 7px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada p.contenido {
+    margin-top: 4px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada p span {
+    margin-top: 2px;
+}
+
+.contenidoDatos.agendar div.agenda.dia div.agendaBody div.contenido div.agendada div.iconosEditables {
+    margin-left: 884px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .tooltip-arriba {
+    background: url("../img/masterFase2.png") no-repeat -245px -2384px;
+    width: 388px;
+    height: 9px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .tooltip-x {
+    background-color: #FFFFFF;
+    border-left: 1px solid #E1312B;
+    border-right: 1px solid #E1312B;
+    padding: 5px 10px 50px;
+    width: 366px;
+}
+
+    .contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .tooltip-x p {
+        margin: 12px 0px 0px 0px;
+        text-align: left;
+    }
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .tooltip-abajo {
+    background: url("../img/masterFase2.png") no-repeat -245px -2403px;
+    width: 388px;
+    height: 9px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .tooltip-cen {
+    background: url("../img/masterFase2.png") no-repeat -245px -2323px transparent;
+    width: 24px;
+    height: 14px;
+    float: left;
+    margin: -13px 0 0 160px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs p {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0 5px 3px 0;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs select.chico {
+    width: 83px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs p.asunto {
+    width: 97px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs select.normal {
+    margin-bottom: 10px;
+    width: 359px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs select.lugar {
+    margin-left: 2px;
+    width: 311px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs.observaciones {
+    height: 40px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs.asunto {
+    height: 60px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion .datosInputs.observaciones input {
+    height: 36px;
+    width: 356px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.edicion div.botones {
+    float: right;
+    margin: 10px 6px 0;
+}
+
+div.pestanasTel, div.pestana {
+    float: left;
+}
+
+div.pestana {
+    position: relative;
+    top: 1px;
+    z-index: 1;
+    margin-right: 3px;
+}
+
+.inicioPestana {
+    background: url('../img/masterFase2.png') no-repeat -1135px -2472px;
+    width: 8px;
+    height: 25px;
+    float: left;
+}
+
+.centroPestana {
+    background: url('../img/fondoPestania.png') repeat-x;
+    width: auto;
+    height: 16px;
+    color: #767676;
+    cursor: pointer;
+    float: left;
+    font-family: verdana;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 5px 0px;
+}
+
+.finPestana {
+    background: url('../img/masterFase2.png') no-repeat -1155px -2472px;
+    width: 8px;
+    height: 25px;
+    float: left;
+}
+
+div#nvo.pestana .centroPestana {
+    width: 166px;
+}
+
+div.pestana.selected {
+    top: 1px;
+}
+
+    div.pestana.selected.first .inicioPestana {
+        background-position: -1176px -2432px;
+        width: 7px;
+        height: 25px;
+    }
+
+div.pestana.first .inicioPestana {
+    background-position: -1176px -2472px;
+    width: 7px;
+    height: 25px;
+}
+
+div.pestana.selected .inicioPestana {
+    background-position: -1135px -2432px;
+}
+
+div.pestana.selected .finPestana {
+    background-position: -1155px -2432px;
+}
+
+div.pestana.selected a.centroPestana {
+    background: url('../img/fondoPestaniaSelect.png') repeat-x;
+    font-weight: bold;
+}
+
+div.telefonosBox div.pestanasBox div.pestanasTel div.pestana a.centroPestana.domicilios span.MYA {
+    margin-top: -2px;
+}
+
+table thead th.headerSortDown span.ordenamiento {
+    background: url("../img/masterFase2.png") no-repeat scroll -930px -202px transparent;
+    float: right;
+    height: 8px;
+    left: 1px;
+    position: relative;
+    top: -23px;
+    width: 10px;
+}
+
+table thead th.headerSortUp span.ordenamiento {
+    background: url("../img/masterFase2.png") no-repeat scroll -910px -201px transparent;
+    float: right;
+    height: 8px;
+    left: 1px;
+    position: relative;
+    top: -9px;
+    width: 10px;
+}
+
+.popUp.solicitudes table thead th {
+    text-align: center;
+    float: left;
+}
+
+    .popUp.solicitudes table thead th p {
+        margin: 5px 0;
+    }
+
+.datosInputs div.error {
+    margin: 5px 0 0 60px;
+}
+
+.placeholder {
+    font-weight: normal;
+    font-family: verdana;
+    color: grey;
+    padding-left: 3px;
+    padding-top: 3px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos.Outlook .tooltip-x {
+    border-left: 1px solid #1418ae;
+    border-right: 1px solid #1418ae;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos.Outlook .tooltip-arriba {
+    background-position: -775px -2345px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos.Outlook .tooltip-abajo {
+    background-position: -775px -2365px;
+}
+
+.contenidoDatos.agendar div.agenda div.agendaBody div.contenido div.agendada div.tooltip.masDatos.Outlook .tooltip-cen {
+    background-position: -865px -2323px;
+    margin-top: -12px;
+}
+
+.pager {
+    padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+
+    .pager:before,
+    .pager:after {
+        display: table;
+        content: " ";
+    }
+
+    .pager:after {
+        clear: both;
+    }
+
+    .pager:before,
+    .pager:after {
+        display: table;
+        content: " ";
+    }
+
+    .pager:after {
+        clear: both;
+    }
+
+    .pager li {
+        display: inline;
+    }
+
+        .pager li > a,
+        .pager li > span {
+            display: inline-block;
+            padding: 5px 14px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 15px;
+        }
+
+            .pager li > a:hover,
+            .pager li > a:focus {
+                text-decoration: none;
+                background-color: #eeeeee;
+            }
+
+    .pager .next > a,
+    .pager .next > span {
+        float: right;
+    }
+
+    .pager .previous > a,
+    .pager .previous > span {
+        float: left;
+    }
+
+    .pager .disabled > a,
+    .pager .disabled > a:hover,
+    .pager .disabled > a:focus,
+    .pager .disabled > span {
+        color: #999999;
+        cursor: not-allowed;
+        background-color: #ffffff;
+    }
+
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-spacing: 0;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+abbr, acronym {
+    border: 0;
+}
+
+.hidden {
+    display: none!important;
+}
+
+#content {
+    width: 1000px;
+    height: 600px;
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: #666666;
+    width: 1000px;
+    height: 30px;
+    float: left;
+}
+
+#login .logo {
+    width: 320px;
+    height: 295px;
+    float: left;
+    background: url(../img/masterFase2.png) no-repeat 0 0;
+}
+
+#login .data {
+    width: 680px;
+    float: left;
+    height: 294px;
+    background-color: #ed1c24;
+}
+
+#login .crm {
+    background: url(../img/masterFase2.png) no-repeat -320px 0;
+    width: 204px;
+    height: 64px;
+    float: left;
+    margin: 50px 0 0 130px;
+}
+
+#login .fields {
+    width: 550px;
+    float: right;
+    margin-top: 22px;
+}
+
+    #login .fields .column {
+        float: right;
+        width: 180px;
+    }
+
+    #login .fields .columnLess {
+        float: right;
+        width: 114px;
+    }
+
+        #login .fields .columnLess input#logIn {
+            background: url(../img/master3D.png) no-repeat -18px -6px;
+            width: 75px;
+            height: 32px;
+            float: left;
+            text-decoration: none;
+            font-family: verdana;
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+            margin-top: 21px;
+            border: none;
+            cursor: pointer;
+        }
+
+            #login .fields .columnLess input#logIn:hover {
+                background: url(../img/master3D.png) no-repeat -98px -6px;
+            }
+
+    #login .fields .column label {
+        color: #ffffff;
+        font-family: calibri;
+        font-size: 18px;
+        font-weight: bold;
+        clear: both;
+        float: left;
+        margin-bottom: 3px;
+    }
+
+    #login .fields .column p {
+        color: #ffffff;
+        font-family: calibri;
+        font-size: 14px;
+        font-weight: bold;
+        margin: 8px 0 0 0;
+        float: left;
+    }
+
+    #login .fields .column input.cambiarPass {
+        color: #FFFFFF;
+        float: left;
+        font-family: calibri;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    #login .fields .column input {
+        height: 26px;
+        width: 150px;
+        float: left;
+        border: none;
+        font-size: 18px;
+        font-family: verdana;
+        color: #666666;
+        background-color: #fff;
+        clear: both;
+    }
+
+        #login .fields .column input.error {
+            background-color: #f9d8d9;
+        }
+
+        #login .fields .column input.checkbox {
+            margin: 5px 8px 0 0;
+            width: 10px;
+            background: none;
+        }
+
+.login-msj {
+    width: 1000px;
+    float: left;
+    height: auto;
+}
+
+    .login-msj p, .login-msj label {
+        clear: both;
+        float: right;
+        margin: 5px 0;
+        padding-left: 29px;
+        width: 447px;
+        font-family: verdana;
+        font-size: 12px;
+        height: 20px;
+        padding-top: 2px;
+    }
+
+        .login-msj p.error {
+            background: url(../img/masterFase2.png) no-repeat -1263px 3px;
+        }
+
+        .login-msj p.warning {
+            background: url(../img/masterFase2.png) no-repeat -1263px -36px;
+        }
+
+.footer p {
+    clear: both;
+    float: right;
+    margin: 5px 0;
+    width: 478px;
+    font-family: tahoma;
+    font-size: 12px;
+    color: #fff;
+}
+
+.helpBox {
+    width: 158px;
+    position: absolute;
+    height: auto;
+    left: 353px;
+    bottom: 0px;
+}
+
+.calendarBox {
+    width: 158px;
+    position: absolute;
+    height: auto;
+    left: 326px;
+    bottom: 0px;
+}
+
+    .helpBox .topSide, .calendarBox .topSide {
+        float: left;
+        width: 158px;
+        height: 35px;
+        background: url(../img/masterFase2.png) no-repeat 0px -419px;
+    }
+
+        .helpBox .topSide span.help {
+            background: url(../img/masterFase2.png) no-repeat -1148px -18px;
+            float: left;
+            height: 20px;
+            margin: 14px 5px;
+            width: 21px;
+        }
+
+        .calendarBox .topSide span.calendar {
+            background: url(../img/masterFase2.png) no-repeat -1123px -18px;
+            float: left;
+            height: 20px;
+            margin: 14px 5px;
+            width: 21px;
+        }
+
+    .helpBox .bottomSide, .calendarBox .bottomSide {
+        float: left;
+        width: 158px;
+        height: 7px;
+        background: url(../img/masterFase2.png) no-repeat 0px -458px;
+    }
+
+    .helpBox .bodySide, .calendarBox .bodySide {
+        float: left;
+        width: 158px;
+        height: auto;
+        background: url(../img/helpPixel.png) repeat-y -2px 0;
+    }
+
+        .helpBox .bodySide a, .calendarBox .bodySide a {
+            margin: 0 7px;
+            width: 129px;
+            float: left;
+            padding: 0 5px 2px 5px;
+            border-bottom: 2px solid #dadada;
+        }
+
+            .helpBox .bodySide a.last, .calendarBox .bodySide a.last {
+                border-bottom: none;
+            }
+
+.messageStatus {
+    width: 100%;
+    float: left;
+    height: 20px;
+}
+
+.usuarios {
+    float: left;
+    width: 100%;
+    font-family: verdana;
+    margin: 20px 0 24px 15px;
+}
+
+    .usuarios p {
+        float: left;
+        margin: 3px 10px 0 0;
+        font-size: 12px;
+        font-family: verdana;
+    }
+
+    .usuarios select {
+        float: left;
+        margin: 0;
+        width: 180px;
+    }
+
+div.separador {
+    float: left;
+    height: 50px;
+    width: 100%;
+}
+
+#loading {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    z-index: 1000;
+}
+
+#loadingcontent {
+    display: table;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#loadingspinner {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    font-size: larger;
+    padding-top: 80px;
+}
+
+#header {
+    width: 1000px;
+    float: left;
+    margin-top: 5px;
+}
+
+#footer a.exit {
+    float: left;
+    color: #ffffff;
+    margin-top: 7px;
+}
+
+#header .bottom {
+    width: 1000px;
+    float: left;
+    height: 27px;
+    background: url(../img/headerPixel2.png) repeat-x;
+}
+
+    #header .bottom ul {
+        background: url(../img/headerListPixel.png) no-repeat top right;
+        height: 27px;
+        margin-left: 15px;
+        float: left;
+    }
+
+        #header .bottom ul li {
+            background: url(../img/headerListPixel.png) no-repeat top left;
+            width: auto;
+            float: left;
+            height: 27px;
+            padding: 0 0 0 2px;
+        }
+
+            #header .bottom ul li a {
+                float: left;
+                height: 21px;
+                font-family: verdana;
+                font-size: 12px;
+                font-weight: bold;
+                color: #fff;
+                text-decoration: none;
+                padding: 6px 8px 0 5px;
+            }
+
+                #header .bottom ul li a:hover, #header .bottom ul li a.selected {
+                    background: url(../img/headerPixelHover.png) repeat-x;
+                }
+
+.action {
+    width: 23px;
+    height: 23px;
+    float: left;
+    margin: 0 1px;
+    cursor: pointer;
+}
+
+    .action.retirar {
+        background: url("../img/masterFase2.png") no-repeat scroll -1181px -151px transparent;
+    }
+
+    .action.cerrarViaje {
+        background: url("../img/masterFase2.png") no-repeat scroll -1212px -151px transparent;
+    }
+
+.pagination-container {
+    float: right;
+}
+
+.PagedList-skipToPrevious {
+    margin-top: 16px;
+    margin-right: 10px;
+    float: left;
+}
+
+.PagedList-skipToNext {
+    margin-top: 16px;
+    margin-left: 10px;
+    float: left;
+}
+
+.PagedList-pageCountAndLocation {
+    margin-top: 20px;
+    float: left;
+}
+
+.PagedList-skipToPrevious a {
+    background-image: url("../img/masterFase2.png");
+    background-position: -120px -1507px;
+    height: 22px;
+    width: 22px;
+    display: block;
+}
+
+.PagedList-skipToNext a {
+    background-image: url("../img/masterFase2.png");
+    background-position: -120px -1474px;
+    height: 22px;
+    width: 22px;
+    display: block;
+}
+
+.PagedList-pageCountAndLocation a {
+    font-weight: bold;
+    font-size: 11px;
+    font-family: verdana;
+    color: #434242;
+    margin: 20px 0 0 0;
+    width: 100%;
+    text-align: right;
+}
+
+span.check {
+    background: url("../img/masterFase2.png") no-repeat -167px -1548px;
+    margin: 0px;
+}
+
+a.verDetallesCamp {
+    margin-right: 14px;
+}
+
+
+a.pollButton {
+    background-position: -1px -788px;
+    width: 57px;
+    clear: left;
+    margin-left: 26px;
+}
+
+.campanias td {
+    color: #000000;
+    float: left;
+    font-size: 10px;
+    padding: 7px 0 0 3px;
+    font-family: Verdana;
+    text-decoration: none;
+    cursor: text;
+}
+
+.colapsar {
+    background: url("../img/masterFase2.png") no-repeat scroll -123px -1426px transparent;
+}
+
+.campanias td.hija {
+    margin-left: 35px;
+    width: 124px;
+    color: #767676;
+}
+
+    .campanias td.hija .phoni {
+        background: url(../img/masterFase2.png) no-repeat -206px -1428px;
+    }
+
+.campanias td.md {
+    padding-left: 0px;
+}
+
+span.md {
+    background: url(../img/masterFase2.png) no-repeat -123px -1446px;
+}
+
+.campanias td.prod, .campanias td.lim {
+    width: 40px;
+    color: #767676;
+    text-align: center;
+}
+
+.campanias td.lim {
+    width: 56px;
+}
+
+.campanias td.ck {
+    margin-left: 4px;
+    cursor: auto;
+}
+
+.campanias span.ck {
+    background: url(../img/masterFase2.png) no-repeat -124px -1410px;
+}
+
+    .campanias span.ck.checked {
+        background: url(../img/masterFase2.png) no-repeat -85px -1410px;
+    }
+
+.campanias .redStar {
+    background: url(../img/masterFase2.png) no-repeat -83px -1427px;
+}
+
+.campanias .yellowStar {
+    background: url(../img/masterFase2.png) no-repeat -83px -1449px;
+}
+
+table.lineHistory th {
+    text-align: center;
+}
+
+
+body, td, input, textarea, select {
+    font-family: arial,sans-serif;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+header {
+    background: none repeat scroll 0 0 #efeeef;
+    height: 105px;
+}

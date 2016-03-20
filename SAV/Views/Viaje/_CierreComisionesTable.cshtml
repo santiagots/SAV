@@ -1,0 +1,95 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using SAV.Models
+@model IPagedList<SAV.Models.Comisiones>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CierrePagingComisiones", new { IdViaje = ViewBag.IdViaje, pageNumber = page })
+                                                                                                    , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET",OnBegin="setEntregaRetiraComision", OnSuccess="disableSpinner", UpdateTargetId = "partialViewComisiones" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Comisiones</p>
+            <a id="Comisiones" name="Comisiones" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaComisiones" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type209">
+                            <p>@Html.DisplayNameFor(model => model.First().Contacto)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type209">
+                            <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
+                            <span class="ordenamiento"></span></th>
+                         <th class="type2 type119">
+                            <p>@Html.DisplayNameFor(model => model.First().Accion)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type57">
+                            <p>Entregar</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type57">
+                            <p>Retirar</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type112">
+                            <p>@Html.DisplayNameFor(model => model.First().Pago)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type36">Ent./Ret.</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor((m => m[i].ComisionViajeID))
+                            <td class="type2 type209">
+                                <p>@Html.DisplayFor(m => m[i].Contacto)</p>
+                            </td>
+                            <td class="type2 type209">
+                                <p>@Html.DisplayFor(m => m[i].Telefono)</p>
+                            </td>
+                            <td class="type2 type119">
+                                <p>@Html.DisplayFor(m => m[i].Accion)</p>
+                            </td>
+                            @if (Model[i].Servicio == ComisionServicio.Puerta)
+                            {
+                            <td class="type2 type57">
+                                <p>@Html.DisplayFor(m => m[i].EntregarPuerta)</p>
+                            </td>
+                            <td class="type2 type57">
+                                <p>@Html.DisplayFor(m => m[i].RetirarPuerta)</p>
+                            </td>
+                            }
+                            @if(Model[i].Servicio == ComisionServicio.Directo)
+                            {
+                            <td class="type2 type57">
+                                <p>@Html.DisplayFor(m => m[i].EntregarDirecto)</p>
+                            </td>
+                            <td class="type2 type57">
+                                <p>@Html.DisplayFor(m => m[i].RetirarDirecto)</p>
+                            </td>
+                            }
+                            <td class="type2 type112">
+                                <p>@Html.EditorFor(m => m[i].Pago)</p>
+                            </td>
+                            <td class="type36">
+                               <p>@Html.EditorFor(m =>Model[i].EntregaRetira)</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="botones">
+    <div class="boton">
+        <div class="inicioBotonGris"></div>
+        <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Comision" onclick="location.href='@Url.Action("Search", "Comision", new { IdViaje = ViewBag.IdViaje })    '"></input>
+        <div class="finBotonGris"></div>
+    </div>
+</div>
+

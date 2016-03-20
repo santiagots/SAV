@@ -1,0 +1,69 @@
+﻿@model SAV.Models.SearchViajeViewModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+
+<div id="content">
+	<div class="headTables selected">
+		<p>Buscar</p>
+	</div>
+    @using (Html.BeginForm())
+    {
+           @Html.ValidationSummary(false)
+	<div class="contenidoDatos">
+		<div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.Origen)</p>
+            @Html.DropDownListFor(model => model.SelectOrigen, new SelectList(Model.Origen, "Key", "Value"), "Elija una opción")
+
+            <p class="edicion">@Html.LabelFor(model => model.Destino)</p>
+			@Html.DropDownListFor(model => model.SelectDestino, new SelectList(Model.Destino, "Key", "Value"), "Elija una opción")
+		</div>
+
+        <div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.FechaSalida)</p>
+            <div class="divFecha">
+                @Html.TextBoxFor(model => model.FechaSalida, new { @class = "fecha", @id="fecha", @name="fecha", @readonly = true})
+			</div>
+
+            <p class="edicion">@Html.LabelFor(model => model.Servicio)</p>
+            @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ViajeTipoServicio))
+                                                           select new SelectListItem
+                                                           {
+                                                               Text = c,
+                                                               Value = c
+                                                           }, "Elija una opción")
+		</div>
+   
+		<div class="botones">
+            <div class="boton">
+				<div class="inicioBotonGris"></div>
+				    <input type="button" class="centroBotonGris waiting" value="Limpiar" onclick="location.href='@Url.Action("Search", "Viaje")'"></input>
+				<div class="finBotonGris"></div>
+			</div>
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+				    <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
+				<div class="finBotonGris"></div>
+			</div>
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create", "Viaje")'"></input>
+				<div class="finBotonGris"></div>
+			</div>
+		</div>	
+	</div>
+    <div class="footerTables"></div>
+    }
+     <!-- RESULTADO TABLES -->
+        <div id="ViajesAbiertos">
+            @Html.Partial("_ViajesAbiertosTable", Model.ViajesActivos)
+        </div>
+
+      <!-- VIAJES POR CERRAR TABLES -->
+        <div id="ViajesCerrados">
+            @Html.Partial("_ViajesCerradosTable", Model.ViajesFinalizados)
+        </div>	
+</div>
+    

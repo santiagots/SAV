@@ -1,0 +1,156 @@
+﻿@using PagedList.Mvc
+@using PagedList
+@model SAV.Models.DetailsViajeViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@using (Html.BeginForm(new { @idViaje = Model.DatosBasicosViaje.viajeID }))
+{
+    @Html.ValidationSummary(true)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Datos del viaje</p>
+        </div>
+        <div class="contenidoDatos">
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Servicio)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.DatosBasicosViaje.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ViajeTipoServicio))
+                                                                                 select new SelectListItem
+                                                                                 {
+                                                                                     Text = c,
+                                                                                     Value = c
+                                                                                 }, "Elija una opción")
+            </div>
+
+            <div id="ServicioAbierto" class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Origen)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectOrigen, new SelectList(Model.DatosBasicosViaje.Origen, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Destino)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectDestino, new SelectList(Model.DatosBasicosViaje.Destino, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div id="ServicioCerrado" class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.OrigenCerrado)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.OrigenCerrado)
+
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.DestinoCerrado)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.DestinoCerrado)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.FechaSalida)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.FechaSalida, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.HoraSalida)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.HoraSalida)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.HoraArribo)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.HoraArribo)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Asientos)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.Asientos)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Disponible)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.Disponible, new { @disabled = "disabled" })
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Patente)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.Patente)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.Interno)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ConductorNombre)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectConductorNombre, new SelectList(Model.DatosBasicosViaje.ConductorNombre, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="modificar" class="centroBotonGris" onclick="return Validate();" type="submit" value="Modificar" />
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="eliminar" class="centroBotonGris" type="button" value="Eliminar" onclick=" if(confirmSpinner('Esta seguro que desea borrar el viaje?')) location.href='@Url.Action("Delete", new { id = Model.DatosBasicosViaje.viajeID })    '" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar"onclick="location.href='@Url.Action("ExportViaje", new { id = Model.DatosBasicosViaje.viajeID })'" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="volver" class="centroBotonGris waiting" type="button" value="Volver"onclick="location.href='@Url.Action("Search")'" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+
+        <!-- PASAJEROS TABLES -->
+        <div style="float: right">
+            <div id="partialViewPasajeros">
+            @Html.Partial("_PasajerosTable", Model.Pasajero)
+            </div>
+            @if(Model.DatosBasicosViaje.Disponible > 0)
+            {
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Pasajero" onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje })    '"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+            }
+            else
+            {
+            <div class="botones">
+                <div class="boton">
+                </div>
+            </div>
+            }
+        </div>
+
+        @if(Model.DatosBasicosViaje.Servicio != SAV.Models.ViajeTipoServicio.Cerrado)
+        {
+        <!-- COMISIONES TABLES -->
+        <div id="partialViewComisiones" style="float: right">
+            @Html.Partial("_ComisionesTable", Model.Comisiones)
+        </div>
+        }
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectOrigen)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectDestino)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraSalida)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraArribo)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Servicio)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.FechaSalida)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Asientos)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectConductorNombre)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
+        </div>
+        <div id="Error" class="contenidoDatosError">
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+    <script src="/Scripts/ViajeDetails.js"></script>
+}

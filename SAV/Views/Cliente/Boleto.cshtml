@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "boleto";
+}
+@{
+    Layout = "";
+}
+<html lang="en" style="background-color: #FFFFFF">
+<head>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <form>
+        <h2 class="site-title">SAV</h2>
+        <div id="content">
+            <div class="headTables">
+                <p>Comprobante de Pago - Servicio @ViewBag.Servicio - Codigo @ViewBag.IdViaje</p>
+            </div>
+
+            <div class="contenidoDatos">
+                <div class="datosInputs">
+                    <p style="width: 30%">Apellido: @ViewBag.Apellido</p>
+
+                    <p style="width: 30%">Nombre: @ViewBag.Nombre</p>
+
+                    <p style="width: 30%">Dni: @ViewBag.DNI</p>
+                </div>
+
+                <div class="datosInputs">
+                    <p style="width: 30%">Origen: @ViewBag.Origen</p>
+
+                    <p style="width: 30%">Destino: @ViewBag.Destino</p>
+
+                    <p style="width: 30%">Fecha Salida: @ViewBag.FechaHora</p>
+                </div>
+            </div>
+            <div class="footerTables"></div>
+        </div>
+    </form>
+</body>
+</html>
+

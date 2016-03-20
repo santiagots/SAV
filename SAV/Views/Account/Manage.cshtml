@@ -1,0 +1,15 @@
+﻿@model SAV.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+
+@if (ViewBag.HasLocalPassword)
+{
+    @Html.Partial("_ChangePasswordPartial")
+}
+else
+{ 
+    @Html.Partial("_SetPasswordPartial")
+}
+
