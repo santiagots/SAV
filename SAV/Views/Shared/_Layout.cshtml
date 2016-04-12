@@ -15,6 +15,12 @@
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/Waiting")
+    @RenderSection("scripts", required: false)
     <body>
         <header>
         <div class="header">
@@ -59,10 +65,4 @@
             </div>
         </footer>
     </body>
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/custom")
-        @Scripts.Render("~/bundles/Waiting")
-        @RenderSection("scripts", required: false)
 </html>

@@ -27,24 +27,20 @@ namespace SAV.Controllers
 
             List<Viaje> viajes = ViajeHelper.getViajesBalance(db.Viajes.ToList<Viaje>(), fecha);
 
-            balanceViewModel.Items = BalanceHelper.getBalance(viajes);
-
-            ViewBag.total = Math.Round(balanceViewModel.Items.Sum(x => x.Importe), 2, MidpointRounding.ToEven);
+            balanceViewModel = BalanceHelper.getBalance(viajes);
 
             return View(balanceViewModel);
         }
 
-        public ActionResult ExportBalance(string fechaBusqueda)
+        public ActionResult ExportBalance(String fechaBusqueda)
         {
             DateTime fecha = ViajeHelper.getFecha(fechaBusqueda);
 
             List<Viaje> viajes = ViajeHelper.getViajesBalance(db.Viajes.ToList<Viaje>(), fecha);
 
-            List<ItemBalanceViewModel> exportBalanceViewModel = BalanceHelper.getBalance(viajes);
+            BalanceViewModel balanceViewModel = BalanceHelper.getBalance(viajes);
 
             @ViewBag.fecha = fecha.ToString("dd/MM/yyyy");
-
-            ViewBag.total = Math.Round(exportBalanceViewModel.Sum(x => x.Importe), 2, MidpointRounding.ToEven);
 
             string name = String.Format("Reporte_Dia_{0}", fecha.ToString("dd_MM_yyyy"));
 
@@ -52,7 +48,7 @@ namespace SAV.Controllers
             Response.ContentType = "application/vnd.ms-excel";
             Response.Charset = "utf-8";
 
-            return View(exportBalanceViewModel);
+            return View(balanceViewModel);
         }
     }
 }

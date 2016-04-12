@@ -25,11 +25,11 @@
                     <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
                     <div class="finBotonGris"></div>
                 </div>
-                @if (Model.Items.Count > 0)
+                @if (Model.Veiculos.Count > 0)
                 {
                     <div class="boton">
                         <div class="inicioBotonGris"></div>
-                        <input type="button" class="centroBotonGris" value="Exportar" onclick="location.href='@Url.Action("ExportBalance", new { fechaBusqueda = Model.Fecha })    '"></input>
+                        <input type="button" class="centroBotonGris" value="Exportar" id="Export"></input>
                         <div class="finBotonGris"></div>
                     </div>
                 }
@@ -41,11 +41,12 @@
         </div>
     }
 
-
+    @foreach(var veiculos in Model.Veiculos)
+    { 
     <div class="alertTablesExtended" id="alertTablesExtended">
         <div class="seccion">
             <div class="headAlertTablesExtended selected">
-                <p>Moviminetos</p>
+                <p>Moviminetos Servicio:@veiculos.Servicio Origen:@veiculos.Origen Destino:@veiculos.Destino Salida:@veiculos.HoraSalida Arribo:@veiculos.HoraArribo Patente:@veiculos.Patente Interno:@veiculos.Interno</p>
                 <a id="Balance" name="Balance" href="#" class="desplegado"></a>
             </div>
             <div id="tablaBalance" class="desplegableTablaCamp" style="display: block;">
@@ -53,34 +54,34 @@
                     <thead>
                         <tr class="headTitles noBorder">
                             <th class="type2 type214">
-                                <p>@Html.DisplayNameFor(model => model.Items.First().Concepto)</p>
+                                <p>@Html.DisplayNameFor(model => veiculos.Items.First().Concepto)</p>
                                 <span class="ordenamiento"></span></th>
                             <th class="type203">
-                                <p>@Html.DisplayNameFor(model => model.Items.First().Importe)</p>
+                                <p>@Html.DisplayNameFor(model => veiculos.Items.First().Importe)</p>
                                 <span class="ordenamiento"></span></th>
                         </tr>
 
                     </thead>
                     <tbody id="tablaPasajeros">
-                        @foreach (var item in Model.Items)
+                        @foreach (var item in veiculos.Items)
                         {
                             <tr>
-                                <td class="type2 type214 waiting">
+                                <td class="type2 type214">
                                     <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                 </td>
-                                <td class="type203 waiting">
+                                <td class="type203">
                                     <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                 </td>
                             </tr>
                         }
-                        @if (Model.Items.Count > 0)
+                        @if (veiculos.Items.Count > 0)
                         {
                             <tr class="headTitles noBorder" style="font-weight: bold">
                                 <td class="type2 type214">
                                     <p>Total:</p>
                                 </td>
                                 <td class="type203">
-                                    <p>@ViewBag.total</p>
+                                    <p>@veiculos.total</p>
                                 </td>
                             </tr>
                         }
@@ -89,4 +90,14 @@
             </div>
         </div>
     </div>
+    }
 </div>
+
+<script language="javascript">
+    var baseurl = '@Url.Action("ExportBalance")';
+    debugger;
+    $('#Export').click(function() {
+        var url = baseurl + '?fechaBusqueda=' + $('#fecha').val();
+        location.href=url;
+    });
+</script>

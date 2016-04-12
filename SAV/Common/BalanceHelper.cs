@@ -8,25 +8,44 @@ namespace SAV.Common
 {
     public class BalanceHelper
     {
-        public static List<ItemBalanceViewModel> getBalance(List<Viaje> viajes)
+        public static BalanceViewModel getBalance(List<Viaje> viajes)
         {
-            List<ItemBalanceViewModel> exportBalanceViewModel = new List<ItemBalanceViewModel>();
 
-            //Pasajeros
-            exportBalanceViewModel.AddRange(viajes.Select(x => new ItemBalanceViewModel(x)).ToList<ItemBalanceViewModel>());
+            BalanceViewModel balance = new BalanceViewModel();
 
-            //Comiciones
             foreach (Viaje viaje in viajes)
+            {
+                BalanceVeiculoViewModel balanceVeiculoViewModel = new BalanceVeiculoViewModel()
+                        {Destino = viaje.Destino.Nombre,
+                        HoraArribo = viaje.FechaArribo.ToString("hh:mm"),
+                        HoraSalida = viaje.FechaSalida.ToString("hh:mm"),
+                        Interno = viaje.Interno,
+                        Origen = viaje.Origen.Nombre,
+                        Patente = viaje.Patente,
+                        Servicio = viaje.Servicio.ToString()};
+
+                List<ItemBalanceViewModel> exportBalanceViewModel = new List<ItemBalanceViewModel>();
+
+                //Pasajeros
+                exportBalanceViewModel.Add(new ItemBalanceViewModel(viaje));
+
+                //Comiciones
                 exportBalanceViewModel.AddRange(viaje.ComisionesViaje.Select(x => new ItemBalanceViewModel(viaje, x)).ToList<ItemBalanceViewModel>());
 
-            //Consuctores
-            exportBalanceViewModel.AddRange(viajes.Select(x => new ItemBalanceViewModel(x, x.Conductor)).ToList<ItemBalanceViewModel>());
+                //Consuctores
+                exportBalanceViewModel.Add(new ItemBalanceViewModel(viaje, viaje.Conductor));
 
-            //Gastos
-            foreach (Viaje viaje in viajes)
+                //Gastos
                 exportBalanceViewModel.AddRange(viaje.Gastos.Select(x => new ItemBalanceViewModel(viaje, x)).ToList<ItemBalanceViewModel>());
 
-            return exportBalanceViewModel.OrderBy(x => x.IdViaje).ToList<ItemBalanceViewModel>();
+                balanceVeiculoViewModel.Items = exportBalanceViewModel;
+
+                balanceVeiculoViewModel.total = Math.Round(balanceVeiculoViewModel.Items.Sum(x => x.Importe), 2, MidpointRounding.ToEven);
+
+                balance.Veiculos.Add(balanceVeiculoViewModel);
+            }
+
+            return balance;
         }
     }
 }

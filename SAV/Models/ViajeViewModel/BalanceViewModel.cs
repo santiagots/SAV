@@ -11,9 +11,27 @@ namespace SAV.Models
         [Display(Name = "Fecha:")]
         [Required(ErrorMessage = "Debe ingresar una Fecha")]
         public string Fecha { get; set; }
+        public List<BalanceVeiculoViewModel> Veiculos { get; set; }
+        public BalanceViewModel()
+        {
+            Veiculos = new List<BalanceVeiculoViewModel>();
+        }
+    }
+
+    public class BalanceVeiculoViewModel
+    {
+        public string Origen { get; set; }
+        public string Destino { get; set; }
+        public string HoraSalida { get; set; }
+        public string HoraArribo { get; set; }
+        public string Servicio { get; set; }
+        public string Patente { get; set; }
+        public int Interno { get; set; }
+        public decimal total { get; set; }
+
         public List<ItemBalanceViewModel> Items { get; set; }
 
-        public BalanceViewModel()
+        public BalanceVeiculoViewModel()
         {
             Items = new List<ItemBalanceViewModel>();
         }

@@ -1,5 +1,5 @@
 ﻿@using SAV.Models
-@model IList<SAV.Models.ItemBalanceViewModel>
+@model SAV.Models.BalanceViewModel
 @{
     Layout = "";
 }
@@ -44,15 +44,15 @@
 
 <table style="border: solid">
     <tr>
-        <td colspan="2" class="site-title">SAV</td>
+        <td colspan="2" class="site-title">BUSES LA ESTACION</td>
     </tr>
 
     
     <tr>
-        <td colspan="2" class="headTables2">Direccion - Chacabuco - CP 6740</td>
+        <td colspan="2" class="headTables2">AV. VIYTES 40 - CHACABUCO - CP 6740</td>
     </tr>
     <tr>
-        <td colspan="2" class="headTables2">Telefono: XXXXX XXXXXX</td>
+        <td colspan="2" class="headTables2">TELÉFONO: 02352 45-1097</td>
     </tr>
     <tr>
         <td colspan="2" class="headTables2">CUIT: XX-XXXXXXXX-X</td>
@@ -60,19 +60,23 @@
     <tr>
         <td colspan="2" class="headTables2">Cierre día @ViewBag.fecha</td>
     </tr>
-    <tr>
-        <td class="headTables1" style="width: 510px">Concepto</td>
-        <td class="headTables1" style="width: 85px">Importe</td>
-    </tr>
-    @foreach (var item in Model){
-    <tr>
-        <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
-        <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
-    </tr>
-    }
+    @foreach (var veiculos in Model.Veiculos)
+    {
+        <tr>
+            <td class="headTables1" style="width: 510px">Concepto de Servicio:@veiculos.Servicio Origen:@veiculos.Origen Destino:@veiculos.Destino Salida:@veiculos.HoraSalida Arribo:@veiculos.HoraArribo Patente:@veiculos.Patente Interno:@veiculos.Interno</td>
+            <td class="headTables1" style="width: 85px">Importe</td>
+        </tr>
+        foreach (var item in veiculos.Items)
+        {
+        <tr>
+            <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+            <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
+        </tr>
+        }
 
-    <tr>
-        <td class="headTables1" style="width: 510px">Total</td>
-        <td class="headTables1" style="width: 75px">@ViewBag.total</td>
-    </tr>
+        <tr>
+            <td class="headTables1" style="width: 510px">Total</td>
+            <td class="headTables1" style="width: 75px">@veiculos.total</td>
+        </tr>
+    }
 </table>
