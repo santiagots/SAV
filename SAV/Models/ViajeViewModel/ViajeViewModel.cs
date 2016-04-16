@@ -70,6 +70,7 @@ namespace SAV.Models
         public string Patente { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una Interno")]
+        [RegularExpression("^[1-9][0-9]?[0-9]?$", ErrorMessage = "El interno debe ser un numero del 1 al 999")]
         [Display(Name = "Interno:")]
         public int Interno { get; set; }
     }

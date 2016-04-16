@@ -10,6 +10,10 @@ $(document).ready(function () {
         agregarGasto();
     });
 
+    $("#modificar").click(function () {
+        ModificarViaje();
+    });
+
 })
 
 function cerrar()
@@ -56,6 +60,35 @@ function agregarGasto()
             error: function (error) { alert(error); disableSpinner(); }
         });
     }
+
+    $('#Patente, #Interno').prop('disabled', false);
+}
+
+function ModificarViaje() {
+
+    if ($("form").valid()) {
+        enableSpinner();
+
+        $.ajax({
+            async: true,
+            url: '/Viaje/Actualizar',
+            type: 'POST',
+            data:
+                {
+                    "patente": $("#Patente").val(),
+                    "interno": $("#Interno").val(),
+                    "idViaje": $("#viajeID").val()
+                },
+            dataType: "html",
+            success: function (data) {
+                disableSpinner()
+            },
+            error: function (error) {
+                addError(error, "ModificarViaje", "Hubo un error al modificar la información de Viaje"); disableSpinner();
+            }
+        });
+    }
+    $("#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario").prop('disabled', false);
 }
 
 function setAsistenciaPasajeros() {

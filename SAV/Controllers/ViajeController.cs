@@ -12,6 +12,7 @@ using System.Configuration;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
 
 namespace SAV.Controllers
 {
@@ -499,6 +500,18 @@ namespace SAV.Controllers
                 }
                 db.SaveChanges();
             }
+        }
+
+        public void Actualizar(string patente, string interno, int idViaje)
+        {
+            ViewBag.IdViaje = idViaje;
+
+            Viaje viaje = db.Viajes.Find(idViaje);
+            viaje.Interno = int.Parse(interno);
+            viaje.Patente = patente;
+
+            db.Entry(viaje).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public ActionResult AddGasto(string razonSocial, string cuit, string nroTicket, string monto, string comentario, int idViaje)

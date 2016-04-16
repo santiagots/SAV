@@ -51,15 +51,12 @@
             </div>
 
             <div class="datosInputs">
-
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.HoraSalida)</p>
                 @Html.TextBoxFor(model => model.DatosBasicosViaje.HoraSalida, new { @disabled = "disabled" })
 
 
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.HoraArribo)</p>
                 @Html.TextBoxFor(model => model.DatosBasicosViaje.HoraArribo, new { @disabled = "disabled" })
-
-
             </div>
 
             <div class="datosInputs">
@@ -70,7 +67,22 @@
                 @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectConductorNombre, new SelectList(Model.DatosBasicosViaje.ConductorNombre, "Key", "Value"), "Elija una opción", new { @disabled = "disabled" })
             </div>
 
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Patente)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.Patente, new { id = "Patente" })
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.Interno, new { id = "Interno" })
+            </div>
+
             <div class="botones">
+
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="modificar" class="centroBotonGris waiting" type="button" value="Modificar" onclick="$('#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario').prop('disabled', true);"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
                     <input id="cerrar" class="centroBotonGris" type="submit" value="Cerrar Viaje" />
@@ -147,7 +159,7 @@
                                 </td>
                                 <td class="type22">
                                     <div class="inicioBotonGris"></div>
-                                    <input id="agregarGasto" class="centroBotonGris" type="button" value="Agregar Gasto"></input>
+                                    <input id="agregarGasto" class="centroBotonGris" type="button" value="Agregar Gasto" onclick="$('#Patente, #Interno').prop('disabled', true);"></input>
                                     <div class="finBotonGris"></div>
                                 </td>
                             </tr>
@@ -167,6 +179,8 @@
             <p>@Html.ValidationMessageFor(model => model.NewGastos.CUIT)</p>
             <p>@Html.ValidationMessageFor(model => model.NewGastos.NroTicket)</p>
             <p>@Html.ValidationMessageFor(model => model.NewGastos.Monto)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
         </div>
         <div id="Error" class="contenidoDatosError">
         </div>
