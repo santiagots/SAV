@@ -21,8 +21,8 @@
             </div>
 
             <div class="datosInputs">
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DNI)<b>(*)</b></p>
-                @Html.TextBoxFor(model => model.DNI)
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CUIL)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.CUIL)
             </div>
 
             <div class="datosInputs">
@@ -94,7 +94,7 @@
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.Apellido)</p>
             <p>@Html.ValidationMessageFor(model => model.Nombre)</p>
-            <p>@Html.ValidationMessageFor(model => model.DNI)</p>
+            <p>@Html.ValidationMessageFor(model => model.CUIL)</p>
             <p>@Html.ValidationMessageFor(model => model.ComisionViaje)</p>
             <p>@Html.ValidationMessageFor(model => model.ComisionViajeCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.Telefono)</p>

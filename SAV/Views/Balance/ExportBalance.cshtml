@@ -63,7 +63,7 @@
     @foreach (var veiculos in Model.Veiculos)
     {
         <tr>
-            <td class="headTables1" style="width: 510px">Concepto de Servicio:@veiculos.Servicio Origen:@veiculos.Origen Destino:@veiculos.Destino Salida:@veiculos.HoraSalida Arribo:@veiculos.HoraArribo Patente:@veiculos.Patente Interno:@veiculos.Interno</td>
+            <td class="headTables1" style="width: 510px">Cod.:@veiculos.Id Concepto de Servicio:@veiculos.Servicio Origen:@veiculos.Origen Destino:@veiculos.Destino Salida:@veiculos.HoraSalida Arribo:@veiculos.HoraArribo Patente:@veiculos.Patente Interno:@veiculos.Interno</td>
             <td class="headTables1" style="width: 85px">Importe</td>
         </tr>
         foreach (var item in veiculos.Items)

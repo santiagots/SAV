@@ -20,6 +20,7 @@ namespace SAV.Models
 
     public class BalanceVeiculoViewModel
     {
+        public int Id { get; set; }
         public string Origen { get; set; }
         public string Destino { get; set; }
         public string HoraSalida { get; set; }
@@ -51,23 +52,21 @@ namespace SAV.Models
         {
             IdViaje = viaje.ID;
             if(viaje.Servicio != ViajeTipoServicio.Cerrado)
-                Concepto = String.Format("[{0}]Pasajeros - {1} - {2}", viaje.ID, viaje.Origen.Nombre, viaje.Destino.Nombre);
+                Concepto = String.Format("Pasajeros - {0} - {1}", viaje.Origen.Nombre, viaje.Destino.Nombre);
             else
-                Concepto = String.Format("[{0}]Pasajeros - {1} - {2}", viaje.ID, viaje.OrigenCerrado, viaje.DestinoCerrado);
+                Concepto = String.Format("Pasajeros - {0} - {1}", viaje.OrigenCerrado, viaje.DestinoCerrado);
             Importe = getImporte(viaje);
         }
 
         public ItemBalanceViewModel(Viaje viaje, ComisionViaje comisionViaje)
         {
-            IdViaje = viaje.ID;
-            Concepto = String.Format("[{0}]Com. {1} - {2} - {3}", viaje.ID, comisionViaje.Comision.Contacto, viaje.Origen.Nombre, viaje.Destino.Nombre);
+            Concepto = String.Format("Com. {0} - {1} - {2}", comisionViaje.Comision.Contacto, viaje.Origen.Nombre, viaje.Destino.Nombre);
             Importe = comisionViaje.Comision.Costo;
         }
 
         public ItemBalanceViewModel(Viaje viaje, Conductor conductor)
         {
-            IdViaje = viaje.ID;
-            Concepto = String.Format("[{0}]Conductor {1} {2}", viaje.ID, conductor.Apellido, conductor.Nombre);
+            Concepto = String.Format("Conductor {0} {1} {2}", conductor.Apellido, conductor.Nombre, conductor.CUIL);
 
             if (viaje.Servicio == ViajeTipoServicio.Cerrado)
                 Importe = Math.Round(-(getImporte(viaje) * (conductor.ComisionViajeCerrado / 100)), 2, MidpointRounding.ToEven);
@@ -75,10 +74,9 @@ namespace SAV.Models
                 Importe = Math.Round(-conductor.ComisionViaje, 2, MidpointRounding.ToEven); ;
         }
 
-        public ItemBalanceViewModel(Viaje viaje, Gasto gasto)
+        public ItemBalanceViewModel(Gasto gasto)
         {
-            IdViaje = viaje.ID;
-            Concepto = String.Format("[{0}]Gasto {1} {2}", viaje.ID, gasto.RazonSocial, gasto.CUIT);
+            Concepto = String.Format("Gasto {0} {1}", gasto.RazonSocial, gasto.CUIT);
             Importe = -decimal.Parse(gasto.Monto);
         }
 

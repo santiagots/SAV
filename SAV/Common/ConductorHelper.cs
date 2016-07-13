@@ -17,7 +17,7 @@ namespace SAV.Common
                 conductor = conductor.Where(x => x.Nombre.ToUpper().Contains(nombre.ToUpper())).ToList<Conductor>();
 
             if (!String.IsNullOrEmpty(dni))
-                conductor = conductor.Where(x => x.DNI.ToString().Contains(dni)).ToList<Conductor>();
+                conductor = conductor.Where(x => x.CUIL.Contains(dni)).ToList<Conductor>();
 
             if (!String.IsNullOrEmpty(telefono))
                 conductor = conductor.Where(x => x.Telefono.ToUpper().Contains(telefono.ToUpper())).ToList<Conductor>();

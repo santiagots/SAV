@@ -13,7 +13,7 @@ namespace SAV.Models
 
         public string Apellido { get; set; }
 
-        public long DNI { get; set; }
+        public string CUIL { get; set; }
 
         public virtual Domicilio Domicilio { get; set; }
 

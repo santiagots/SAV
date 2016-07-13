@@ -56,7 +56,7 @@ function agregarGasto()
                     "idViaje": $("#viajeID").val()
                 },
             dataType: "html",
-            success: function (data) { $('#dialog').dialog('close'); },
+            success: function (data) { debugger; $('#partialViewGastos').html(data); $('#dialog').dialog('close'); disableSpinner(); },
             error: function (error) { alert(error); disableSpinner(); }
         });
     }

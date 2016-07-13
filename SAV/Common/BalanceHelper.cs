@@ -16,7 +16,8 @@ namespace SAV.Common
             foreach (Viaje viaje in viajes)
             {
                 BalanceVeiculoViewModel balanceVeiculoViewModel = new BalanceVeiculoViewModel()
-                        {Destino = viaje.Destino.Nombre,
+                        {Id = viaje.ID,
+                        Destino = viaje.Destino.Nombre,
                         HoraArribo = viaje.FechaArribo.ToString("hh:mm"),
                         HoraSalida = viaje.FechaSalida.ToString("hh:mm"),
                         Interno = viaje.Interno,
@@ -36,7 +37,7 @@ namespace SAV.Common
                 exportBalanceViewModel.Add(new ItemBalanceViewModel(viaje, viaje.Conductor));
 
                 //Gastos
-                exportBalanceViewModel.AddRange(viaje.Gastos.Select(x => new ItemBalanceViewModel(viaje, x)).ToList<ItemBalanceViewModel>());
+                exportBalanceViewModel.AddRange(viaje.Gastos.Select(x => new ItemBalanceViewModel(x)).ToList<ItemBalanceViewModel>());
 
                 balanceVeiculoViewModel.Items = exportBalanceViewModel;
 

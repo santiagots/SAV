@@ -21,10 +21,10 @@ namespace SAV.Models
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Apellido solo debe contener letras")]
         public string Apellido { get; set; }
 
-        [Display(Name = "DNI:")]
+        [Display(Name = "CUIL:")]
         [Required(ErrorMessage = "Debe ingresar un DNI")]
-        [RegularExpression("^(?!\\.?$)\\d{0,8}?$", ErrorMessage = "El DNI solo debe contener numeros sin separado de miles")]
-        public string DNI { get; set; }
+        [RegularExpression("^[0-9]{2}-[0-9]{8}-[0-9]$", ErrorMessage = "El CUIT debe ser en formato [2]-[8]-[1]")]
+        public string CUIL { get; set; }
 
         [Display(Name = "Comision viaje:")]
         [Required(ErrorMessage = "Debe ingresar una Comision viaje")]
@@ -83,7 +83,7 @@ namespace SAV.Models
             Nombre = conductor.Nombre;
             Telefono = conductor.Telefono;
             Email = conductor.Email;
-            DNI = conductor.DNI.ToString();
+            CUIL = conductor.CUIL;
             ComisionViajeCerrado = conductor.ComisionViajeCerrado.ToString();
             ComisionViaje = conductor.ComisionViaje.ToString();
 
@@ -115,7 +115,7 @@ namespace SAV.Models
         {
             conductor.Apellido = conductorViewModel.Apellido;
             conductor.Nombre = conductorViewModel.Nombre;
-            conductor.DNI = long.Parse(conductorViewModel.DNI);
+            conductor.CUIL = conductorViewModel.CUIL;
             conductor.ComisionViajeCerrado = decimal.Parse(conductorViewModel.ComisionViajeCerrado);
             conductor.ComisionViaje = decimal.Parse(conductorViewModel.ComisionViaje);
 
