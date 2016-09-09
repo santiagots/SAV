@@ -103,28 +103,26 @@
 
 
         <!-- PASAJEROS TABLES -->
-        <div style="float: right">
-            <div id="partialViewPasajeros">
+            <div id="partialViewPasajeros" style="float: right">
             @Html.Partial("_PasajerosTable", Model.Pasajero)
+                @if (Model.DatosBasicosViaje.Disponible > 0)
+                {
+                    <div class="botones">
+                        <div class="boton">
+                            <div class="inicioBotonGris"></div>
+                            <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Pasajero" onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje })    '"></input>
+                            <div class="finBotonGris"></div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="botones">
+                        <div class="boton">
+                        </div>
+                    </div>
+                }
             </div>
-            @if(Model.DatosBasicosViaje.Disponible > 0)
-            {
-            <div class="botones">
-                <div class="boton">
-                    <div class="inicioBotonGris"></div>
-                    <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Pasajero" onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje })    '"></input>
-                    <div class="finBotonGris"></div>
-                </div>
-            </div>
-            }
-            else
-            {
-            <div class="botones">
-                <div class="boton">
-                </div>
-            </div>
-            }
-        </div>
 
         @if(Model.DatosBasicosViaje.Servicio != SAV.Models.ViajeTipoServicio.Cerrado)
         {

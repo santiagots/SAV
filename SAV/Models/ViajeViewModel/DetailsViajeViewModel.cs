@@ -26,7 +26,9 @@ namespace SAV.Models
 
         public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores):this(viaje)
         {
-            DatosBasicosViaje.SelectConductorNombre = viaje.Conductor.ID.ToString();
+            if(viaje.Conductor != null)
+                DatosBasicosViaje.SelectConductorNombre = viaje.Conductor.ID.ToString();
+
             DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
         }
 

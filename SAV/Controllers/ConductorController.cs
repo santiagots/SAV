@@ -26,7 +26,7 @@ namespace SAV.Controllers
             {
                 Conductor conductor = db.Conductores.Find(id.Value);
                 conductorViewModel = new ConductorViewModel(provincias, conductor);
-                conductorViewModel.Viajes = db.Viajes.ToList().Where(x => x.Conductor.ID == id).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+                conductorViewModel.Viajes = db.Viajes.ToList().Where(x => x.Conductor != null && x.Conductor.ID == id).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             }
             else
             {
@@ -117,9 +117,27 @@ namespace SAV.Controllers
         {
             Conductor conductor = db.Conductores.Find(id);
 
-            IPagedList<Viaje> viajes = db.Viajes.ToList().Where(x => x.Conductor.ID == id).ToPagedList<Viaje>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            IPagedList<Viaje> viajes = db.Viajes.ToList().Where(x => x.Conductor != null && x.Conductor.ID == id).ToPagedList<Viaje>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesTable", viajes);
+        }
+
+        public ActionResult Delete(int id = 0)
+        {
+            Conductor conductor = db.Conductores.Find(id);
+            if (conductor == null)
+            {
+                return HttpNotFound();
+            }
+
+            foreach (Viaje viaje in db.Viajes.Where(x => x.Conductor != null && x.Conductor.ID == id).ToList())
+            {
+                viaje.Conductor = null;
+            } 
+            db.Conductores.Remove(conductor);
+            db.SaveChanges();
+
+            return RedirectToAction("Search");
         }
     }
 }

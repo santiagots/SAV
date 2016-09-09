@@ -11,12 +11,17 @@
     </div>
     @using (Html.BeginForm())
     {
-        @Html.ValidationSummary(true)
         <div class="contenidoDatos">
             <div class="datosInputs">
                 <p class="edicion">@Html.LabelFor(model => model.Fecha)</p>
                 <div class="divFecha">
                     @Html.TextBoxFor(model => model.Fecha, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
+                </div>
+            </div>
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Clave)</p>
+                <div class="divFecha">
+                    @Html.PasswordFor(model => model.Clave)
                 </div>
             </div>
             <div class="botones">
@@ -38,6 +43,8 @@
         <div class="footerTables"></div>
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.Fecha)</p>
+            <p>@Html.ValidationMessageFor(model => model.Clave)</p>
+            <p>@Html.ValidationSummary(true)</p>
         </div>
     }
 

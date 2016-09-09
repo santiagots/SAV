@@ -34,7 +34,8 @@ namespace SAV.Common
                 exportBalanceViewModel.AddRange(viaje.ComisionesViaje.Select(x => new ItemBalanceViewModel(viaje, x)).ToList<ItemBalanceViewModel>());
 
                 //Consuctores
-                exportBalanceViewModel.Add(new ItemBalanceViewModel(viaje, viaje.Conductor));
+                if(viaje.Conductor != null)
+                    exportBalanceViewModel.Add(new ItemBalanceViewModel(viaje, viaje.Conductor));
 
                 //Gastos
                 exportBalanceViewModel.AddRange(viaje.Gastos.Select(x => new ItemBalanceViewModel(x)).ToList<ItemBalanceViewModel>());

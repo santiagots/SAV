@@ -18,9 +18,9 @@
 						<tr class="headTitles noBorder">
 							<th class="type2 type203"><p>Apellido</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Nombre</p><span class="ordenamiento"></span></th>
-							<th class="type2 type106"><p>CUIL</p><span class="ordenamiento"></span></th>
+							<th class="type2 type140"><p>CUIL</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Domicilio</p><span class="ordenamiento"></span></th>
-							<th class="type106"><p>Telefono</p><span class="ordenamiento"></span></th>
+							<th class="type2 type106"><p>Telefono</p><span class="ordenamiento"></span></th>
 						</tr>
 							
 					</thead>
@@ -30,9 +30,13 @@
 						<tr>
 							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.Apellido)</p></td>
 							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.Nombre)</p></td>
-							<td class="type2 type106 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.CUIL)</p></td>
+							<td class="type2 type140 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.CUIL)</p></td>
 							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.Domicilio.getDomicilio)</p></td>
-							<td class="type106 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.Telefono)</p></td>
+							<td class="type2 type106 waiting" onclick="location.href='@Url.Action("Create", new { id = item.ID })'" ><p>@Html.DisplayFor(modelItem => item.Telefono)</p></td>
+                            <td class="type5">
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar el conductor?');" href="@Url.Action("Delete", new { id = item.ID })"><span id="Span43" class="action retirar" title="Eliminar" /></a>
+                                
+                            </td>
 						</tr>
 						}
 					</tbody>

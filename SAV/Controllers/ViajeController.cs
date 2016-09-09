@@ -198,6 +198,11 @@ namespace SAV.Controllers
         {
             var viaje = db.Viajes.Find(id);
 
+            string conductor;
+            if (viaje.Conductor != null)
+                conductor = string.Format("{0} {1} ({2})", viaje.Conductor.Apellido, viaje.Conductor.Nombre, viaje.Conductor.CUIL);
+            else
+                conductor = "Conductor no asignado";
             string patente = viaje.Patente;
             string interno = viaje.Interno.ToString();
             string viajeID = viaje.ID.ToString();
@@ -229,7 +234,7 @@ namespace SAV.Controllers
             if (pasajeros.Count > 0)
             {
                 List<ICell> HeadPasajerosCell = PasajerosSheet.GetRow(1).Cells;
-                HeadPasajerosCell[0].SetCellValue(string.Format("Hoja de Viaje - Cod. Viaje: {0} - Patente: {1} - Interno: {2}", viajeID, patente, interno));
+                HeadPasajerosCell[0].SetCellValue(string.Format("Hoja de Viaje - Cod. Viaje: {0} - Patente: {1} - Interno: {2} - Conductor: {3}", viajeID, patente, interno, conductor));
 
                 HeadPasajerosCell = PasajerosSheet.GetRow(3).Cells;
                 HeadPasajerosCell[0].SetCellValue(string.Format("Origen: {0} - Destino: {1}", origen, destino));

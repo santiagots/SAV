@@ -246,7 +246,7 @@ namespace SAV.Controllers
                 return RedirectToAction("Search");
         }
 
-        public ActionResult Delete(int id, int idViaje)
+        public ActionResult Delete(int id, int idViaje, string from)
         {
             ClienteViaje clienteViaje = db.ClienteViajes.Where(x => x.Viaje.ID == idViaje && x.Cliente.ID == id).FirstOrDefault();
             
@@ -256,7 +256,10 @@ namespace SAV.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Details", "Viaje", new { id = idViaje });
+            if(!String.IsNullOrEmpty(from) && from == "Close")
+                return RedirectToAction("Close", "Viaje", new { id = idViaje });
+            else
+                return RedirectToAction("Details", "Viaje", new { id = idViaje });
         }
 
         public ActionResult DeleteCliente(int id, string apellido, string nombre, string dni, string telefono, int? IdViaje)

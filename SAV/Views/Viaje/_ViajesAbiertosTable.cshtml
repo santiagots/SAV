@@ -51,7 +51,7 @@
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type204 waiting"><p>@Html.DisplayFor(modelItem => item.Servicio)</p></td>
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type122 waiting"><p>@Html.DisplayFor(modelItem => item.Asientos)</p></td>
                                     <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type122 waiting"><p>@(item.Asientos - item.ClienteViaje.Count)</p></td>
-                                    <td class=" type5">
+                                    <td class="type5">
                                         <a onclick = "return confirmSpinner('Esta seguro que desea borrar el viaje?');" href="@Url.Action("Delete", new { id = item.ID })" ><span id="Span43" class="action retirar" title="Eliminar"/></a>
                                         <a href="@Url.Action("ExportViaje", new { id = item.ID })" ><span id="Span44" class="action exportar" title="Exportar"/></a>
                                     </td>

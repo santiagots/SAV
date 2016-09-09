@@ -99,10 +99,9 @@
 
 
         <!-- PASAJEROS TABLES -->
-        <div style="float: right">
-            <div id="partialViewPasajeros">
-                @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
-            </div>
+        <div id="partialViewPasajeros" style="float: right">
+            @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
+
             @if (Model.DatosBasicosViaje.Disponible > 0)
             {
                 <div class="botones">

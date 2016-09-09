@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using SAV.Models;
 using SAV.Common;
+using System.Configuration;
 
 namespace SAV.Controllers
 {
@@ -23,6 +24,11 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Balance(BalanceViewModel balanceViewModel)
         {
+            if (!balanceViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
+            {
+                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
+                return View(balanceViewModel);
+            }
             DateTime fecha = ViajeHelper.getFecha(balanceViewModel.Fecha);
 
             List<Viaje> viajes = ViajeHelper.getViajesBalance(db.Viajes.ToList<Viaje>(), fecha);

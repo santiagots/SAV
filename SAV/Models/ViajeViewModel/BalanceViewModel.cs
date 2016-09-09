@@ -11,6 +11,9 @@ namespace SAV.Models
         [Display(Name = "Fecha:")]
         [Required(ErrorMessage = "Debe ingresar una Fecha")]
         public string Fecha { get; set; }
+        [Display(Name = "Clave:")]
+        [Required(ErrorMessage = "Debe ingresar una Clave")]
+        public string Clave { get; set; }
         public List<BalanceVeiculoViewModel> Veiculos { get; set; }
         public BalanceViewModel()
         {
@@ -52,9 +55,9 @@ namespace SAV.Models
         {
             IdViaje = viaje.ID;
             if(viaje.Servicio != ViajeTipoServicio.Cerrado)
-                Concepto = String.Format("Pasajeros - {0} - {1}", viaje.Origen.Nombre, viaje.Destino.Nombre);
+                Concepto = String.Format("Pasajeros ({0})", getTotalPasajerosViajaron(viaje));
             else
-                Concepto = String.Format("Pasajeros - {0} - {1}", viaje.OrigenCerrado, viaje.DestinoCerrado);
+                Concepto = String.Format("Pasajeros ({0})", getTotalPasajerosViajaron(viaje));
             Importe = getImporte(viaje);
         }
 
@@ -66,7 +69,7 @@ namespace SAV.Models
 
         public ItemBalanceViewModel(Viaje viaje, Conductor conductor)
         {
-            Concepto = String.Format("Conductor {0} {1} {2}", conductor.Apellido, conductor.Nombre, conductor.CUIL);
+            Concepto = String.Format("Conductor {0} {1} ({2})", conductor.Apellido, conductor.Nombre, conductor.CUIL);
 
             if (viaje.Servicio == ViajeTipoServicio.Cerrado)
                 Importe = Math.Round(-(getImporte(viaje) * (conductor.ComisionViajeCerrado / 100)), 2, MidpointRounding.ToEven);
@@ -87,5 +90,9 @@ namespace SAV.Models
                     select item.Costo).Sum(), 2 , MidpointRounding.ToEven);
         }
 
+        private int getTotalPasajerosViajaron(Viaje viaje)
+        {
+            return viaje.ClienteViaje.Count(x => x.Pago);
+        }
     }
 }
