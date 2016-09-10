@@ -461,25 +461,21 @@ namespace SAV.Controllers
             return PartialView("_CierreGastosTable", viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
-        public void setAsistenciaPasajeros(ICollection<Pasajeros> pasajeros)
+        public void setAsistenciaPasajeros(int clienteViajeID, int pago, int presente)
         {
-            if (pasajeros != null)
+            if (clienteViajeID > 0)
             {
                 List<ClienteViaje> clienteViaje = db.ClienteViajes.ToList<ClienteViaje>();
 
-                foreach (var item in pasajeros)
+
+                ClienteViaje select = clienteViaje.Where(x => x.ID == clienteViajeID).FirstOrDefault();
+                if (select != null)
                 {
-                    ClienteViaje select = clienteViaje.Where(x => x.ID == item.ClienteViajeID).FirstOrDefault();
-                    if (select != null)
-                    {
-                        if (select.Presente != item.Presente || select.Pago != item.Pago)
-                        {
-                            select.Presente = item.Presente;
-                            select.Pago = item.Pago;
-                            db.Entry(select).State = EntityState.Modified;
-                        }
-                    }
+                    select.Presente = Convert.ToBoolean(presente);
+                    select.Pago = Convert.ToBoolean(pago);
+                    db.Entry(select).State = EntityState.Modified;
                 }
+
                 db.SaveChanges();
             }
         }

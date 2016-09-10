@@ -14,13 +14,16 @@ $(document).ready(function () {
         ModificarViaje();
     });
 
+    $("#tablaPasajeros [class='check-box']").change(function () {
+        actualizarInfoCliente();
+    });
+
 })
 
 function cerrar()
 {
     $("#newGasto").hide();
     $("form").resetValidation();
-    setAsistenciaPasajerosAjax();
     setEntregaRetiraComisionAjax();
     if (!ErrorClose) {
         if (!confirmSpinner("Esta seguro que desea de cerrar el viaje?")) {
@@ -91,22 +94,6 @@ function ModificarViaje() {
     $("#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario").prop('disabled', false);
 }
 
-function setAsistenciaPasajeros() {
-    enableSpinner();
-    setAsistenciaPasajerosAjax();
-}
-
-function setAsistenciaPasajerosAjax() {
-    $.ajax({
-        async: false,
-        url: '/Viaje/setAsistenciaPasajeros',
-        type: 'POST',
-        data: $("#tablaPasajeros :input").serialize(),
-        dataType: "json",
-        success: function (data) { disableSpinner(); },
-        error: function (error) { addError(error, "AsistenciaPasajeros", "Hubo un error al guardar la información de Pasajeros"); ErrorClose = true; }
-    });
-}
 
 function setEntregaRetiraComision() {
     enableSpinner();
@@ -121,7 +108,7 @@ function setEntregaRetiraComisionAjax() {
         data: $("#tablaComisiones :input").serialize(),
         dataType: "json",
         success: function (data) { disableSpinner(); },
-        error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al guardar la información de Comisiones"); ErrorClose = true; }
+        error: function (error) { debugger; addError(error, "EntregaRetiraComision", "Hubo un error al guardar la información de Comisiones"); ErrorClose = true; }
     });
 }
 
@@ -144,5 +131,30 @@ function deleteGasto(idGasto, idViaje)
         success: function (data) { $('#partialViewGastos').html(data); disableSpinner(); },
         error: function (error) { addError(error, "deletGasto", "Hubo un error al eliminar el Gasto"); ErrorClose = true; }
     });
+}
+
+function actualizarInfoCliente()
+{
+
+    //Tr perteneciente al pasajero a modificar
+    var contexto = $(event.target).closest("tr");
+
+    //Obtengo la informacion del pasajero que se esta actualizando
+    var datos = {
+        "clienteViajeID": $("[name*='ClienteViajeID']", contexto).val(),
+        "pago": $("[name*='Pago']:checked", contexto).length,
+        "presente": $("[name*='Presente']:checked", contexto).length,
+    };
+
+    $.ajax({
+        async: false,
+        url: '/Viaje/setAsistenciaPasajeros',
+        type: 'POST',
+        data: datos,
+        dataType: "html",
+        success: function (data) { disableSpinner(); },
+        error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al registrar el pago o la asistencia del pasajero."); ErrorClose = true; }
+    });
+    $(this).closest("tr")
 }
 
