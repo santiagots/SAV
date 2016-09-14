@@ -2,12 +2,12 @@
 @using PagedList.Mvc
 @model IPagedList<SAV.Models.Pasajeros>
 
-<div class="alertTablesExtended" id="partialViewPasajeros">
+<div class="alertTablesExtended">
     <div class="seccion">
 
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CierrePagingPasajeros", new { IdViaje = ViewBag.IdViaje, pageNumber = page})
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CierrePagingPasajeros", new { IdViaje = ViewBag.IdViaje, pageNumber = page, time = DateTime.Now})
                                                                                             , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
-                                                                                            , new AjaxOptions() { HttpMethod = "GET",OnBegin="setAsistenciaPasajeros", OnSuccess="disableSpinner", UpdateTargetId = "partialViewPasajeros" }))
+                                                                                            , new AjaxOptions() { HttpMethod = "GET",OnBegin= "enableSpinner", OnSuccess= "addEventToPasajeros", UpdateTargetId = "partialViewPasajeros" }))
 
         <div class="headAlertTablesExtended selected">
             <p>Pasajeros</p>

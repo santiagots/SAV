@@ -565,7 +565,7 @@ namespace SAV.Controllers
             return PartialView("_PasajerosTable", pasajeros);
         }
 
-        public ActionResult CierrePagingPasajeros(int? IdViaje, int? pageNumber)
+        public ActionResult CierrePagingPasajeros(int? IdViaje, int? pageNumber, DateTime time)
         {
             ViewBag.IdViaje = IdViaje;
 
