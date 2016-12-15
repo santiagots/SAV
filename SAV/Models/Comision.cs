@@ -11,11 +11,13 @@ namespace SAV.Models
 
         public string Contacto { get; set; }
 
-        public virtual List<ComisionViaje> ComisionViaje { get; set; }
-
         public virtual Domicilio DomicilioEntregar { get; set; }
 
         public virtual Domicilio DomicilioRetirar { get; set; }
+
+        public virtual Parada Retirar { get; set; }
+
+        public virtual Parada Entregar { get; set; }
 
         public string Telefono { get; set; }
 
@@ -30,5 +32,19 @@ namespace SAV.Models
         public ComisionAccion Accion { get; set; }
 
         public ComisionServicio Servicio { get; set; }
-    }
+
+        public DateTime FechaAlta { get; set; }
+
+        public bool Enviar { get; set; }
+
+        public DateTime? FechaEnvio { get; set; }
+
+        public DateTime? FechaEntrega { get; set; }
+
+        public DateTime? FechaPago { get; set; }
+
+        public decimal Debe { get; set; }
+
+        public virtual CuentaCorriente CuentaCorriente { get; set; }
+}
 }

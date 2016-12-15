@@ -6,16 +6,18 @@ using System.Web;
 
 namespace SAV.Models
 {
-    public class BalanceViewModel
+    public class BalanceViajeDiarioViewModel
     {
         [Display(Name = "Fecha:")]
         [Required(ErrorMessage = "Debe ingresar una Fecha")]
         public string Fecha { get; set; }
+        [Display(Name = "Fecha Hasta:")]
+        public string FechaHasta { get; set; }
         [Display(Name = "Clave:")]
         [Required(ErrorMessage = "Debe ingresar una Clave")]
         public string Clave { get; set; }
         public List<BalanceVeiculoViewModel> Veiculos { get; set; }
-        public BalanceViewModel()
+        public BalanceViajeDiarioViewModel()
         {
             Veiculos = new List<BalanceVeiculoViewModel>();
         }
@@ -51,6 +53,10 @@ namespace SAV.Models
         [Display(Name = "Importe")]
         public decimal Importe { get; set; }
 
+        public ItemBalanceViewModel()
+        {
+        }
+
         public ItemBalanceViewModel(Viaje viaje)
         {
             IdViaje = viaje.ID;
@@ -59,12 +65,6 @@ namespace SAV.Models
             else
                 Concepto = String.Format("Pasajeros ({0})", getTotalPasajerosViajaron(viaje));
             Importe = getImporte(viaje);
-        }
-
-        public ItemBalanceViewModel(Viaje viaje, ComisionViaje comisionViaje)
-        {
-            Concepto = String.Format("Com. {0} - {1} - {2}", comisionViaje.Comision.Contacto, viaje.Origen.Nombre, viaje.Destino.Nombre);
-            Importe = comisionViaje.Comision.Costo;
         }
 
         public ItemBalanceViewModel(Viaje viaje, Conductor conductor)

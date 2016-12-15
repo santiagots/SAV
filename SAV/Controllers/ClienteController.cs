@@ -23,7 +23,7 @@ namespace SAV.Controllers
             Provincia provincia = db.Provincias.Where(x => x.ID == IdProvincia).FirstOrDefault();
 
             if (HttpContext.Request.IsAjaxRequest())
-                return Json(new SelectList(provincia.Localidad, "ID", "Nombre"), JsonRequestBehavior.AllowGet);
+                return Json(new SelectList(provincia.Localidad.OrderBy(x => x.Nombre), "ID", "Nombre"), JsonRequestBehavior.AllowGet);
 
             return View(provincia);
         }
@@ -40,6 +40,7 @@ namespace SAV.Controllers
             ViewBag.FechaHora = Fecha;
 
             return new Rotativa.ViewAsPdf("Boleto");
+            //return View("Boleto");
         }
 
         public ActionResult Search(int? IdViaje)

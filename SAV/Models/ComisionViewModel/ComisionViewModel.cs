@@ -11,6 +11,8 @@ namespace SAV.Models
 
     public class ComisionViewModel
     {
+        public int idCuentaCorriente { get; set; }
+
         [Display(Name = "Contacto:")]
         [Required(ErrorMessage = "Debe ingresar un Contacto")]
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Nombre solo debe contener letras")]
@@ -112,7 +114,7 @@ namespace SAV.Models
 
         public ComisionViewModel() : base() { }
 
-        public ComisionViewModel(List<Provincia> provincias, Comision comision)
+        public ComisionViewModel(List<Provincia> provincias, Comision comision, List<ComisionResponsable> responsable, List<Parada> paradas)
         {
             Contacto = comision.Contacto;
             Telefono = comision.Telefono;
@@ -121,13 +123,17 @@ namespace SAV.Models
             Comentario = comision.Comentario;
             Accion = comision.Accion;
             Servicio = comision.Servicio;
+            Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre)).ToList();
+
+            if(comision.Responsable != null)
+                SelectResponsable = comision.Responsable.ID;
 
             ProvinciaRetirar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             ProvinciaEntregar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             LocalidadRetirar = new List<KeyValuePair<int, string>>();
             LocalidadEntregar = new List<KeyValuePair<int, string>>();
-            ServicioDirectoRetirar = new List<KeyValuePair<int, string>>();
-            ServicioDirectoEntregar = new List<KeyValuePair<int, string>>();
+            ServicioDirectoRetirar = paradas.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            ServicioDirectoEntregar = paradas.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
 
             if (comision.Servicio == ComisionServicio.Puerta)
             {
@@ -150,101 +156,36 @@ namespace SAV.Models
                     CallePisoRetirar = comision.DomicilioRetirar.Piso;
                 }
             }
+            else
+            {
+                if(comision.Retirar != null)
+                    SelectServicioDirectoRetirar = comision.Retirar.ID;
+                if (comision.Entregar != null)
+                    SelectServicioDirectoEntregar = comision.Entregar.ID;
+            }
         }
 
-        public ComisionViewModel(List<Provincia> provincias, List<ComisionResponsable> responsable)
+        public ComisionViewModel(List<Provincia> provincias, List<ComisionResponsable> responsable, List<Parada> paradas)
         {
             Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre )).ToList();
             ProvinciaRetirar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             ProvinciaEntregar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            ServicioDirectoRetirar = paradas.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            ServicioDirectoEntregar = paradas.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             LocalidadRetirar = new List<KeyValuePair<int, string>>();
             LocalidadEntregar = new List<KeyValuePair<int, string>>();
         }
 
-        public ComisionViewModel(List<Provincia> provincias, Viaje viaje, List<ComisionResponsable> responsable)
-            : this(provincias, responsable)
-        {
-            ServicioDirectoRetirar = viaje.Origen.Parada.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-            ServicioDirectoRetirar.AddRange(viaje.Destino.Parada.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList());
-
-            ServicioDirectoEntregar = viaje.Origen.Parada.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-            ServicioDirectoEntregar.AddRange(viaje.Destino.Parada.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList());
-        }
-
-        public ComisionViewModel(List<Provincia> provincias, Viaje viaje, Comision comision, bool SetServicioDirecto, List<ComisionResponsable> responsable)
-            : this(provincias, viaje, responsable)
-        {
-            Contacto = comision.Contacto;
-            Telefono = comision.Telefono;
-            Costo = comision.Costo.ToString();
-            Comentario = comision.Comentario;
-            Pago = comision.Pago;
-            Accion = comision.Accion;
-            Servicio = comision.Servicio;
-
-            if (comision.Responsable != null)
-                SelectResponsable = comision.Responsable.ID;
-
-            if(comision.Servicio == ComisionServicio.Puerta)
-            {
-                if (comision.DomicilioEntregar != null)
-                {
-                    SelectProvinciaEntregar = comision.DomicilioEntregar.Provincia.ID;
-                    LocalidadEntregar = provincias.Where(x=> x.ID == SelectProvinciaEntregar).FirstOrDefault().Localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
-                    SelectLocalidadEntregar = comision.DomicilioEntregar.Localidad.ID;
-                    CalleEntregar = comision.DomicilioEntregar.Calle;
-                    CalleNumeroEntregar = comision.DomicilioEntregar.Numero;
-                    CallePisoEntregar = comision.DomicilioEntregar.Piso;
-                }
-                if (comision.DomicilioRetirar != null)
-                {
-                    SelectProvinciaRetirar = comision.DomicilioRetirar.Provincia.ID;
-                    LocalidadRetirar = provincias.Where(x => x.ID == SelectProvinciaRetirar).FirstOrDefault().Localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
-                    SelectLocalidadRetirar = comision.DomicilioRetirar.Localidad.ID;
-                    CalleRetirar = comision.DomicilioRetirar.Calle;
-                    CalleNumeroRetirar = comision.DomicilioRetirar.Numero;
-                    CallePisoRetirar = comision.DomicilioRetirar.Piso;
-                }
-            }
-            if (comision.Servicio == ComisionServicio.Directo && SetServicioDirecto)
-            {
-                ComisionViaje comisionViaje = viaje.ComisionesViaje.Where(x => x.Comision.ID == comision.ID).FirstOrDefault<ComisionViaje>();
-
-                if (comisionViaje != null && comisionViaje.Retirar != null)
-                    SelectServicioDirectoRetirar = comisionViaje.Retirar.ID;
-
-                if (comisionViaje != null && comisionViaje.Entregar != null)
-                    SelectServicioDirectoEntregar = comisionViaje.Entregar.ID;
-            }
-        }
-
-        public ComisionViaje getComisionViaje(ComisionViewModel comisionViewModel, Viaje viaje, List<Parada> Paradas, Comision comision)
-        {
-            ComisionViaje comisionViaje = new ComisionViaje();
-
-            comisionViaje.Comision = comision;
-            comisionViaje.Viaje = viaje;
-            comisionViaje.Pago = comisionViewModel.Pago;
-            comisionViaje.Costo = decimal.Parse(comisionViewModel.Costo);
-
-            if (comisionViewModel.Servicio == ComisionServicio.Directo)
-            {
-                comisionViaje.Entregar = Paradas.Where(x => x.ID ==  comisionViewModel.SelectServicioDirectoEntregar).FirstOrDefault();
-                comisionViaje.Retirar = Paradas.Where(x => x.ID == comisionViewModel.SelectServicioDirectoRetirar).FirstOrDefault();
-            }
-            return comisionViaje;
-        }
-
-        public Comision getComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades)
+        public Comision getComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada)
         {
             Comision comision = new Comision();
 
-            upDateComision(comisionViewModel, provincias, localidades, ref comision);
-
+            upDateComision(comisionViewModel, provincias, localidades, parada, ref comision);
+            comision.FechaAlta = DateTime.Now;
             return comision;
         }
 
-        public void upDateComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, ref Comision comision)
+        public void upDateComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada, ref Comision comision)
         {
             comision.Contacto = comisionViewModel.Contacto.ToUpper();
             comision.Telefono = comisionViewModel.Telefono;
@@ -252,12 +193,20 @@ namespace SAV.Models
             comision.Servicio = comisionViewModel.Servicio;
             comision.Costo = decimal.Parse(comisionViewModel.Costo);
             comision.Comentario = comisionViewModel.Comentario;
+            comision.Pago = comisionViewModel.Pago;
+            if (comisionViewModel.Pago)
+                comision.FechaPago = DateTime.Now;
 
             if (comisionViewModel.Servicio == ComisionServicio.Puerta)
             {
                 comision.DomicilioEntregar = setDomicilio(comisionViewModel.SelectProvinciaEntregar, comisionViewModel.SelectLocalidadEntregar, comisionViewModel.CalleEntregar, comisionViewModel.CalleNumeroEntregar, comisionViewModel.CallePisoEntregar, provincias, localidades);
 
                 comision.DomicilioRetirar = setDomicilio(comisionViewModel.SelectProvinciaRetirar, comisionViewModel.SelectLocalidadRetirar, comisionViewModel.CalleRetirar, comisionViewModel.CalleNumeroRetirar, comisionViewModel.CallePisoRetirar, provincias, localidades);
+            }
+            else
+            {
+                comision.Entregar = parada.Where(x => x.ID == comisionViewModel.SelectServicioDirectoEntregar).FirstOrDefault();
+                comision.Retirar = parada.Where(x => x.ID == comisionViewModel.SelectServicioDirectoRetirar).FirstOrDefault();
             }
         }
 

@@ -121,13 +121,6 @@
             }
         </div>
 
-        <!-- COMISIONES TABLES -->
-        @if(Model.DatosBasicosViaje.Servicio != SAV.Models.ViajeTipoServicio.Cerrado)
-        {
-        <div id="partialViewComisiones" style="float: right">
-            @Html.Partial("_CierreComisionesTable", Model.Comisiones)
-        </div>
-        }
         <!-- GASTOS TABLES -->
         <div id="partialViewGastos" style="float: right">
             @Html.Partial("_CierreGastosTable", Model.Gastos)

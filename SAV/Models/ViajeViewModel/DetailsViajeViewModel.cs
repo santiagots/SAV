@@ -14,8 +14,6 @@ namespace SAV.Models
     {
         public IPagedList<Pasajeros> Pasajero { get; set; }
 
-        public IPagedList<Comisiones> Comisiones { get; set; }
-
         public IPagedList<Gasto> Gastos { get; set; }
 
         public Gasto  NewGastos { get; set; }
@@ -58,8 +56,6 @@ namespace SAV.Models
 
             Pasajero = ViajeHelper.getPasajeros(viaje.ClienteViaje, 1);
 
-            Comisiones = ViajeHelper.getComisiones(viaje.ComisionesViaje, 1);
-
             Gastos = viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             DatosBasicosViaje.Asientos = viaje.Asientos;
             DatosBasicosViaje.FechaSalida = viaje.FechaSalida.Date.ToString("dd/MM/yyyy");
@@ -87,24 +83,5 @@ namespace SAV.Models
         public bool Pago { get; set; }
         public string Costo { get; set; }
         public bool Presente { get; set; }
-    }
-
-    public class Comisiones
-    {
-        public int ComisionID { get; set; }
-        public int ComisionViajeID { get; set; }
-        public string Contacto { get; set; }
-        public string Telefono { get; set; }
-        public string Responsable { get; set; }
-        public ComisionAccion Accion { get; set; }
-        public ComisionServicio Servicio { get; set; }
-        public string EntregarPuerta { get; set; }
-        public string RetirarPuerta { get; set; }
-        public string EntregarDirecto { get; set; }
-        public string RetirarDirecto { get; set; }
-        public string Costo { get; set; }
-        public string Comentaro { get; set; }
-        public bool Pago { get; set; }
-        public bool EntregaRetira { get; set; }
     }
 }

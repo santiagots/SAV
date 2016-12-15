@@ -65,7 +65,7 @@ namespace SAV.Models
         public int Disponible { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una Patente")]
-        [RegularExpression("^[A-Za-z]{3}\\d{3}$", ErrorMessage = "La patente ingresada es invalida")]
+        [RegularExpression("(^[A-ZÑ]{3}\\d{3})|(^[A-ZÑ]{2}\\d{3}[A-ZÑ]{2})$", ErrorMessage = "La patente ingresada es invalida debe respetar el formato XXX999 o XX999XX")]
         [Display(Name = "Patente:")]
         public string Patente { get; set; }
 

@@ -1,0 +1,105 @@
+﻿@using SAV.Models
+@model SAV.Models.BalanceComisionDiarioViewModel
+@{
+    Layout = "";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+</head>
+
+<style type="text/css">
+.site-title {
+    color: #989898;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+}
+
+.headTables1{
+    background-color:#C8C8C8;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    border: solid;
+    text-align: center;
+}
+
+.headTables2{
+    color: #989898;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    text-align: center;
+    font-weight: bold;
+}
+
+.datosInputs {
+    color: #666666;
+    font-family: verdana;
+    font-size: 10px;
+	width: 100px;
+    border: solid;
+    min-height:40px;
+}
+</style>
+
+<table style="border: solid">
+    <tr>
+        <td colspan="2" class="site-title">BUSES LA ESTACION</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="headTables2">AV. VIYTES 40 - CHACABUCO - CP 6740</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="headTables2">TELÉFONO: 02352 45-1097</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="headTables2">CUIT: XX-XXXXXXXX-X</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="headTables2">@ViewBag.titulo</td>
+    </tr>
+    @if (Model.Comisiones.Count > 0)
+    {
+        <tr>
+            <td class="headTables1" style="width: 510px">Concepto Comisión</td>
+            <td class="headTables1" style="width: 85px">Importe</td>
+        </tr>
+        foreach (var item in Model.Comisiones)
+        {
+        <tr>
+            <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+            <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
+        </tr>
+        }
+
+        <tr>
+            <td class="headTables1" style="width: 510px">Total Comision</td>
+            <td class="headTables1" style="width: 75px">@Model.totalComision</td>
+        </tr>
+    }
+    @if (Model.Gastos.Count > 0)
+    {
+        <tr>
+            <td class="headTables1" style="width: 510px">Concepto Gasto</td>
+            <td class="headTables1" style="width: 85px">Importe</td>
+        </tr>
+        foreach (var item in Model.Gastos)
+        {
+        <tr>
+            <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+            <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
+        </tr>
+        }
+        <tr>
+            <td class="headTables1" style="width: 510px">Total Gastos</td>
+            <td class="headTables1" style="width: 75px">@Model.totalGasto</td>
+        </tr>
+    }
+    @if (@Model.total > 0)
+    {
+        <tr>
+            <td class="headTables1" style="width: 510px">Total</td>
+            <td class="headTables1" style="width: 75px">@Model.total</td>
+        </tr>
+    }
+</table>

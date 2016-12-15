@@ -1,5 +1,5 @@
 ﻿@using SAV.Models
-@model SAV.Models.BalanceViewModel
+@model SAV.Models.BalanceViajeDiarioViewModel
 @{
     Layout = "";
 }
@@ -58,7 +58,7 @@
         <td colspan="2" class="headTables2">CUIT: XX-XXXXXXXX-X</td>
     </tr>
     <tr>
-        <td colspan="2" class="headTables2">Cierre día @ViewBag.fecha</td>
+        <td colspan="2" class="headTables2">@ViewBag.titulo</td>
     </tr>
     @foreach (var veiculos in Model.Veiculos)
     {

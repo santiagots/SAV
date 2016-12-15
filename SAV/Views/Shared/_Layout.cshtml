@@ -12,6 +12,7 @@
         <meta http-equiv="Cache-Control" content="no-cache" />
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="-1" />
+        @RenderSection("metatags", false)
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
@@ -35,14 +36,23 @@
                     <nav>
                         <div id="header">
 					        <div class="bottom">
-						        <ul>
+						        <ul class="nav">
 							        <li>@Html.ActionLink("Viajes", "Search", "Viaje", null, new { @class = currentController == "Viaje"? "selected waitingMenuBar":"waitingMenuBar" })</li>
+                                    <li>@Html.ActionLink("Cuenta Corriente", "Search", "CuentaCorriente", null, new { @class = currentController == "CuentaCorriente" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
 							        <li>@Html.ActionLink("Clientes", "Search", "Cliente", null, new { @class = currentController == "Cliente"? "selected waitingMenuBar":"waitingMenuBar" })</li>
 							        <li>@Html.ActionLink("Conductor", "Search", "Conductor", null, new { @class = currentController == "Conductor"? "selected waitingMenuBar":"waitingMenuBar" })</li>
-                                    <li>@Html.ActionLink("Comisiones", "Search", "Comision", null, new { @class = currentController == "Comision"? "selected waitingMenuBar":"waitingMenuBar" })</li>
-                                    <li>@Html.ActionLink("Destinos", "Create", "Destinos", null, new { @class = currentController == "Destinos"? "selected waitingMenuBar":"waitingMenuBar" })</li>
-							        <li>@Html.ActionLink("Repostes", "Balance", "Balance", null, new { @class = currentController == "Balance"? "selected waitingMenuBar":"waitingMenuBar" })</li>
-						        </ul>
+                                    <li><a href="#">Comisiones</a>
+                                        <ul>
+                                            <li>@Html.ActionLink("Administración", "Search", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Gastos", "Spending", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Reportes</a>
+                                        <ul>
+                                            <li>@Html.ActionLink("Viajes", "Viaje", "Balance", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Comisiones", "Comision", "Balance", null, new { @class = currentController == "Balance" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                        </ul>
+                                    </li>
 					        </div>
 				        </div>
                     </nav>

@@ -22,7 +22,7 @@ namespace SAV.Models
         public string Apellido { get; set; }
 
         [Display(Name = "CUIL:")]
-        [Required(ErrorMessage = "Debe ingresar un DNI")]
+        [Required(ErrorMessage = "Debe ingresar un CUIL")]
         [RegularExpression("^[0-9]{2}-[0-9]{8}-[0-9]$", ErrorMessage = "El CUIT debe ser en formato [2]-[8]-[1]")]
         public string CUIL { get; set; }
 

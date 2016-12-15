@@ -4,8 +4,10 @@
     ViewBag.Title = "Create";
 }
 
-@using (Html.BeginForm((string)ViewBag.Action, "Comision", new { @idViaje = ViewBag.IdViaje }, FormMethod.Post, new { @id = "Create" }))
+@using (Html.BeginForm((string)ViewBag.Action, "Comision", FormMethod.Post, new { @id = "Create" }))
 {
+    @Html.HiddenFor(model => model.idCuentaCorriente)
+
     @Html.ValidationSummary(true)
     <div id="content">
         <div class="headTables selected">
@@ -51,18 +53,15 @@
                 @Html.TextBoxFor(model => model.Comentario, new { @style = "width:566px;" })
             </div>
 
-            @if (ViewBag.IdViaje != null)
-            {
-                <div class="datosInputs">
-                   <p class="edicion obligatorio">@Html.LabelFor(model => model.Responsable)<b>(*)</b></p>
-                        @Html.DropDownListFor(model => model.SelectResponsable, new SelectList(Model.Responsable, "Key", "Value"), "Elija una opción")
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Responsable)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.SelectResponsable, new SelectList(Model.Responsable, "Key", "Value"), "Elija una opción")
 
-                    <div class="boton">
-                        <input id="AgregarResponsable" class="centroBotonGris" type="button" value="Responsable"  ></input>
-                    </div>
-
+                <div class="boton">
+                    <input id="AgregarResponsable" class="centroBotonGris" type="button" value="Responsable"  ></input>
                 </div>
-            }
+
+            </div>
 
         </div>
         <div class="headTables medio">
@@ -140,11 +139,11 @@
                     <input id="Guardar" class="centroBotonGris waiting" onclick="$(this).resetValidation();" type="submit" value="Guardar" />
                     <div class="finBotonGris"></div>
                 </div>
-                @if (ViewBag.IdViaje != null)
+                @if (Model.idCuentaCorriente >= 0)
                 {
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
-                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search",  new { IdViaje = ViewBag.IdViaje })    '" ></input>
+                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Edit", "CuentaCorriente",  new { id = Model.idCuentaCorriente })    '" ></input>
                     <div class="finBotonGris"></div>
                 </div>
                 }

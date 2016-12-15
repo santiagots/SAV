@@ -37,11 +37,6 @@ namespace SAV.Common
             return viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now.AddHours(4)) < 0 && x.Estado == ViajeEstados.Abierto).ToList<Viaje>();
         }
 
-        public static List<Viaje> getViajesBalance(List<Viaje> viajes, DateTime fecha)
-        {
-            return viajes.Where(x => x.FechaArribo.Day == fecha.Day && x.FechaArribo.Month == fecha.Month && x.FechaArribo.Year == fecha.Year && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
-        }
-
         public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio)
         {
             if (IdOrigen.HasValue)
@@ -69,32 +64,32 @@ namespace SAV.Common
             return localidades.Where(x => x.Parada != null && x.Parada.Count > 0).ToList<Localidad>();
         }
 
-        public static List<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje)
-        {
-            return ComisionesViaje.Select(x => new Comisiones()
-                                                    {
-                                                        ComisionID = x.Comision.ID,
-                                                        ComisionViajeID = x.ID,
-                                                        Responsable = x.Comision.Responsable != null? x.Comision.Responsable.Apellido + " " + x.Comision.Responsable.Nombre: "No definido",
-                                                        Contacto = x.Comision.Contacto,
-                                                        Telefono = x.Comision.Telefono,
-                                                        Accion = x.Comision.Accion,
-                                                        Servicio = x.Comision.Servicio,
-                                                        EntregarPuerta = x.Comision.DomicilioEntregar != null ? x.Comision.DomicilioEntregar.getDomicilio : string.Empty,
-                                                        RetirarPuerta = x.Comision.DomicilioRetirar != null ? x.Comision.DomicilioRetirar.getDomicilio : string.Empty,
-                                                        EntregarDirecto = x.Entregar != null ? x.Entregar.Nombre : string.Empty,
-                                                        RetirarDirecto = x.Retirar != null ? x.Retirar.Nombre : string.Empty,
-                                                        Costo = x.Comision.Costo.ToString(),
-                                                        Comentaro = x.Comision.Comentario,
-                                                        Pago = x.Pago,
-                                                        EntregaRetira = x.EntregaRetira
-                                                    }).ToList<Comisiones>();
-        }
+        //public static List<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje)
+        //{
+        //    return ComisionesViaje.Select(x => new Comisiones()
+        //                                            {
+        //                                                ComisionID = x.Comision.ID,
+        //                                                ComisionViajeID = x.ID,
+        //                                                Responsable = x.Comision.Responsable != null? x.Comision.Responsable.Apellido + " " + x.Comision.Responsable.Nombre: "No definido",
+        //                                                Contacto = x.Comision.Contacto,
+        //                                                Telefono = x.Comision.Telefono,
+        //                                                Accion = x.Comision.Accion,
+        //                                                Servicio = x.Comision.Servicio,
+        //                                                EntregarPuerta = x.Comision.DomicilioEntregar != null ? x.Comision.DomicilioEntregar.getDomicilio : string.Empty,
+        //                                                RetirarPuerta = x.Comision.DomicilioRetirar != null ? x.Comision.DomicilioRetirar.getDomicilio : string.Empty,
+        //                                                EntregarDirecto = x.Entregar != null ? x.Entregar.Nombre : string.Empty,
+        //                                                RetirarDirecto = x.Retirar != null ? x.Retirar.Nombre : string.Empty,
+        //                                                Costo = x.Comision.Costo.ToString(),
+        //                                                Comentaro = x.Comision.Comentario,
+        //                                                Pago = x.Pago,
+        //                                                EntregaRetira = x.EntregaRetira
+        //                                            }).ToList<Comisiones>();
+        //}
 
-        public static IPagedList<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje, int pageNumber)
-        {
-            return getComisiones(ComisionesViaje).ToPagedList<Comisiones>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-        }
+        //public static IPagedList<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje, int pageNumber)
+        //{
+        //    return getComisiones(ComisionesViaje).ToPagedList<Comisiones>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+        //}
 
         public static List<Pasajeros> getPasajeros(List<ClienteViaje> ClienteViaje)
         {

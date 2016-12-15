@@ -6,14 +6,21 @@ $(document).ready(function () {
     });
 
     $(".waiting").click(function () {
-        if ($("form").length == 0 || $("form").valid()) {
+        debugger;
+        //if ($("form").length == 0 || $("form").valid()) {
+        //enableSpinner();
+
+        var error = false
+        $("form").each(function (i) {
+            if (!$(this).valid())
+                error = true
+        });
+        if (!error)
             enableSpinner();
-        }
     });
 });
 
-function enableSpinner()
-{
+function enableSpinner() {
     $("#loading").fadeIn();
     var opts = {
         lines: 12, // The number of lines to draw
@@ -32,16 +39,15 @@ function enableSpinner()
 
 function disableSpinner() {
     $("#loading").fadeOut();
-    if(spinner != undefined)
+    if (spinner != undefined)
         spinner.stop();
     $(".waiting").each(function () {
-        if(!hasEvent(this, "click"))
+        if (!hasEvent(this, "click"))
             $(this).click(function () { enableSpinner(); });
     });
 }
 
-function confirmSpinner(message)
-{
+function confirmSpinner(message) {
     if (confirm(message)) {
         enableSpinner();
         return true;

@@ -13,7 +13,6 @@ namespace SAV.Models
     {
         public int ID { get; set; }
         public virtual List<ClienteViaje> ClienteViaje { get; set; }
-        public virtual List<ComisionViaje> ComisionesViaje { get; set; }
         public virtual List<Gasto> Gastos { get; set; }
         public virtual Conductor Conductor { get; set; }
         public virtual Localidad Origen { get; set; }

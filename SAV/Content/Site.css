@@ -1,3 +1,59 @@
+.ui-datepicker-trigger {
+    float: left;
+}
+
+
+.tabItem a {
+    float: left;
+    color: #ffffff;
+    font-size: 14px;
+    height: 21px;
+    padding: 6px 15px 0px 15px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    .tabItem a:hover {
+        background: url(../img/headerPixelHover.png) repeat-x;
+    }
+
+#tabs li.tabItem {
+    background: url('../img/masterFase2.png') no-repeat -1px -972px;
+    float: left;
+    height: 31px;
+    margin: 10px, 10px;
+    border-right: 1px solid #ffffff;
+}
+
+#tabs li.selected {
+    background: url("../img/masterFase2.png") no-repeat scroll -1px -1004px transparent;
+    height: 31px;
+    margin: 0px, 10px;
+}
+
+.tabContent .alertTablesExtended {
+    float: left;
+    width: 940px;
+    height: auto;
+    margin: 0 0 0 15px;
+}
+
+.tabContent .headAlertTablesExtended {
+    float: left;
+    margin: 10px 0 0 0;
+    background: url('../img/masterFase2.png') no-repeat -1px -972px;
+    width: 940px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.tabContent .headTitles {
+    background: url('../img/masterFase2.png') no-repeat -1px -1618px;
+    width: 938px;
+    height: 31px;
+    float: left;
+}
+
 body {
     color: #333333;
     direction: ltr;
@@ -16,43 +72,6 @@ body {
     margin-top: 5px;
 }
 
-    #header .bottom {
-        width: 1000px;
-        float: left;
-        height: 27px;
-        background: url(../img/headerPixel2.png) repeat-x;
-    }
-
-        #header .bottom ul {
-            background: url(../img/headerListPixel.png) no-repeat top right;
-            height: 27px;
-            margin-left: 15px;
-            float: left;
-        }
-
-            #header .bottom ul li {
-                background: url(../img/headerListPixel.png) no-repeat top left;
-                width: auto;
-                float: left;
-                height: 27px;
-                padding: 0 0 0 2px;
-            }
-
-                #header .bottom ul li a {
-                    float: left;
-                    height: 21px;
-                    font-family: verdana;
-                    font-size: 12px;
-                    font-weight: bold;
-                    color: #fff;
-                    text-decoration: none;
-                    padding: 6px 8px 0 5px;
-                }
-
-                    #header .bottom ul li a:hover, #header .bottom ul li a.selected {
-                        background: url(../img/headerPixelHover.png) repeat-x;
-                    }
-
 .action {
     width: 23px;
     height: 23px;
@@ -61,14 +80,25 @@ body {
     cursor: pointer;
 }
 
-    .action.retirar {
-        background: url("../img/masterFase2.png") no-repeat scroll -1181px -151px transparent;
-    }
+.action.retirar {
+    background: url("../img/masterFase2.png") no-repeat scroll -1181px -151px transparent;
+}
 
-    .action.exportar {
-        background: url("../img/masterFase2.png") no-repeat scroll -1211px -179px transparent;
-    }
+.action.exportar {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -179px transparent;
+}
 
+.action.clonar {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -123px transparent;
+}
+
+.action.send {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -206px transparent;
+}
+
+.action.pay {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -232px transparent;
+}
 
 body, td, input, textarea, select {
     font-family: arial,sans-serif;
@@ -102,15 +132,16 @@ tbody tr {
     width: 100%;
 }
     /*#gridresult tbody tr{ height:22px;}*/
-    tbody tr:hover {
-        font-weight: bold;
+    .alertTablesExtended tbody tr:hover {
+        background: none repeat scroll 0 0 #d1d1d1;
+    border: 1px solid #a9a9a9;
     }
 
     tbody tr td {
-        width: 222px;
+        /*width: 222px;*/
         padding: 7px 0 0 10px;
         font-size: 12px;
-        font-family: verdana;
+        /*font-family: verdana;*/
         text-decoration: none;
         color: #333333;
         cursor: pointer;
@@ -214,7 +245,7 @@ div.boton {
     border: none;
     color: #ffffff;
     font-weight: bold;
-    font-family: verdana;
+    /*font-family: verdana;*/
     font-size: 11px;
     cursor: pointer;
     padding-bottom: 2px;
@@ -275,9 +306,7 @@ table input {
     .headAlertTablesExtended p {
         float: left;
         color: #ffffff;
-        font-size: 12px;
-        font-family: verdana;
-        font-weight: bold;
+        font-size: 14px;
         margin: 8px 0 0 10px;
         cursor: pointer;
     }
@@ -310,7 +339,7 @@ table input {
     height: 23px;
     font-weight: bold;
     font-size: 12px;
-    font-family: verdana;
+    /*font-family: verdana;*/
 }
 
 .alertTablesExtended table thead .noBorder {
@@ -319,14 +348,6 @@ table input {
 
 .alertTablesExtended table thead th {
     text-align: center;
-}
-
-
-
-.type2 {
-    width: 114px;
-    text-align: left;
-    border-right: 1px solid #a9a9a9;
 }
 
 table tbody tr td {
@@ -347,7 +368,7 @@ table tbody tr td {
 }
 
 .type22 {
-    width: 105px;
+    width: 112px;
 }
 
 .type36 {
@@ -395,6 +416,19 @@ table tbody tr td {
     width: 115px;
 }
 
+.type211 {
+    width: 120px;
+}
+
+.type213 {
+    width: 265px;
+}
+
+.type212 {
+    width: 630px;
+    border-right: 1px solid #a9a9a9;
+}
+
 .type166 {
     width: 89px;
 }
@@ -408,7 +442,13 @@ table tbody tr td {
 }
 
 .type203 {
-    width: 207px;
+    width: 200px;
+}
+
+.type210 {
+    width: 280px;
+    text-align: left;
+    border-right: 1px solid #a9a9a9;
 }
 
 .type204 {
@@ -419,9 +459,14 @@ table tbody tr td {
     width: 180px;
 }
 
+.type2 {
+    text-align: left;
+    border-right: 1px solid #a9a9a9;
+}
+
 .alertTablesExtended table p, .alertTablesExtended table a {
-    font-size: 10px;
-    font-family: verdana;
+    font-size: 12px;
+    /*font-family: verdana;*/
     margin: 0 0 0 5px;
     width: auto;
     text-decoration: none;
@@ -476,42 +521,70 @@ body {
     margin-top: 5px;
 }
 
-    #header .bottom {
-        width: 1000px;
-        float: left;
-        height: 27px;
-        background: url(../img/headerPixel2.png) repeat-x;
-    }
+/*#header .bottom {
+    width: 1000px;
+    float: left;
+    height: 27px;
+    background: url(../img/headerPixel2.png) repeat-x;
+}
 
-        #header .bottom ul {
-            background: url(../img/headerListPixel.png) no-repeat top right;
-            height: 27px;
-            margin-left: 15px;
-            float: left;
-        }
+ #header .bottom ul {
+    background: url(../img/headerListPixel.png) no-repeat top right;
+    height: 27px;
+    margin-left: 15px;
+}
 
-            #header .bottom ul li {
-                background: url(../img/headerListPixel.png) no-repeat top left;
-                width: auto;
-                float: left;
-                height: 27px;
-                padding: 0 0 0 2px;
-            }
 
-                #header .bottom ul li a {
-                    float: left;
-                    height: 21px;
-                    font-family: verdana;
-                    font-size: 12px;
-                    font-weight: bold;
-                    color: #fff;
-                    text-decoration: none;
-                    padding: 6px 8px 0 5px;
-                }
+ #header .bottom ul li {
+    background: url(../img/headerListPixel.png) no-repeat top left;
+    width: auto;
+    float: left;
+    height: 27px;
+    padding: 0 0 0 2px;
+}
 
-                    #header .bottom ul li a:hover, #header .bottom ul li a.selected {
-                        background: url(../img/headerPixelHover.png) repeat-x;
-                    }
+ #header .bottom ul li a:hover, #header .bottom ul li a.selected {
+    background: url(../img/headerPixelHover.png) repeat-x;
+}
+
+
+#header .bottom ul li a {
+    float: left;
+    height: 21px;
+    font-family: verdana;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 8px 0 5px;
+}*/
+
+.nav > li {
+float:left;
+}
+ 
+.nav li a {
+background:#0377b9;
+color:#FFF;
+display:block;
+border:1px solid;
+padding:10px 12px;
+text-decoration:none;
+}
+ 
+.nav li a:hover {
+background:#1e6089;
+}
+
+.nav li ul {
+display:none;
+position:absolute;
+min-width:140px;
+}
+
+.nav li:hover > ul {
+display:block;
+}
 
 .action {
     width: 23px;
@@ -561,15 +634,11 @@ tbody tr {
     width: 100%;
 }
 
-    tbody tr:hover {
-        font-weight: bold;
-    }
 
     tbody tr td {
-        width: 222px;
         padding: 7px 0 0 10px;
         font-size: 12px;
-        font-family: verdana;
+        /*font-family: verdana;*/
         text-decoration: none;
         color: #333333;
         cursor: pointer;
@@ -673,7 +742,7 @@ div.boton {
     border: none;
     color: #ffffff;
     font-weight: bold;
-    font-family: verdana;
+    /*font-family: verdana;*/
     font-size: 11px;
     cursor: pointer;
     padding-bottom: 2px;
@@ -730,16 +799,6 @@ table input {
         background: url('../img/masterFase2.png') no-repeat -1px -1004px;
     }
 
-    .headAlertTablesExtended p {
-        float: left;
-        color: #ffffff;
-        font-size: 12px;
-        font-family: verdana;
-        font-weight: bold;
-        margin: 8px 0 0 10px;
-        cursor: pointer;
-    }
-
     .headAlertTablesExtended a {
         float: right;
         width: 11px;
@@ -768,7 +827,7 @@ table input {
     height: 23px;
     font-weight: bold;
     font-size: 12px;
-    font-family: verdana;
+    /*font-family: verdana;*/
 }
 
 .alertTablesExtended table thead .noBorder {
@@ -779,16 +838,10 @@ table input {
     text-align: center;
 }
 
-.type2 {
-    width: 114px;
-    text-align: left;
-    border-right: 1px solid #a9a9a9;
-}
-
 table tbody tr td {
     color: #333333;
     cursor: pointer;
-    font-family: verdana;
+    /*font-family: verdana;*/
     font-size: 12px;
     padding: 6px 0 5px 0;
     text-decoration: none;
@@ -800,10 +853,6 @@ table tbody tr td {
 
 .type13 {
     width: 76px;
-}
-
-.type22 {
-    width: 105px;
 }
 
 .type36 {
@@ -863,9 +912,6 @@ table tbody tr td {
     width: 65px;
 }
 
-.type203 {
-    width: 207px;
-}
 
 .type204 {
     width: 66px;
@@ -876,8 +922,8 @@ table tbody tr td {
 }
 
 .alertTablesExtended table p, .alertTablesExtended table a {
-    font-size: 10px;
-    font-family: verdana;
+    font-size: 12px;
+    /*font-family: verdana;*/
     margin: 0 0 0 5px;
     width: auto;
     text-decoration: none;
@@ -929,14 +975,14 @@ body {
     padding: 0;
 }
 
-a:link, a:visited,
+/*a:link, a:visited,
 a:active, a:hover {
     color: #333;
-}
+}*/
 
-a:hover {
+/*a:hover {
     background-color: #c7d1d6;
-}
+}*/
 
 header, footer, hgroup,
 nav, section {
@@ -1177,7 +1223,7 @@ input[type="checkbox"] {
 }
 
 .ui-widget-content {
-    border: none!important;
+    border: none !important;
 }
 
 table p {
@@ -1208,9 +1254,9 @@ table p {
         color: #FFFFFF;
         cursor: pointer;
         float: left;
-        font-family: verdana;
-        font-weight: bold;
-        font-size: 12px;
+        /*font-family: verdana;*/
+        /*font-weight: bold;*/
+        font-size: 14px;
         margin: 8px 0 0 10px;
     }
 
@@ -1240,9 +1286,9 @@ table p {
     .datosInputs p {
         color: #666666;
         float: left;
-        font-family: verdana;
-        font-weight: bold;
-        font-size: 12px;
+        /*font-family: verdana;*/
+        /*font-weight: bold;*/
+        font-size: 14px;
         margin: 3px 10px 0;
         width: 200px;
     }
@@ -1268,8 +1314,8 @@ table p {
         height: 20px;
         margin: 0 10px 0 0;
         width: 167px;
-        font-family: verdana;
-        font-size: 12px;
+        /*font-family: verdana;*/
+        font-size: 14px;
     }
 
 
@@ -1308,8 +1354,8 @@ div.boton {
     color: #FFFFFF;
     cursor: pointer;
     float: left;
-    font-family: verdana;
-    font-size: 11px;
+    /*font-family: verdana;*/
+    font-size: 14px;
     font-weight: normal;
     height: 22px;
     padding-bottom: 2px;
@@ -1403,8 +1449,8 @@ div.boton {
 
 .descripcionAgenda {
     float: left;
-    font-family: verdana;
-    font-size: 11px;
+    /*font-family: verdana;*/
+    font-size: 14px;
     margin-top: 10px;
     width: auto;
     margin-left: 15px;
@@ -1423,8 +1469,8 @@ div.boton {
 .tooltip {
     color: #000000;
     display: none;
-    font-family: verdana;
-    font-size: 10px;
+    /*font-family: verdana;*/
+    font-size: 12px;
     height: 40px;
     left: 0;
     position: absolute;
@@ -1621,8 +1667,8 @@ div.pestana {
     color: #767676;
     cursor: pointer;
     float: left;
-    font-family: verdana;
-    font-size: 12px;
+    /*font-family: verdana;*/
+    font-size: 14px;
     font-weight: normal;
     padding: 5px 0px;
 }
@@ -1706,7 +1752,7 @@ table thead th.headerSortUp span.ordenamiento {
 
 .placeholder {
     font-weight: normal;
-    font-family: verdana;
+    /*font-family: verdana;*/
     color: grey;
     padding-left: 3px;
     padding-top: 3px;
@@ -1816,6 +1862,7 @@ address, caption, cite, code, dfn, em, strong, th, var {
 
 ol, ul {
     list-style: none;
+    overflow: auto;
 }
 
 caption, th {
@@ -1836,7 +1883,7 @@ abbr, acronym {
 }
 
 .hidden {
-    display: none!important;
+    display: none !important;
 }
 
 #content {
@@ -1896,8 +1943,8 @@ abbr, acronym {
             height: 32px;
             float: left;
             text-decoration: none;
-            font-family: verdana;
-            font-size: 12px;
+            /*font-family: verdana;*/
+            font-size: 14px;
             color: #fff;
             text-align: center;
             margin-top: 21px;
@@ -1946,7 +1993,7 @@ abbr, acronym {
         float: left;
         border: none;
         font-size: 18px;
-        font-family: verdana;
+        /*font-family: verdana;*/
         color: #666666;
         background-color: #fff;
         clear: both;
@@ -1974,8 +2021,8 @@ abbr, acronym {
         margin: 5px 0;
         padding-left: 29px;
         width: 447px;
-        font-family: verdana;
-        font-size: 12px;
+        /*font-family: verdana;*/
+        font-size: 14px;
         height: 20px;
         padding-top: 2px;
     }
@@ -2072,15 +2119,15 @@ abbr, acronym {
 .usuarios {
     float: left;
     width: 100%;
-    font-family: verdana;
+    /*font-family: verdana;*/
     margin: 20px 0 24px 15px;
 }
 
     .usuarios p {
         float: left;
         margin: 3px 10px 0 0;
-        font-size: 12px;
-        font-family: verdana;
+        font-size: 14px;
+        /*font-family: verdana;*/
     }
 
     .usuarios select {
@@ -2135,43 +2182,6 @@ div.separador {
     color: #ffffff;
     margin-top: 7px;
 }
-
-#header .bottom {
-    width: 1000px;
-    float: left;
-    height: 27px;
-    background: url(../img/headerPixel2.png) repeat-x;
-}
-
-    #header .bottom ul {
-        background: url(../img/headerListPixel.png) no-repeat top right;
-        height: 27px;
-        margin-left: 15px;
-        float: left;
-    }
-
-        #header .bottom ul li {
-            background: url(../img/headerListPixel.png) no-repeat top left;
-            width: auto;
-            float: left;
-            height: 27px;
-            padding: 0 0 0 2px;
-        }
-
-            #header .bottom ul li a {
-                float: left;
-                height: 21px;
-                font-family: verdana;
-                font-size: 12px;
-                font-weight: bold;
-                color: #fff;
-                text-decoration: none;
-                padding: 6px 8px 0 5px;
-            }
-
-                #header .bottom ul li a:hover, #header .bottom ul li a.selected {
-                    background: url(../img/headerPixelHover.png) repeat-x;
-                }
 
 .action {
     width: 23px;
@@ -2228,8 +2238,8 @@ div.separador {
 
 .PagedList-pageCountAndLocation a {
     font-weight: bold;
-    font-size: 11px;
-    font-family: verdana;
+    font-size: 13px;
+    /*font-family: verdana;*/
     color: #434242;
     margin: 20px 0 0 0;
     width: 100%;
@@ -2256,9 +2266,9 @@ a.pollButton {
 .campanias td {
     color: #000000;
     float: left;
-    font-size: 10px;
+    font-size: 12px;
     padding: 7px 0 0 3px;
-    font-family: Verdana;
+    /*font-family: Verdana;*/
     text-decoration: none;
     cursor: text;
 }
@@ -2338,4 +2348,10 @@ body {
 header {
     background: none repeat scroll 0 0 #efeeef;
     height: 105px;
+}
+
+.contenidoDatosError {
+    color: #D8000C;
+    margin:10px 22px;
+    vertical-align:middle;
 }

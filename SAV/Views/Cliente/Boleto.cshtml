@@ -6,36 +6,79 @@
 }
 <html lang="en" style="background-color: #FFFFFF">
 <head>
-    @Styles.Render("~/Content/css")
+<style>
+    table{
+  width : 900px;
+  margin : auto;
+}
+
+.datos td {
+  border-bottom: 1px solid black;
+  font: 24px Arial;
+  width:50%;
+}
+
+.titulo{
+  background-color: #909090; color: #FFFFFF;
+}
+
+div{
+  width : 900px;
+  border: 1px solid black;
+  background-image: url("/img/laestacionfondo.png");
+  background-repeat:no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+#bg {
+    position: absolute;
+    top: 50px;
+    left: 277px;
+    z-index: -100;
+}
+.cabecera td {
+  font: 24px Arial;
+}
+</style>
 </head>
 <body>
-    <form>
-        <h2 class="site-title">SAV</h2>
-        <div id="content">
-            <div class="headTables">
-                <p>Comprobante de Pago - Servicio @ViewBag.Servicio - Codigo @ViewBag.IdViaje</p>
-            </div>
 
-            <div class="contenidoDatos">
-                <div class="datosInputs">
-                    <p style="width: 30%">Apellido: @ViewBag.Apellido</p>
+    <div> <img src="@Server.MapPath("~/img/laestacionfondo.png")" id="bg" />
+        <table class="cabecera">
+            <tr>
+                <td rowspan="2"><img src="@Server.MapPath("~/img/laestacion.png")" width="120px" height="100px" alt="colectivo"></td>
+                <td>COMPROBANTE DE PAGO</td>
+            </tr>
+            <tr>
+                <td>CODIGÓ - @ViewBag.IdViaje</td>
+            </tr>
 
-                    <p style="width: 30%">Nombre: @ViewBag.Nombre</p>
-
-                    <p style="width: 30%">Dni: @ViewBag.DNI</p>
-                </div>
-
-                <div class="datosInputs">
-                    <p style="width: 30%">Origen: @ViewBag.Origen</p>
-
-                    <p style="width: 30%">Destino: @ViewBag.Destino</p>
-
-                    <p style="width: 30%">Fecha Salida: @ViewBag.FechaHora</p>
-                </div>
-            </div>
-            <div class="footerTables"></div>
-        </div>
-    </form>
+        </table>
+        <table class="datos">
+            <tr>
+                <td class="titulo" colspan="2">DATOS DEL PASAJERO</td>
+            </tr>
+            <tr>
+                <td>APELLIDO: @ViewBag.Apellido</td>
+                <td>NOMBRE: @ViewBag.Nombre</td>
+            </tr>
+            <tr>
+                <td>DNI: @ViewBag.DNI</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="titulo" colspan="2">DATOS DEL VIAJE</td>
+            </tr>
+            <tr>
+                <td>TIPO SERVICIO: @ViewBag.Servicio</td>
+                <td>FECHA SALIDA: @ViewBag.FechaHora</td>
+            </tr>
+            <tr>
+                <td>ORIGEN: @ViewBag.Origen</td>
+                <td>DESTINO: @ViewBag.Destino</td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
 

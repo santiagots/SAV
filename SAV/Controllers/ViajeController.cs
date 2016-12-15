@@ -213,7 +213,7 @@ namespace SAV.Controllers
 
             List<Pasajeros> pasajeros = ViajeHelper.getPasajeros(viaje.ClienteViaje);
 
-            List<Comisiones> comisiones = ViajeHelper.getComisiones(viaje.ComisionesViaje);
+            //List<Comisiones> comisiones = ViajeHelper.getComisiones(viaje.ComisionesViaje);
 
             if (viaje == null)
             {
@@ -276,87 +276,6 @@ namespace SAV.Controllers
 
             #endregion
 
-            #region comisines
-
-            ISheet ComisionestemplateSheet = tamplateWorckbook.GetSheet("Comisiones");
-            Dictionary<string, List<Comisiones>> ComisionesPorResponsable = new Dictionary<string, List<Comisiones>>();
-            if (comisiones.Count > 0)
-            {
-                foreach (Comisiones comision in comisiones)
-                {
-                    if (!ComisionesPorResponsable.ContainsKey(comision.Responsable))
-                    {
-                        ComisionesPorResponsable.Add(comision.Responsable, new List<Comisiones>());
-                        ((HSSFSheet)ComisionestemplateSheet).CopyTo(tamplateWorckbook, "Comisiones " + comision.Responsable, true, true);
-                    }
-                    ComisionesPorResponsable[comision.Responsable].Add(comision);
-                }
-
-                foreach (var ComisionePorResponsable in ComisionesPorResponsable)
-                {
-                    ISheet ComisionesSheet = tamplateWorckbook.GetSheet("Comisiones " + ComisionePorResponsable.Key);
-                    int ComisionesRow = 5;
-
-
-                    List<ICell> HeadComisionesCell = ComisionesSheet.GetRow(1).Cells;
-                    HeadComisionesCell[0].SetCellValue(string.Format("Hoja de Viaje - Cod. Viaje: {0} - Patente: {1} - Interno: {2}", viajeID, patente, interno));
-
-                    HeadComisionesCell = ComisionesSheet.GetRow(2).Cells;
-                    HeadComisionesCell[0].SetCellValue(string.Format("Comisiones: {0}", ComisionePorResponsable.Key));
-
-                    HeadComisionesCell = ComisionesSheet.GetRow(3).Cells;
-                    HeadComisionesCell[0].SetCellValue(string.Format("Origen: {0} - Destino: {1}", origen, destino));
-                    HeadComisionesCell[4].SetCellValue(string.Format("Salida: {0} - Arribo: {1}", salida, arribo));
-
-                    int ComisionIndex = 0;
-                    foreach (Comisiones comision in ComisionePorResponsable.Value)
-                    {
-                        ComisionIndex++;
-
-                        if (ComisionesSheet.GetRow(ComisionesRow) != null)
-                        {
-                            SetValueToComisionesCell(ComisionesSheet, ComisionesRow, comision, ComisionIndex);
-                        }
-                        else
-                        {
-                            IRow RowTemplate1;
-                            IRow RowTemplate2;
-                            //para cebrar tomo diferentes rows como template
-                            if (ComisionIndex % 2 == 0)
-                            {
-                                RowTemplate1 = ComisionesSheet.GetRow(7);
-                                RowTemplate2 = ComisionesSheet.GetRow(8);
-                            }
-                            else
-                            {
-                                RowTemplate1 = ComisionesSheet.GetRow(5);
-                                RowTemplate2 = ComisionesSheet.GetRow(6);
-                            }
-
-                            RowTemplate1.CopyRowTo(ComisionesRow);
-                            RowTemplate2.CopyRowTo(ComisionesRow + 1);
-
-                            SetValueToComisionesCell(ComisionesSheet, ComisionesRow, comision, ComisionIndex);
-                        }
-                        ComisionesRow += 2;
-
-                    }
-                }
-
-            }
-            else
-            {
-                //Muestro la primera hoja por si se oculto
-                tamplateWorckbook.SetSheetHidden(0, false);
-                tamplateWorckbook.SetActiveSheet(0);
-            }
-
-            //elimino la solapa de comisiones que uso como plantilla
-            tamplateWorckbook.SetSheetHidden(1, true);
-
-
-            #endregion
-
             string name = String.Format("{0}_{1}_{2}_{3}", viajeID, origen, destino, viaje.FechaSalida.ToString("dd-MM_HH:mm"));
 
             MemoryStream ms = new MemoryStream();
@@ -364,32 +283,6 @@ namespace SAV.Controllers
             tamplateWorckbook.Write(ms);
 
             return File(ms.ToArray(), "application/vnd.ms-excel", name + ".xls");
-        }
-
-        private static void SetValueToComisionesCell(ISheet ComisionesSheet, int ComisionesRow, Comisiones comision, int ComisionIndex)
-        {
-            List<ICell> comisionCell = ComisionesSheet.GetRow(ComisionesRow).Cells;
-
-            comisionCell[0].SetCellValue(ComisionIndex);
-
-            comisionCell[1].SetCellValue(comision.Contacto);
-            comisionCell[2].SetCellValue(comision.Accion.ToString());
-            if (comision.Servicio == ComisionServicio.Puerta)
-            {
-                comisionCell[3].SetCellValue(comision.RetirarPuerta);
-                comisionCell[4].SetCellValue(comision.EntregarPuerta);
-            }
-            else
-            {
-                comisionCell[3].SetCellValue(comision.RetirarDirecto);
-                comisionCell[4].SetCellValue(comision.EntregarDirecto);
-            }
-            comisionCell[5].SetCellValue(comision.Telefono);
-            comisionCell[6].SetCellValue(comision.Costo);
-            comisionCell[7].SetCellValue(comision.Pago ? "Si" : "No");
-
-            List<ICell> comisionComentarioCell = ComisionesSheet.GetRow(ComisionesRow + 1).Cells;
-            comisionComentarioCell[1].SetCellValue(String.Format("Comentario: {0}", comision.Comentaro));
         }
 
         public ActionResult AddCliente(int idCliente, int idViaje)
@@ -409,26 +302,6 @@ namespace SAV.Controllers
             }
             return View("Details", viaje);
         }
-
-        public ActionResult AddComision(int idComision, int idViaje)
-        {
-            var viaje = db.Viajes.Find(idViaje);
-            var comision = db.Comisiones.Find(idComision);
-
-            if (!viaje.ComisionesViaje.Any(x => x.ID == idComision))
-            {
-                var clienteViaje = new ComisionViaje();
-
-                clienteViaje.Viaje = viaje;
-                clienteViaje.Comision = comision;
-
-                viaje.ComisionesViaje.Add(clienteViaje);
-                db.SaveChanges();
-            }
-            return View("Details", viaje);
-        }
-
-        // GET: /Viaje/Delete/5
 
         public ActionResult Delete(int id = 0)
         {
@@ -480,29 +353,6 @@ namespace SAV.Controllers
             }
         }
 
-        public void setEntregaRetiraComision(ICollection<Comisiones> comisiones)
-        {
-            if (comisiones != null)
-            {
-                List<ComisionViaje> comisionViaje = db.ComisionViajes.ToList<ComisionViaje>();
-
-                foreach (var item in comisiones)
-                {
-                    ComisionViaje select = comisionViaje.Where(x => x.ID == item.ComisionViajeID).FirstOrDefault();
-                    if (select != null)
-                    {
-                        if (select.EntregaRetira != item.EntregaRetira || select.Pago != item.Pago)
-                        {
-                            select.EntregaRetira = item.EntregaRetira;
-                            select.Pago = item.Pago;
-                            db.Entry(select).State = EntityState.Modified;
-                        }
-                    }
-                }
-                db.SaveChanges();
-            }
-        }
-
         public void Actualizar(string patente, string interno, int idViaje)
         {
             ViewBag.IdViaje = idViaje;
@@ -538,23 +388,23 @@ namespace SAV.Controllers
             return PartialView("_CierreGastosTable", viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
-        public ActionResult DetailsPagingComisiones(int? IdViaje, int? pageNumber)
-        {
-            ViewBag.IdViaje = IdViaje;
+        //public ActionResult DetailsPagingComisiones(int? IdViaje, int? pageNumber)
+        //{
+        //    ViewBag.IdViaje = IdViaje;
 
-            IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
+        //    IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
 
-            return PartialView("_ComisionesTable", Comisiones);
-        }
+        //    return PartialView("_ComisionesTable", Comisiones);
+        //}
 
-        public ActionResult CierrePagingComisiones(int? IdViaje, int? pageNumber)
-        {
-            ViewBag.IdViaje = IdViaje;
+        //public ActionResult CierrePagingComisiones(int? IdViaje, int? pageNumber)
+        //{
+        //    ViewBag.IdViaje = IdViaje;
 
-            IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
+        //    IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
 
-            return PartialView("_CierreComisionesTable", Comisiones);
-        }
+        //    return PartialView("_CierreComisionesTable", Comisiones);
+        //}
 
         public ActionResult DetailsPagingPasajeros(int? IdViaje, int? pageNumber)
         {

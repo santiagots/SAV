@@ -1,0 +1,182 @@
+﻿@model SAV.Models.CuentaCorrienteViewModel.CuentaCorrienteViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+<div id="content">
+    @using (Html.BeginForm())
+    {
+
+        <div class="headTables selected">
+            <p>Datos Cuenta Corriente</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.RazonSocial)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.RazonSocial)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CUIL)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.CUIL)
+            </div>
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Telefono)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Telefono)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Email)</p>
+                @Html.TextBoxFor(model => model.Email)
+            </div>
+        </div>
+        <div class="headTables medio">
+            <p>Domicilio</p>
+        </div>
+        <div class="contenidoDatos" id="DomicilioPrincipal">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Provincia)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Localidad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Calle)<b>(*)</b></p>
+                @Html.EditorFor(model => model.Calle)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumero)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleNumero)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePiso)</p>
+                @Html.EditorFor(model => model.CallePiso)
+            </div>
+
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="guardar" class="centroBotonGris waiting" type="submit" value="Guardar" />
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.RazonSocial)</p>
+            <p>@Html.ValidationMessageFor(model => model.CUIL)</p>
+            <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidad)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectProvincia)</p>
+            <p>@Html.ValidationMessageFor(model => model.Calle)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleNumero)</p>
+            <p>@Html.ValidationMessageFor(model => model.CallePiso)</p>
+        </div>
+    }
+    @using (Html.BeginForm("SearchCuentaCorriente", "CuentaCorriente", new { @id = Model.ID }))
+    {
+        <div class="headTables selected">
+            <p>Comisiones</p>
+        </div>
+
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Numero)</p>
+                @Html.TextBoxFor(model => model.Numero, new { @type = "number" })
+
+                <p class="edicion">@Html.LabelFor(model => model.FechaAlta)</p>
+                @Html.TextBoxFor(model => model.FechaAlta, new { @class = "fecha", @id = "fechaAlta", @name = "fechaAlta", @readonly = true })
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.FechaEntrega)</p>
+                @Html.TextBoxFor(model => model.FechaEntrega, new { @class = "fecha", @id = "fechaEnvio", @name = "fechaEnvio", @readonly = true })
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.FechaPago)</p>
+                @Html.TextBoxFor(model => model.FechaPago, new { @class = "fecha", @id = "fechaEntrega", @name = "fechaEntrega", @readonly = true })
+            </div>
+
+            <div class="botones">
+
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar" />
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="modificar" class="centroBotonGris waiting" type="button" value="Nuevo" onclick="location.href='@Url.Action("Create", "Comision", new { idCuentaCorriente = Model.ID })'"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="modificar" class="centroBotonGris waiting" type="button" value="Duplicar" onclick="$('#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario').prop('disabled', true);"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+    }
+        <div id="tabs">
+            <div class="headTables medio">
+                <ul>
+                    <li class="selected tabItem"><a href="#tabs-1">Debe</a></li>
+                    <li class="tabItem"><a href="#tabs-2">Pagas</a></li>
+                </ul>
+            </div>
+            <div class="contenidoDatos">
+                <div id="tabs-1" class="tabContent">
+                    <div id="debeTable">
+                        @Html.Partial("_Debe", Model.ComisionesDebe, new ViewDataDictionary { { "idCuentaCorriente", Model.ID }, { "numero", Model.Numero }, { "fechaAlta" , Model.FechaAlta }, { "fechaEntrega", Model.FechaEntrega }, { "fechaPago", Model.FechaPago } })
+                    </div>
+                    <div class="datosInputs" style="float:right">
+                        <p class="edicion">@Html.LabelFor(model => model.TotalDeuda)</p>
+                        @Html.TextBoxFor(model => model.TotalDeuda, new { @readonly = "readonly" })
+                    </div>
+                </div>
+                <div id="tabs-2" class="tabContent">
+                    <div id="pagosTable">
+                        @Html.Partial("_Pagos", Model.ComisionesPagas, new ViewDataDictionary { { "idCuentaCorriente", Model.ID }, { "numero", Model.Numero }, { "fechaAlta", Model.FechaAlta }, { "fechaEntrega", Model.FechaEntrega }, { "fechaPago", Model.FechaPago } })
+                    </div>
+                </div>
+            </div>
+            <div class="footerTables"></div>
+        </div>
+@using (Html.BeginForm("Pay", "CuentaCorriente", new { @id = Model.ID }))
+{
+        <div class="headTables selected">
+            <p>Entrega</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.MontoEntrega)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.MontoEntrega)
+            </div>
+
+            <div class="botones">
+
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="guardar" class="centroBotonGris waiting" type="submit" value="Pagar" />
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.MontoEntrega)</p>
+        </div>
+}
+    @Html.ValidationSummary(true)
+        <div id="Error" class="contenidoDatosError">
+        </div>
+</div>
+
+@section Scripts {
+
+    <script src="/Scripts/CuentaCorrienteCreate.js"></script>
+}

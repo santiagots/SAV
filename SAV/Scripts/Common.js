@@ -18,4 +18,21 @@
     $(".disableValidation").click(function () {
         $('input, select').prop('disabled', true);
     });
+
+    //manejo de tabs
+
+    debugger;
+    $('#tabs').find('div.tabContent').hide();
+    $('#tabs').find('div.tabContent:first').show();
+
+    $('#tabs .tabItem').click(function () {
+
+        $('#tabs .tabItem').removeClass('selected');
+        $(this).addClass('selected');
+
+        $('#tabs div.tabContent').hide();
+
+        var tabActivo = $(this).find('a').attr('href');
+        $(tabActivo).show();
+    })
 });

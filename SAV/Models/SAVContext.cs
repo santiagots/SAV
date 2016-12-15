@@ -28,6 +28,8 @@ namespace SAV.Models
 
         public DbSet<Comision> Comisiones { get; set; }
 
+        public DbSet<ComisionGasto> ComisionGastos { get; set; }
+        
         public DbSet<Domicilio> Domicilios { get; set; }
 
         public DbSet<Gasto> Gastos { get; set; }
@@ -38,9 +40,9 @@ namespace SAV.Models
 
         public DbSet<Parada> Paradas { get; set; }
 
-        public DbSet<ComisionViaje> ComisionViajes { get; set; }
-
         public DbSet<ComisionResponsable> ComisionResponsable { get; set; }
+
+        public DbSet<CuentaCorriente> CuentaCorriente { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

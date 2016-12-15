@@ -31,7 +31,6 @@ function cerrar()
 {
     $("#newGasto").hide();
     $("form").resetValidation();
-    setEntregaRetiraComisionAjax();
     if (!ErrorClose) {
         if (!confirmSpinner("Esta seguro que desea de cerrar el viaje?")) {
             disableSpinner();
@@ -99,24 +98,6 @@ function cerrar()
             });
         }
         $("#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario").prop('disabled', false);
-    }
-
-
-    function setEntregaRetiraComision() {
-        enableSpinner();
-        setEntregaRetiraComisionAjax();
-    }
-
-    function setEntregaRetiraComisionAjax() {
-        $.ajax({
-            async: false,
-            url: '/Viaje/setEntregaRetiraComision',
-            type: 'POST',
-            data: $("#tablaComisiones :input").serialize(),
-            dataType: "json",
-            success: function (data) { disableSpinner(); },
-            error: function (error) { debugger; addError(error, "EntregaRetiraComision", "Hubo un error al guardar la información de Comisiones"); ErrorClose = true; }
-        });
     }
 
     function addError(error, displayError, mesage) {

@@ -1,0 +1,57 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.Comision>
+
+
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+  @Html.PagedListPager((IPagedList)Model, page => Url.Action("EditPagingCuentaCorrientePagos", new { id = this.ViewData["idCuentaCorriente"], numero = this.ViewData["numero"], fechaAlta = this.ViewData["fechaAlta"], fechaEnvio = this.ViewData["fechaEnvio"], fechaPago = this.ViewData["fechaPago"], pageNumber = page })
+, PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "pagosTable" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Viajes del Cliente</p>
+            <a id="Busqueda" name="Busqueda" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type36"><p>Numero</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type119"><p>Acción</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type119"><p>Fecha Alta</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type119"><p>Fecha Envio</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type119"><p>Fecha Pago</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type119"><p>Costo</p><span class="ordenamiento"></span></th>
+                        <th class="type210"><p>Comentario</p><span class="ordenamiento"></span></th>
+                        <th class="type5"></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="type2 type36" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.ID)</p></td>
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Accion)</p></td>
+                            @{var fecha = item.FechaAlta.ToString("dd/MM/yyyy");}
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaEntrega.HasValue ? item.FechaEntrega.Value.Date.ToString("dd/MM/yyyy") : "";}
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaPago.HasValue ? item.FechaPago.Value.Date.ToString("dd/MM/yyyy") : "";}
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Costo)</p></td>
+                            <td class="type210" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Comentario)</p></td>
+                            <td class="type5">
+                                <a href="@Url.Action("clone", "comision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span id="Span44" class="action clonar" title="Copiar" /></a>
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("DeleteComision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span id="Span43" class="action retirar" title="Eliminar" /></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -124,13 +124,6 @@
                 }
             </div>
 
-        @if(Model.DatosBasicosViaje.Servicio != SAV.Models.ViajeTipoServicio.Cerrado)
-        {
-        <!-- COMISIONES TABLES -->
-        <div id="partialViewComisiones" style="float: right">
-            @Html.Partial("_ComisionesTable", Model.Comisiones)
-        </div>
-        }
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectOrigen)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectDestino)</p>

@@ -209,7 +209,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\BalanceHelper.cs" />
     <Compile Include="Common\ClienteHelper.cs" />
+    <Compile Include="Common\ComisionHelper.cs" />
     <Compile Include="Common\ConductorHelper.cs" />
+    <Compile Include="Common\CuentaCorrienteHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Common\AppConfiguration.cs" />
     <Compile Include="Common\ViajeHelper.cs" />
     <Compile Include="Controllers\ConductorController.cs" />
+    <Compile Include="Controllers\CuentaCorrienteController.cs" />
     <Compile Include="Controllers\DestinosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ViajeController.cs" />
@@ -226,19 +229,24 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\BalanceViewModel\BalanceComisionDiarioViewModel.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ClienteViaje.cs" />
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
     <Compile Include="Models\ClienteViewModel\SearchClienteViewModel.cs" />
     <Compile Include="Models\Comision.cs" />
+    <Compile Include="Models\ComisionGasto.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
-    <Compile Include="Models\ComisionViaje.cs" />
+    <Compile Include="Models\ComisionViewModel\ComisionGastoViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\ComisionViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\ResponsableViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\SearchComisionViewModel.cs" />
     <Compile Include="Models\Conductor.cs" />
     <Compile Include="Models\ConductorViewModel\ConductorViewModel.cs" />
     <Compile Include="Models\ConductorViewModel\SearchConductorViewModel.cs" />
+    <Compile Include="Models\CuentaCorriente.cs" />
+    <Compile Include="Models\CuentaCorrienteViewModel\CuentaCorrienteViewModel.cs" />
+    <Compile Include="Models\CuentaCorrienteViewModel\SearchCuentaCorrienteViewModel.cs" />
     <Compile Include="Models\DestinoViewModel\DestinoViewModel.cs" />
     <Compile Include="Models\Domicilio.cs" />
     <Compile Include="Models\Gasto.cs" />
@@ -249,7 +257,7 @@
     <Compile Include="Models\Viaje.cs" />
     <Compile Include="Models\ViajeViewModel\CreateViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\DetailsViajeViewModel.cs" />
-    <Compile Include="Models\ViajeViewModel\BalanceViewModel.cs" />
+    <Compile Include="Models\BalanceViewModel\BalanceViajeDiarioViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\SearchViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\ViajeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -345,6 +353,7 @@
     <Content Include="img\headerPixel2.png" />
     <Content Include="img\headerPixelHover.png" />
     <Content Include="img\helpPixel.png" />
+    <Content Include="img\laestacion.png" />
     <Content Include="img\masterFase2.png" />
     <Content Include="img\statisticsPixel.png" />
     <Content Include="img\statisticsPixelGraphs.png" />
@@ -363,6 +372,7 @@
     <Content Include="Scripts\ComisionesResponsable.js" />
     <Content Include="Scripts\Common.js" />
     <Content Include="Scripts\commonFase2.js" />
+    <Content Include="Scripts\CuentaCorrienteCreate.js" />
     <Content Include="Scripts\DestinoCreate.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -440,7 +450,6 @@
     <Content Include="Views\Viaje\Search.cshtml" />
     <Content Include="Views\Comision\Create.cshtml" />
     <Content Include="Views\Viaje\_PasajerosTable.cshtml" />
-    <Content Include="Views\Viaje\_ComisionesTable.cshtml" />
     <Content Include="Views\Viaje\_ViajesAbiertosTable.cshtml" />
     <Content Include="Views\Cliente\_ClientesTable.cshtml" />
     <Content Include="Views\Cliente\Boleto.cshtml" />
@@ -454,15 +463,30 @@
     <Content Include="Views\Comision\_ComisionTable.cshtml" />
     <Content Include="Views\Viaje\Close.cshtml" />
     <Content Include="Views\Viaje\_CierrePasajerosTable.cshtml" />
-    <Content Include="Views\Viaje\_CierreComisionesTable.cshtml" />
     <Content Include="Views\Viaje\_CierreGastosTable.cshtml" />
     <Content Include="Views\Viaje\ExportViaje.cshtml" />
-    <Content Include="Views\Balance\ExportBalance.cshtml" />
-    <Content Include="Views\Balance\Balance.cshtml" />
+    <Content Include="Views\Balance\ExportViaje.cshtml" />
+    <Content Include="Views\Balance\Viaje.cshtml" />
     <Content Include="Views\Conductor\_ViajesTable.cshtml" />
     <Content Include="Views\Comision\Responsable.cshtml" />
     <Content Include="Views\Comision\_ResponsableTable.cshtml" />
     <Content Include="Template\ViajeTemplate.xls" />
+    <Content Include="Views\CuentaCorriente\Edit.cshtml" />
+    <Content Include="Views\CuentaCorriente\_Debe.cshtml" />
+    <Content Include="Views\CuentaCorriente\_Pagos.cshtml" />
+    <Content Include="Views\CuentaCorriente\Search.cshtml" />
+    <Content Include="Views\CuentaCorriente\_CuentaCorrienteTable.cshtml" />
+    <Content Include="Views\CuentaCorriente\Create.cshtml" />
+    <Content Include="Template\CuentaCorrienteTemplate.xls" />
+    <Content Include="Views\Comision\_EnProgreso.cshtml" />
+    <Content Include="Views\Comision\_Finalizadas.cshtml" />
+    <Content Include="Views\Comision\Spending.cshtml" />
+    <Content Include="Views\Comision\_SpendingTable.cshtml" />
+    <Content Include="Views\Comision\_Envio.cshtml" />
+    <Content Include="Views\Balance\Comision.cshtml" />
+    <Content Include="Views\Balance\ExportComisiones.cshtml" />
+    <Content Include="Template\ComisionTemplate.xls" />
+    <Content Include="Views\CuentaCorriente\Export.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
