@@ -121,6 +121,22 @@ namespace SAV.Controllers
         }
 
         [HttpPost]
+        public ActionResult Search(SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel)
+        {
+            List<CuentaCorriente> cuentasCorrientes = db.CuentaCorriente.ToList<CuentaCorriente>();
+
+            if (searchCuentaCorrienteViewModel.CUIL != null &&  searchCuentaCorrienteViewModel.CUIL != string.Empty)
+                cuentasCorrientes = cuentasCorrientes.Where(x => x.CUIL.ToUpper().Contains(searchCuentaCorrienteViewModel.CUIL.ToUpper())).ToList();
+
+            if (searchCuentaCorrienteViewModel.RazonSocial != null && searchCuentaCorrienteViewModel.RazonSocial != string.Empty)
+                cuentasCorrientes = cuentasCorrientes.Where(x => x.RazonSocial.ToUpper().Contains(searchCuentaCorrienteViewModel.RazonSocial.ToUpper())).ToList();
+
+            searchCuentaCorrienteViewModel.CuentaCorriente = cuentasCorrientes.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            return View(searchCuentaCorrienteViewModel);
+        }
+
+        [HttpPost]
         public ActionResult SearchCuentaCorriente(CuentaCorrienteViewModel cuentaCorrienteViewModel, int id)
         {
             //elimino los errores de carga del formulario 
@@ -167,7 +183,7 @@ namespace SAV.Controllers
         }
 
         [HttpPost]
-        public ActionResult Pay(CuentaCorrienteViewModel cuentaCorrienteViewModel, int id)
+        public ActionResult pagar(CuentaCorrienteViewModel cuentaCorrienteViewModel, int id)
         {
             //elimino los errores de carga del formulario 
             ModelState.Clear();
@@ -179,6 +195,11 @@ namespace SAV.Controllers
             List<Comision> deudas = CuentaCorrienteHelper.getDeudas(cuentaCorriente.Comisiones).OrderBy(x => x.FechaAlta).ToList();
 
             decimal monto = decimal.Parse(cuentaCorrienteViewModel.MontoEntrega);
+
+            TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+            DateTime tstTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, tst);
+
+            cuentaCorriente.Pagos.Add(new Pago(monto));
 
             foreach (Comision comision in deudas)
             {
@@ -223,6 +244,19 @@ namespace SAV.Controllers
             cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
 
             return View("Edit", cuentaCorrienteViewModel);
+        }
+
+        public ActionResult SearchPagingCuentaCorriente(string razonSocial, string CUIL, int pageNumber)
+        {
+            List<CuentaCorriente> cuentasCorrientes = db.CuentaCorriente.ToList<CuentaCorriente>();
+
+            if (CUIL != null && CUIL != string.Empty)
+                cuentasCorrientes = cuentasCorrientes.Where(x => x.CUIL.ToUpper().Contains(CUIL.ToUpper())).ToList();
+
+            if (razonSocial != null && razonSocial != string.Empty)
+                cuentasCorrientes = cuentasCorrientes.Where(x => x.RazonSocial.ToUpper().Contains(razonSocial.ToUpper())).ToList();
+
+            return PartialView("_CuentaCorrienteTable", cuentasCorrientes.ToPagedList(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
         public ActionResult EditPagingCuentaCorrienteDebe(int id, int? numero, string fechaAlta, string fechaEnvio, string fechaPago, int pageNumber)

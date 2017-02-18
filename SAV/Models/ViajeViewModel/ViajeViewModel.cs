@@ -38,6 +38,11 @@ namespace SAV.Models
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Destino solo debe contener letras")]
         public string DestinoCerrado { get; set; }
 
+        [Display(Name = "Costo:")]
+        [Required(ErrorMessage = "Debe ingresar un Costo")]
+        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Costo debe ser un valor numerico entre 0 y 99999 con 2 digitos decimales")]
+        public string CostoCerrado { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar una cantidad de Asientos")]
         [RegularExpression("^[1-9][0-9]?$", ErrorMessage = "La cantidad de asientos debe ser un numero del 1 al 99")]
         [Display(Name = "Cantidad de Asientos:")]
@@ -73,5 +78,8 @@ namespace SAV.Models
         [RegularExpression("^[1-9][0-9]?[0-9]?$", ErrorMessage = "El interno debe ser un numero del 1 al 999")]
         [Display(Name = "Interno:")]
         public int Interno { get; set; }
+
+        [Display(Name = "Estado:")]
+        public ViajeEstados Estado { get; set; }
     }
 }

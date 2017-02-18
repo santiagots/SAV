@@ -11,7 +11,7 @@
     </div>
     @using (Html.BeginForm())
     {
-        @Html.ValidationSummary(false)
+        @Html.ValidationSummary(true)
         <div class="contenidoDatos">
             <div class="datosInputs">
                 <p class="edicion">@Html.LabelFor(model => model.Descripcion)</p>
@@ -30,6 +30,11 @@
             </div>
         </div>
         <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.Descripcion)</p>
+            <p>@Html.ValidationMessageFor(model => model.Monto)</p>
+        </div>
     }
 
 @using (Html.BeginForm("SearchComisionGasto", "Comision"))
@@ -65,8 +70,4 @@
     <div id="gastosTable">
         @Html.Partial("_spendingTable", Model.Gastos, new ViewDataDictionary { { "descripcion", Model.BuscarDescriptcion }, { "fechaAlta", Model.BuscarFecha }, { "monto", Model.BuscarMonto } })
     </div>
-
-    <div class="contenidoDatosError">
-        <p>@Html.ValidationMessageFor(model => model.Gastos)</p>
-        <p>@Html.ValidationMessageFor(model => model.Monto)</p>
-    </div>
+</div>

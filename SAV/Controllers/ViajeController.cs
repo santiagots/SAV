@@ -424,6 +424,15 @@ namespace SAV.Controllers
             return PartialView("_CierrePasajerosTable", pasajeros);
         }
 
+        public ActionResult CierrePagingPasajerosViajeCerrado(int? IdViaje, int? pageNumber, DateTime time)
+        {
+            ViewBag.IdViaje = IdViaje;
+
+            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajeros(db.Viajes.Find(IdViaje).ClienteViaje, pageNumber.Value);
+
+            return PartialView("_CierrePasajerosViajeCerradoTable", pasajeros);
+        }
+
         public ActionResult CierrePagingGastos(int? IdViaje, int? pageNumber)
         {
             ViewBag.IdViaje = IdViaje;

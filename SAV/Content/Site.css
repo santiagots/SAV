@@ -96,9 +96,14 @@ body {
     background: url("../img/masterFase2.png") no-repeat scroll -1211px -206px transparent;
 }
 
-.action.pay {
+.action.pagar {
     background: url("../img/masterFase2.png") no-repeat scroll -1211px -232px transparent;
 }
+
+.action.volver {
+    background: url("../img/masterFase2.png") no-repeat scroll -1151px -151px transparent;
+}
+
 
 body, td, input, textarea, select {
     font-family: arial,sans-serif;

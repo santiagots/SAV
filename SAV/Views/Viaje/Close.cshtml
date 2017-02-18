@@ -75,6 +75,11 @@
                 @Html.TextBoxFor(model => model.DatosBasicosViaje.Interno, new { id = "Interno" })
             </div>
 
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Estado)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.Estado, new { @disabled = "disabled" })
+            </div>
+
             <div class="botones">
 
                 <div class="boton">
@@ -82,12 +87,14 @@
                     <input id="modificar" class="centroBotonGris waiting" type="button" value="Modificar" onclick="$('#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario').prop('disabled', true);"></input>
                     <div class="finBotonGris"></div>
                 </div>
-
+                @if (Model.DatosBasicosViaje.Estado == SAV.Models.ViajeEstados.Abierto)
+                {
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
                     <input id="cerrar" class="centroBotonGris" type="submit" value="Cerrar Viaje" />
                     <div class="finBotonGris"></div>
                 </div>
+                }
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
                     <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search")    '" ></input>
@@ -99,9 +106,10 @@
 
 
         <!-- PASAJEROS TABLES -->
-        <div id="partialViewPasajeros" style="float: right">
-            @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
-
+            <div id="partialViewPasajeros">
+                @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
+            </div>
+           
             @if (Model.DatosBasicosViaje.Disponible > 0)
             {
                 <div class="botones">
@@ -119,7 +127,6 @@
                     </div>
                 </div>
             }
-        </div>
 
         <!-- GASTOS TABLES -->
         <div id="partialViewGastos" style="float: right">

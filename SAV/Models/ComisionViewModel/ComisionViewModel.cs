@@ -196,6 +196,8 @@ namespace SAV.Models
             comision.Pago = comisionViewModel.Pago;
             if (comisionViewModel.Pago)
                 comision.FechaPago = DateTime.Now;
+            else
+                comision.FechaPago = null;
 
             if (comisionViewModel.Servicio == ComisionServicio.Puerta)
             {

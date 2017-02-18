@@ -49,6 +49,7 @@
                             @{var cuentaCorriente = item.CuentaCorriente == null ? string.Empty : item.CuentaCorriente.RazonSocial;}
                             <td class="type2" style="width: 170px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => cuentaCorriente)</p></td>
                             <td style="width: 120px;">
+                                <a href="@Url.Action("RegresarAProgreso", "comision", new { ID = item.ID, numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"] })"><span class="action volver" title="Regresar" /></a>
                                 <a href="@Url.Action("clone", "comision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span id="Span44" class="action clonar" title="Copiar" /></a>
                                 <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", new { id = item.ID })"><span id="Span43" class="action retirar" title="Eliminar" /></a>
                             </td>

@@ -135,6 +135,32 @@ namespace SAV.Controllers
             return View("Create", comisionViewModel);
         }
 
+        public ActionResult RegresarAEnvio(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        {
+            SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel = new SearchCuentaCorrienteViewModel();
+
+            Comision comision = db.Comisiones.Find(ID);
+            comision.FechaEnvio = null;
+            db.SaveChanges();
+
+            SearchComisionViewModel searchComisionViewModel = CargarDatosEnBuscador(Numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente);
+
+            return View("Search", searchComisionViewModel);
+        }
+
+        public ActionResult RegresarAProgreso(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        {
+            SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel = new SearchCuentaCorrienteViewModel();
+
+            Comision comision = db.Comisiones.Find(ID);
+            comision.FechaEntrega = null;
+            db.SaveChanges();
+
+            SearchComisionViewModel searchComisionViewModel = CargarDatosEnBuscador(Numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente);
+
+            return View("Search", searchComisionViewModel);
+        }
+
         [HttpPost]
         public ActionResult Create(ComisionViewModel comisionViewModel)
         {
@@ -252,35 +278,12 @@ namespace SAV.Controllers
             Comision comision = db.Comisiones.Find(ID);
             comision.FechaEntrega = DateTime.Now.Date;
             db.SaveChanges();
-
-            List<Comision> comisiones = db.Comisiones.ToList();
-
-            comisiones = ComisionHelper.searchComisiones(comisiones, Numero, Contacto, Servicio, Accion, ComisionHelper.getFecha(FechaAlta), ComisionHelper.getFecha(FechaEnvio), ComisionHelper.getFecha(FechaEntrega), ComisionHelper.getFecha(FechaPago), Costo, IdResponsable, IdCuentaCorriente);
-
-            SearchComisionViewModel searchComisionViewModel = new SearchComisionViewModel();
-            searchComisionViewModel.Contacto = Contacto;
-            searchComisionViewModel.Servicio = Servicio;
-            searchComisionViewModel.Accion = Accion;
-            searchComisionViewModel.ID = Numero;
-            searchComisionViewModel.FechaAlta = FechaAlta;
-            searchComisionViewModel.FechaEntrega = FechaEntrega;
-            searchComisionViewModel.FechaEnvio = FechaEnvio;
-            searchComisionViewModel.FechaPago = FechaPago;
-
-            searchComisionViewModel.ComisionesEnvio = ComisionHelper.getEnvios(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesPendientes = ComisionHelper.getPendientes(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesFinalizadas = ComisionHelper.getFinalizadas(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-
-            List<ComisionResponsable> responsables = db.ComisionResponsable.ToList();
-            List<CuentaCorriente> cuentaCorriente = db.CuentaCorriente.ToList();
-
-            searchComisionViewModel.Responsable = responsables.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} {1}", x.Apellido, x.Nombre))).ToList();
-            searchComisionViewModel.CuentaCorriente = cuentaCorriente.Select(x => new KeyValuePair<int, string>(x.ID, x.RazonSocial)).ToList();
+            SearchComisionViewModel searchComisionViewModel = CargarDatosEnBuscador(Numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente);
 
             return View("Search", searchComisionViewModel);
-        }
+        }    
 
-        public ActionResult Pay(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        public ActionResult pagar(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
         {
             SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel = new SearchCuentaCorrienteViewModel();
 
@@ -289,29 +292,7 @@ namespace SAV.Controllers
             comision.FechaPago = DateTime.Now.Date;
             db.SaveChanges();
 
-            List<Comision> comisiones = db.Comisiones.ToList();
-
-            comisiones = ComisionHelper.searchComisiones(comisiones, Numero, Contacto, Servicio, Accion, ComisionHelper.getFecha(FechaAlta), ComisionHelper.getFecha(FechaEnvio), ComisionHelper.getFecha(FechaEntrega), ComisionHelper.getFecha(FechaPago), Costo, IdResponsable, IdCuentaCorriente);
-
-            SearchComisionViewModel searchComisionViewModel = new SearchComisionViewModel();
-            searchComisionViewModel.Contacto = Contacto;
-            searchComisionViewModel.Servicio = Servicio;
-            searchComisionViewModel.Accion = Accion;
-            searchComisionViewModel.ID = Numero;
-            searchComisionViewModel.FechaAlta = FechaAlta;
-            searchComisionViewModel.FechaEntrega = FechaEntrega;
-            searchComisionViewModel.FechaEnvio = FechaEnvio;
-            searchComisionViewModel.FechaPago = FechaPago;
-
-            searchComisionViewModel.ComisionesEnvio = ComisionHelper.getEnvios(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesPendientes = ComisionHelper.getPendientes(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesFinalizadas = ComisionHelper.getFinalizadas(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-
-            List<ComisionResponsable> responsables = db.ComisionResponsable.ToList();
-            List<CuentaCorriente> cuentaCorriente = db.CuentaCorriente.ToList();
-
-            searchComisionViewModel.Responsable = responsables.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} {1}", x.Apellido, x.Nombre))).ToList();
-            searchComisionViewModel.CuentaCorriente = cuentaCorriente.Select(x => new KeyValuePair<int, string>(x.ID, x.RazonSocial)).ToList();
+            SearchComisionViewModel searchComisionViewModel = CargarDatosEnBuscador(Numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente);
 
             return View("Search", searchComisionViewModel);
         }
@@ -541,6 +522,34 @@ namespace SAV.Controllers
         {
             db.Dispose();
             base.Dispose(disposing);
+        }
+
+        private SearchComisionViewModel CargarDatosEnBuscador(string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        {
+            List<Comision> comisiones = db.Comisiones.ToList();
+
+            comisiones = ComisionHelper.searchComisiones(comisiones, Numero, Contacto, Servicio, Accion, ComisionHelper.getFecha(FechaAlta), ComisionHelper.getFecha(FechaEnvio), ComisionHelper.getFecha(FechaEntrega), ComisionHelper.getFecha(FechaPago), Costo, IdResponsable, IdCuentaCorriente);
+
+            SearchComisionViewModel searchComisionViewModel = new SearchComisionViewModel();
+            searchComisionViewModel.Contacto = Contacto;
+            searchComisionViewModel.Servicio = Servicio;
+            searchComisionViewModel.Accion = Accion;
+            searchComisionViewModel.ID = Numero;
+            searchComisionViewModel.FechaAlta = FechaAlta;
+            searchComisionViewModel.FechaEntrega = FechaEntrega;
+            searchComisionViewModel.FechaEnvio = FechaEnvio;
+            searchComisionViewModel.FechaPago = FechaPago;
+
+            searchComisionViewModel.ComisionesEnvio = ComisionHelper.getEnvios(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            searchComisionViewModel.ComisionesPendientes = ComisionHelper.getPendientes(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            searchComisionViewModel.ComisionesFinalizadas = ComisionHelper.getFinalizadas(comisiones).OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            List<ComisionResponsable> responsables = db.ComisionResponsable.ToList();
+            List<CuentaCorriente> cuentaCorriente = db.CuentaCorriente.ToList();
+
+            searchComisionViewModel.Responsable = responsables.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} {1}", x.Apellido, x.Nombre))).ToList();
+            searchComisionViewModel.CuentaCorriente = cuentaCorriente.Select(x => new KeyValuePair<int, string>(x.ID, x.RazonSocial)).ToList();
+            return searchComisionViewModel;
         }
     }
 }

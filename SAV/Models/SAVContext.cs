@@ -44,6 +44,8 @@ namespace SAV.Models
 
         public DbSet<CuentaCorriente> CuentaCorriente { get; set; }
 
+        public DbSet<Pago> Pagos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 

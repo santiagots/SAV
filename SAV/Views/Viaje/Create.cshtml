@@ -34,12 +34,18 @@
                 @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectDestino, new SelectList(Model.DatosBasicosViaje.Destino, "Key", "Value"), "Elija una opción")
             </div>
 
-            <div id="ServicioCerrado" class="datosInputs">
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.OrigenCerrado)<b>(*)</b></p>
-                @Html.TextBoxFor(model => model.DatosBasicosViaje.OrigenCerrado)
+            <div id="ServicioCerrado">
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.OrigenCerrado)<b>(*)</b></p>
+                    @Html.TextBoxFor(model => model.DatosBasicosViaje.OrigenCerrado)
 
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.DestinoCerrado)<b>(*)</b></p>
-                @Html.TextBoxFor(model => model.DatosBasicosViaje.DestinoCerrado)
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.DestinoCerrado)<b>(*)</b></p>
+                    @Html.TextBoxFor(model => model.DatosBasicosViaje.DestinoCerrado)
+                </div>
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.CostoCerrado)<b>(*)</b></p>
+                    @Html.TextBoxFor(model => model.DatosBasicosViaje.CostoCerrado)
+                </div>
             </div>
 
             <div class="datosInputs">
@@ -129,6 +135,7 @@
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectDestino)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.OrigenCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.DestinoCerrado)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.CostoCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraSalida)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraArribo)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Servicio)</p>

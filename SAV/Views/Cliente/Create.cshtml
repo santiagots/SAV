@@ -152,13 +152,12 @@
                     @Html.TextBoxFor(model => model.Destino, new { @disabled = "disabled" })
                 </div>
 
-                <div class="datosInputs">
-                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
-                    @Html.TextBoxFor(model => model.Costo)
-                </div>
-
                 @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
                 {
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        @Html.TextBoxFor(model => model.Costo)
+                    </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaAscenso)</p>
                         @Html.DropDownListFor(model => model.SelectServicioPuertaAscenso, new SelectList(Model.ServicioPuertaAscenso, "Key", "Value"), "Elija una opción")
@@ -169,6 +168,10 @@
                 }
                 @if (ViewBag.Servicio == ViajeTipoServicio.Directo)
                 {
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        @Html.TextBoxFor(model => model.Costo)
+                    </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoAscenso)</p>
                         @Html.DropDownListFor(model => model.SelectServicioDirectoAscenso, new SelectList(Model.ServicioDirectoAscenso, "Key", "Value"), "Elija una opción")

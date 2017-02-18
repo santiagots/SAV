@@ -19,6 +19,7 @@ namespace SAV.Models
         public virtual Localidad Destino { get; set; }
         public String OrigenCerrado { get; set; }
         public String DestinoCerrado { get; set; }
+        public Decimal CostoCerrado { get; set; }
         public int Asientos { get; set; }
         public DateTime FechaSalida { get; set; }
         public DateTime FechaArribo { get; set; }
@@ -116,6 +117,7 @@ namespace SAV.Models
             {
                 Origen = localidades.Where(x => x.ID == int.Parse(viajeViewModel.SelectOrigen)).FirstOrDefault();
                 Destino = localidades.Where(x => x.ID == int.Parse(viajeViewModel.SelectDestino)).FirstOrDefault();
+                CostoCerrado = 0;
                 OrigenCerrado = string.Empty;
                 DestinoCerrado = string.Empty;
             }
@@ -123,6 +125,7 @@ namespace SAV.Models
             {
                 Origen = null;
                 Destino = null;
+                CostoCerrado = decimal.Parse(viajeViewModel.CostoCerrado);
                 OrigenCerrado = viajeViewModel.OrigenCerrado;
                 DestinoCerrado = viajeViewModel.DestinoCerrado;
             }

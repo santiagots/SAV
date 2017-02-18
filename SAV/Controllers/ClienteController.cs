@@ -182,7 +182,7 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Details(ClienteViewModel clienteViewModel, int id, int? idViaje)
         {
-            lock(clienteViajesLock)
+             lock(clienteViajesLock)
             {
                 List<Provincia> provincias = db.Provincias.ToList<Provincia>();
                 List<Localidad> localidades = db.Localidades.ToList<Localidad>();

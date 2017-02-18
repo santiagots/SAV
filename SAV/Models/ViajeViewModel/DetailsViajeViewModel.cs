@@ -42,6 +42,7 @@ namespace SAV.Models
             {
                 DatosBasicosViaje.OrigenCerrado = viaje.OrigenCerrado;
                 DatosBasicosViaje.DestinoCerrado = viaje.DestinoCerrado;
+                DatosBasicosViaje.CostoCerrado = viaje.CostoCerrado.ToString();
             }
 
             DatosBasicosViaje.Destino = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
@@ -65,6 +66,7 @@ namespace SAV.Models
             DatosBasicosViaje.Disponible = viaje.Asientos - viaje.ClienteViaje.Count;
             DatosBasicosViaje.Patente = viaje.Patente;
             DatosBasicosViaje.Interno = viaje.Interno;
+            DatosBasicosViaje.Estado = viaje.Estado;
         }
     }
 

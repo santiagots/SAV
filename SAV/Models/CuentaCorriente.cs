@@ -20,6 +20,8 @@ namespace SAV.Models
 
         public virtual List<Comision> Comisiones { get; set; }
 
+        public virtual List<Pago> Pagos { get; set; }
+
         public decimal Deuda { get { return Comisiones.Where(x => !x.Pago).Sum(y => y.Debe > 0 ? y.Debe : y.Costo); } }
     }
 }

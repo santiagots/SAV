@@ -247,6 +247,7 @@
     <Compile Include="Models\CuentaCorriente.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\CuentaCorrienteViewModel.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\SearchCuentaCorrienteViewModel.cs" />
+    <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\DestinoViewModel\DestinoViewModel.cs" />
     <Compile Include="Models\Domicilio.cs" />
     <Compile Include="Models\Gasto.cs" />
@@ -487,6 +488,7 @@
     <Content Include="Views\Balance\ExportComisiones.cshtml" />
     <Content Include="Template\ComisionTemplate.xls" />
     <Content Include="Views\CuentaCorriente\Export.cshtml" />
+    <Content Include="Views\Viaje\_CierrePasajerosViajeCerradoTable.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

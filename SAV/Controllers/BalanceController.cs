@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using SAV.Models;
 using SAV.Common;
 using System.Configuration;
+using System.Data.Objects;
 
 namespace SAV.Controllers
 {
@@ -64,16 +65,18 @@ namespace SAV.Controllers
             DateTime fecha = ViajeHelper.getFecha(balanceComisionDiarioViewModel.Fecha);
             if (string.IsNullOrEmpty(balanceComisionDiarioViewModel.FechaHasta))
             {
-                List<Comision> comision = BalanceHelper.getComisiones(db.Comisiones.ToList<Comision>(), fecha);
-                List<ComisionGasto> comisionGastos = BalanceHelper.getComisionesGastos(db.ComisionGastos.ToList<ComisionGasto>(), fecha);
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(comision, comisionGastos);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha);
             }
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
-                List<Comision> comision = db.Comisiones.Where(x => x.FechaPago.HasValue && x.FechaPago.Value.CompareTo(fecha) >= 0 && x.FechaPago.Value.CompareTo(fechaHasta) <=0).ToList<Comision>();
-                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => x.FechaAlta.CompareTo(fecha) >= 0 && x.FechaAlta.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(comision, comisionGastos);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
 
             }
 
@@ -118,19 +121,21 @@ namespace SAV.Controllers
 
             if (string.IsNullOrEmpty(fechaHastaBusqueda))
             {
-                List<Comision> comision = BalanceHelper.getComisiones(db.Comisiones.ToList<Comision>(), fecha);
-                List<ComisionGasto> comisionGastos = BalanceHelper.getComisionesGastos(db.ComisionGastos.ToList<ComisionGasto>(), fecha);
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(comision, comisionGastos);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha);
 
                 name = String.Format("Reporte_Comisiones_Dia_{0}", fecha.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Comisiones día {0}", fecha.ToString("dd/MM/yyyy"));
             }
             else
             {
-                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
-                List<Comision> comision = db.Comisiones.Where(x => x.FechaPago.HasValue && x.FechaPago.Value.CompareTo(fecha) >= 0 && x.FechaPago.Value.CompareTo(fechaHasta) <= 0).ToList<Comision>();
-                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => x.FechaAlta.CompareTo(fecha) >= 0 && x.FechaAlta.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(comision, comisionGastos);
+                DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
 
                 name = String.Format("Reporte_Comisiones_Dia_{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Consolidado Comisiones desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
