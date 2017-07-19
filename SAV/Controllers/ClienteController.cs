@@ -120,7 +120,7 @@ namespace SAV.Controllers
                   
                     if (viaje.tieneLugar())
                     {
-                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>());
+                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>(), User.Identity.Name);
                         db.ClienteViajes.Add(clienteViaje);
                         db.Clientes.Add(cliente);
                         db.SaveChanges();
@@ -171,7 +171,7 @@ namespace SAV.Controllers
                 ViewBag.IdViaje = idViaje;
                 Viaje viaje = db.Viajes.Find(idViaje);
                 ViewBag.Servicio = viaje.Servicio;
-                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente);
+                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, User.Identity.Name);
             }
             else
                 clienteViewModel = new ClienteViewModel(Provincias, cliente);
@@ -194,7 +194,7 @@ namespace SAV.Controllers
                 if (idViaje.HasValue) //se ingresa a detalle del cliente desde un viaje
                 {
                     Viaje viaje = db.Viajes.Find(idViaje.Value);
-                    ClienteViaje NewclienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>());
+                    ClienteViaje NewclienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>(), User.Identity.Name);
 
                     ClienteViaje clienteViaje = cliente.ClienteViaje.Where(x => x.Viaje != null && x.Viaje.ID == idViaje).FirstOrDefault();
 

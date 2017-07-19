@@ -6,7 +6,6 @@ $(document).ready(function () {
     });
 
     $(".waiting").click(function () {
-        debugger;
         //if ($("form").length == 0 || $("form").valid()) {
         //enableSpinner();
 

@@ -21,7 +21,6 @@ function ChangeOrigenDestino() {
 
 function Validate()
 {
-    debugger;
     $("#Error").empty();
 
     var asientos = $("#DatosBasicosViaje_Asientos").val();

@@ -230,6 +230,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceComisionDiarioViewModel.cs" />
+    <Compile Include="Models\BalanceViewModel\BalanceVendedorDiarioViewModel.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ClienteViaje.cs" />
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
@@ -330,6 +331,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="App_Browsers\qt.browser" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\smarterasp.net.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="img\alertPixel.png" />
@@ -489,8 +491,12 @@
     <Content Include="Template\ComisionTemplate.xls" />
     <Content Include="Views\CuentaCorriente\Export.cshtml" />
     <Content Include="Views\Viaje\_CierrePasajerosViajeCerradoTable.cshtml" />
+    <Content Include="Views\Balance\Vendedor.cshtml" />
+    <Content Include="Views\Balance\ExportVendedor.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

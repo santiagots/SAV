@@ -123,6 +123,9 @@ namespace SAV.Models
 
         public string FechaSalida { get; set; }
 
+        [Display(Name = "Vendedor:")]
+        public string Vendedor { get; set; }
+
         [Display(Name = "Origen:")]
         public string Origen { get; set; }
 
@@ -276,7 +279,7 @@ namespace SAV.Models
             LocalidadOtros = new List<KeyValuePair<int, string>>();
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente):this(provincias, cliente)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, String vendedor):this(provincias, cliente)
         {
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
 
@@ -287,6 +290,8 @@ namespace SAV.Models
             ServicioPuertaDescenso = new List<KeyValuePair<int, string>>();
             ServicioPuertaDescenso.Add(new KeyValuePair<int, string>(1, "Domicilio Principal"));
             ServicioPuertaDescenso.Add(new KeyValuePair<int, string>(2, "Domicilio Secunadrio"));
+
+            this.Vendedor = vendedor;
 
             if (viaje.Servicio == ViajeTipoServicio.Cerrado)
             {
@@ -313,6 +318,7 @@ namespace SAV.Models
                     AscensoDomicilioPrincipal = clienteViaje.AscensoDomicilioPrincipal;
                     DescensoDomicilioPrincipal = clienteViaje.DescensoDomicilioPrincipal;
                     DescensoDomicilioOtros = clienteViaje.DescensoDomicilioOtros;
+                    Vendedor = clienteViaje.Vendedor;
 
                     if (DescensoDomicilioOtros)
                     {
@@ -325,9 +331,9 @@ namespace SAV.Models
                         CalleNumeroOtros = clienteViaje.DomicilioDescenso.Numero;
                         CallePisoOtros = clienteViaje.DomicilioDescenso.Piso;
                     }
-                    
+
                     if (viaje.Servicio == ViajeTipoServicio.Puerta)
-                    {                                            
+                    {
                         if (cliente.DomicilioPrincipal.ID == clienteViaje.DomicilioAscenso.ID)
                         {
                             SelectServicioPuertaAscenso = 1;
@@ -351,7 +357,7 @@ namespace SAV.Models
             }
         }
 
-        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<Localidad> localidades, List<Provincia> provincias)
+        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<Localidad> localidades, List<Provincia> provincias, String Vendedor)
         {
             ClienteViaje clienteViaje = new ClienteViaje();
 
@@ -362,6 +368,7 @@ namespace SAV.Models
             clienteViaje.DescensoDomicilioPrincipal = clienteViewModel.DescensoDomicilioPrincipal;
             clienteViaje.DescensoDomicilioOtros = clienteViewModel.DescensoDomicilioOtros;
             clienteViaje.Costo = Convert.ToDecimal(clienteViewModel.Costo);
+            clienteViaje.Vendedor = Vendedor;
 
             if (viaje.Servicio == ViajeTipoServicio.Puerta)
             {
