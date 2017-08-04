@@ -63,8 +63,8 @@ namespace SAV.Common
             balance.Veiculos.Add(balanceVeiculoViewModel);
 
             var grupoConductores = viajes.GroupBy(x => x.Conductor != null? x.Conductor.ID:-1).ToList();
-            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.RazonSocial);
-            var grupoPasajeros = viajes.GroupBy(x => new { x.Servicio, x.Patente }).ToList();
+            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.Comentario);
+            var grupoPasajeros = viajes.GroupBy(x => x.Servicio);
 
             foreach (var item in grupoPasajeros)
             {
@@ -74,7 +74,7 @@ namespace SAV.Common
                     int cantidadDeClientes = item.SelectMany(x => x.ClienteViaje).ToList().Count;
                     balanceVeiculoViewModel.Items.Add(new ItemBalanceViewModel()
                     {
-                        Concepto = string.Format("Servicio {0} Patente {1} (Total viajes {2} Total pasajeros {3})", item.First().Servicio.ToString(), item.First().Patente.ToString(), item.Count(), cantidadDeClientes),
+                        Concepto = string.Format("Servicio {0} (Total viajes {1} Total pasajeros {2})", item.First().Servicio.ToString(), item.Count(), cantidadDeClientes),
                         Importe = item.Sum(x => x.CostoCerrado)
                     });
                 }
@@ -213,25 +213,6 @@ namespace SAV.Common
         public static List<Viaje> getViajes(List<Viaje> viajes, DateTime fecha)
         {
             return viajes.Where(x => x.FechaArribo.Day == fecha.Day && x.FechaArribo.Month == fecha.Month && x.FechaArribo.Year == fecha.Year && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
-        }
-
-        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<Viaje> viajes)
-        {
-            BalanceVendedorDiarioViewModel balance = new BalanceVendedorDiarioViewModel();
-
-            var grupoCendedores = viajes.SelectMany(x => x.ClienteViaje).GroupBy(y => y.Vendedor);
-
-            foreach (var item in grupoCendedores)
-            {
-                balance.Items.Add(new ItemBalanceVendedorViewModel()
-                {
-                    Concepto = string.Format("{0} ({1})", item.First().Vendedor, item.Count()),
-                    Monto = item.Where(x=>x.Pago).Sum(x => x.Costo)
-                });
-                balance.total += item.Where(x => x.Pago).Sum(x => x.Costo);
-            }
-
-            return balance;
         }
     }
 }

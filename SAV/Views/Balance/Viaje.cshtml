@@ -108,6 +108,7 @@
 
 <script language="javascript">
     var baseurl = '@Url.Action("ExportViaje")';
+    debugger;
     $('#Export').click(function() {
         var url = baseurl + '?fechaBusqueda=' + $('#fecha').val() + "&fechaHastaBusqueda=" + $('#fechaHasta').val();
         location.href=url;

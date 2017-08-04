@@ -21,6 +21,7 @@
 
     //manejo de tabs
 
+    debugger;
     $('#tabs').find('div.tabContent').hide();
     $('#tabs').find('div.tabContent:first').show();
 

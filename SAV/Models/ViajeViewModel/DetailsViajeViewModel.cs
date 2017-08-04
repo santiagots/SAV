@@ -85,6 +85,5 @@ namespace SAV.Models
         public bool Pago { get; set; }
         public string Costo { get; set; }
         public bool Presente { get; set; }
-        public string Vendedor { get; set; }
     }
 }

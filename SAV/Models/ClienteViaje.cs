@@ -33,7 +33,5 @@ namespace SAV.Models
         public bool DescensoDomicilioOtros { get; set; }
 
         public bool Presente { get; set; }
-
-        public string Vendedor { get; set; }
     }
 }

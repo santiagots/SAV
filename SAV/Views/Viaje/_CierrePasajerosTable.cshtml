@@ -23,23 +23,20 @@
                         <th class="type2 type119">
                             <p>@Html.DisplayNameFor(model => model.First().DNI)</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type2 type235">
+                        <th class="type2 type39">
                             <p>Dirección</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type140">
                             <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type119">
-                            <p>Ausentes</p>
-                            <span class="ordenamiento"></span></th>
-                        <th class="type2 type119">
-                            <p>Vendedor</p>
+                            <p>Viajes Ausentes</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type112">
                             <p>@Html.DisplayNameFor(model => model.First().Pago)</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type5">Presente</th>
-                        <th class="type30">&nbsp;&nbsp;&nbsp;</th>
+                        <th class="type49">&nbsp;&nbsp;&nbsp;</th>
                     </tr>
 
                 </thead>
@@ -54,7 +51,7 @@
                             <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type119 waitingMenuBar">
                                 <p>@Html.DisplayFor(m => m[i].DNI)</p>
                             </td>
-                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type235 waitingMenuBar">
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type39 waitingMenuBar">
                                 <p>@Html.DisplayFor(m => m[i].Domicilio)</p>
                             </td>
                             <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type140 waitingMenuBar">
@@ -63,16 +60,13 @@
                             <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type119 waitingMenuBar">
                                 <p>@Html.DisplayFor(m => m[i].Ausencias)</p>
                             </td>
-                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type119 waitingMenuBar">
-                                <p>@Html.DisplayFor(m => m[i].Vendedor)</p>
-                            </td>
                             <td class="type2 type112">
                                 <p>@Html.EditorFor(m => m[i].Pago)</p>
                             </td>
                             <td class="type2 type5">
                                 <p>@Html.EditorFor(m =>Model[i].Presente)</p>
                             </td>
-                            <td class="type30">
+                            <td class="type49">
                                 <a onclick="return confirmSpinner('Esta seguro que desea borrar el pasajero?');" href="@Url.Action("Delete", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.idViaje, From = "Close" })">
                                     <span id="Span43" class="action retirar" title="Eliminar" />
                                 </a>
