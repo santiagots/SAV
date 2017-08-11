@@ -48,7 +48,7 @@ namespace SAV.Common
             if (!string.IsNullOrEmpty(FechaSalida))
             {
                 DateTime fecha = ViajeHelper.getFecha(FechaSalida);
-                viajes = viajes.Where(x => x.FechaSalida.Day == fecha.Day && x.FechaSalida.Month == fecha.Month && x.FechaSalida.Month == fecha.Month).ToList<Viaje>();
+                viajes = viajes.Where(x => x.FechaSalida.Day == fecha.Day && x.FechaSalida.Month == fecha.Month && x.FechaSalida.Year == fecha.Year).ToList<Viaje>();
             }
 
             if (!string.IsNullOrEmpty(Servicio))
@@ -107,7 +107,8 @@ namespace SAV.Common
                 Ausencias = x.Cliente.getClienteViaje,
                 Pago = x.Pago,
                 Costo = x.Costo.ToString(),
-                Presente = x.Presente
+                Presente = x.Presente,
+                Vendedor = x.Vendedor
             }).ToList<Pasajeros>();
         }
 

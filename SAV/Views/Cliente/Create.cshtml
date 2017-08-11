@@ -145,6 +145,11 @@
             <div class="contenidoDatos">
 
                 <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Vendedor)</p>
+                    @Html.TextBoxFor(model => model.Vendedor, new { @disabled = "disabled" })
+                </div>
+
+                <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.Origen)</p>
                     @Html.TextBoxFor(model => model.Origen, new { @disabled = "disabled" })
 

@@ -230,6 +230,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceComisionDiarioViewModel.cs" />
+    <Compile Include="Models\BalanceViewModel\BalanceVendedorDiarioViewModel.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ClienteViaje.cs" />
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
@@ -489,6 +490,8 @@
     <Content Include="Template\ComisionTemplate.xls" />
     <Content Include="Views\CuentaCorriente\Export.cshtml" />
     <Content Include="Views\Viaje\_CierrePasajerosViajeCerradoTable.cshtml" />
+    <Content Include="Views\Balance\ExportVendedor.cshtml" />
+    <Content Include="Views\Balance\Vendedor.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

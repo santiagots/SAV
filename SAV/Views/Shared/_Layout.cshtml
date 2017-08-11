@@ -51,8 +51,10 @@
                                         <ul>
                                             <li>@Html.ActionLink("Viajes", "Viaje", "Balance", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                             <li>@Html.ActionLink("Comisiones", "Comision", "Balance", null, new { @class = currentController == "Balance" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Vendedores", "Vendedor", "Balance", null, new { @class = currentController == "Balance" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                         </ul>
                                     </li>
+                                    <li>@Html.ActionLink("Destinos", "Create", "Destinos", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
 					        </div>
 				        </div>
                     </nav>

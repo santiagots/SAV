@@ -1,4 +1,4 @@
-﻿@model SAV.Models.BalanceViajeDiarioViewModel
+﻿@model SAV.Models.BalanceViewModel
 
 @{
     ViewBag.Title = "Balance";
@@ -13,18 +13,13 @@
     {
         <div class="contenidoDatos">
             <div class="datosInputs">
-                <p class="edicion">@Html.LabelFor(model => model.Fecha)<b>(*)</b></p>
+                <p class="edicion">@Html.LabelFor(model => model.Fecha)</p>
                 <div class="divFecha">
                     @Html.TextBoxFor(model => model.Fecha, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
                 </div>
-
-                <p class="edicion">@Html.LabelFor(model => model.FechaHasta)</p>
-                <div class="divFecha">
-                    @Html.TextBoxFor(model => model.FechaHasta, new { @class = "fecha", @id = "fechaHasta", @name = "fechaHasta", @readonly = true })
-                </div>
             </div>
             <div class="datosInputs">
-                <p class="edicion">@Html.LabelFor(model => model.Clave)<b>(*)</b></p>
+                <p class="edicion">@Html.LabelFor(model => model.Clave)</p>
                 <div class="divFecha">
                     @Html.PasswordFor(model => model.Clave)
                 </div>
@@ -65,11 +60,11 @@
                 <table id="tablaParts" class="tablesorter">
                     <thead>
                         <tr class="headTitles noBorder">
-                            <th class="type2" style="width: 500px;">
+                            <th class="type2 type39">
                                 <p>@Html.DisplayNameFor(model => veiculos.Items.First().Concepto)</p>
                                 <span class="ordenamiento"></span>
                             </th>
-                            <th style="width: 400px;">
+                            <th class="type203">
                                 <p>@Html.DisplayNameFor(model => veiculos.Items.First().Importe)</p>
                                 <span class="ordenamiento"></span></th>
                         </tr>
@@ -79,10 +74,10 @@
                         @foreach (var item in veiculos.Items)
                         {
                             <tr>
-                                <td class="type2" style="width: 500px;">
+                                <td class="type2 type39">
                                     <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td class="type203">
                                     <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                 </td>
                             </tr>
@@ -90,10 +85,10 @@
                         @if (veiculos.Items.Count > 0)
                         {
                             <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
+                                <td class="type2 type39">
                                     <p>Total:</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td class="type203">
                                     <p>@veiculos.total</p>
                                 </td>
                             </tr>
@@ -107,9 +102,10 @@
 </div>
 
 <script language="javascript">
-    var baseurl = '@Url.Action("ExportViaje")';
+    var baseurl = '@Url.Action("ExportBalance")';
+    debugger;
     $('#Export').click(function() {
-        var url = baseurl + '?fechaBusqueda=' + $('#fecha').val() + "&fechaHastaBusqueda=" + $('#fechaHasta').val();
+        var url = baseurl + '?fechaBusqueda=' + $('#fecha').val();
         location.href=url;
     });
 </script>

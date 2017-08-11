@@ -47,6 +47,38 @@ namespace SAV.Controllers
             return View(balanceViewModel);
         }
 
+        public ActionResult Vendedor()
+        {
+            BalanceVendedorDiarioViewModel balanceViewModel = new BalanceVendedorDiarioViewModel();
+
+            return View(balanceViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Vendedor(BalanceVendedorDiarioViewModel balanceViewModel)
+        {
+            if (!balanceViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
+            {
+                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
+                return View(balanceViewModel);
+            }
+            DateTime fecha = ViajeHelper.getFecha(balanceViewModel.Fecha);
+
+            if (string.IsNullOrEmpty(balanceViewModel.FechaHasta))
+            {
+                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
+                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+            }
+            else
+            {
+                DateTime fechaHasta = ViajeHelper.getFecha(balanceViewModel.FechaHasta);
+                List<Viaje> viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+            }
+
+            return View(balanceViewModel);
+        }
+
         public ActionResult Comision()
         {
             BalanceComisionDiarioViewModel balanceComisionDiarioViewModel = new BalanceComisionDiarioViewModel();
@@ -148,6 +180,36 @@ namespace SAV.Controllers
             Response.Charset = "utf-8";
 
             return View(balanceComisionDiarioViewModel);
+        }
+
+        public ActionResult ExportVendedor(String fechaBusqueda, String fechaHastaBusqueda)
+        {
+            DateTime fecha = ViajeHelper.getFecha(fechaBusqueda);
+            BalanceVendedorDiarioViewModel balanceViewModel;
+            string name;
+
+            if (string.IsNullOrEmpty(fechaHastaBusqueda))
+            {
+                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
+                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                name = String.Format("Reporte_Dia_Viajes{0}", fecha.ToString("dd_MM_yyyy"));
+                @ViewBag.titulo = string.Format("Cierre día {0}", fecha.ToString("dd/MM/yyyy"));
+            }
+
+            else
+            {
+                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
+                List<Viaje> viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                name = String.Format("Consolidado_Vendedores{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
+                @ViewBag.titulo = string.Format("Consolidado Vendedores desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
+            }
+
+            Response.AddHeader("content-disposition", "attachment;filename=" + name + ".xls");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.Charset = "utf-8";
+
+            return View(balanceViewModel);
         }
     }
 }
