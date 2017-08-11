@@ -282,8 +282,8 @@ namespace SAV.Controllers
 
             SearchClienteViewModel searchClienteViewModel = new SearchClienteViewModel();
 
-            ViewBag.nombre = nombre.ToUpper();
-            ViewBag.apellido = apellido.ToUpper();
+            ViewBag.nombre = nombre;
+            ViewBag.apellido = apellido;
             ViewBag.dni = dni;
             ViewBag.telefono = telefono;
 
