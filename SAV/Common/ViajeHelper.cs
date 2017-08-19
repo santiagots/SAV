@@ -119,9 +119,12 @@ namespace SAV.Common
 
         private static string getAscenso(ClienteViaje clienteViaje)
         {
-            if(clienteViaje.Viaje.Servicio == ViajeTipoServicio.Puerta)
-                return clienteViaje.DomicilioAscenso.getDomicilio;
-
+            if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Puerta)
+            {
+                if (clienteViaje.DomicilioAscenso != null)
+                    return clienteViaje.DomicilioAscenso.getDomicilio;
+                return clienteViaje.Ascenso.Nombre;
+            }
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo)
             {
                 if (clienteViaje.DomicilioAscenso != null)
@@ -137,7 +140,12 @@ namespace SAV.Common
         private static string getDescenso(ClienteViaje clienteViaje)
         {
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Puerta)
-                return clienteViaje.DomicilioDescenso.getDomicilio;
+            {
+                if (clienteViaje.DomicilioDescenso != null)
+                    return clienteViaje.DomicilioDescenso.getDomicilio;
+                return clienteViaje.Descenso.Nombre;
+            }
+
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo)
             {
                 if (clienteViaje.DomicilioDescenso != null)
