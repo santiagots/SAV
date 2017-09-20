@@ -70,7 +70,7 @@ function cerrar()
             });
         }
 
-        $('#Patente, #Interno').prop('disabled', false);
+        $('#Patente, #PatenteSuplente, #Interno').prop('disabled', false);
     }
 
     function ModificarViaje() {
@@ -85,6 +85,7 @@ function cerrar()
                 data:
                     {
                         "patente": $("#Patente").val(),
+                        "PatenteSuplente": $("#PatenteSuplente").val(),
                         "interno": $("#Interno").val(),
                         "idViaje": $("#viajeID").val()
                     },

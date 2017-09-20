@@ -13,6 +13,7 @@ using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace SAV.Controllers
 {
@@ -32,10 +33,10 @@ namespace SAV.Controllers
             ViewBag.IdViaje = id;
 
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
-
             List<Localidad> localidad = db.Localidades.ToList<Localidad>();
+            List<Provincia> provincia = db.Provincias.ToList<Provincia>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad, provincia);
 
             return View(detailsViajeViewModel);
         }
@@ -52,10 +53,10 @@ namespace SAV.Controllers
             ViewBag.IdViaje = id;
 
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
-
             List<Localidad> localidad = db.Localidades.ToList<Localidad>();
+            List<Provincia> provincia = db.Provincias.ToList<Provincia>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad, provincia);
 
             return View(detailsViajeViewModel);
         }
@@ -84,10 +85,10 @@ namespace SAV.Controllers
             Viaje viaje = db.Viajes.Find(idViaje);
 
             List<Conductor> conductores = db.Conductores.ToList<Conductor>();
-
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
+            List<Provincia> provincias = db.Provincias.ToList<Provincia>();
 
-            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, localidades);
+            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias);
 
             db.Entry(viaje).State = EntityState.Modified;
             db.SaveChanges();
@@ -98,8 +99,9 @@ namespace SAV.Controllers
         {
             var conductores = db.Conductores.ToList<Conductor>();
             var localidades = db.Localidades.ToList<Localidad>();
+            var provincias = db.Provincias.ToList<Provincia>();
 
-            var CreateViajeViewModel = new CreateViajeViewModel(conductores, localidades);
+            var CreateViajeViewModel = new CreateViajeViewModel(conductores, localidades, provincias);
 
             return View(CreateViajeViewModel);
         }
@@ -108,10 +110,10 @@ namespace SAV.Controllers
         public ActionResult Create(CreateViajeViewModel createViajeViewModel)
         {
             var localidades = db.Localidades.ToList<Localidad>();
-
             var conductores = db.Conductores.ToList<Conductor>();
+            var provincias = db.Provincias.ToList<Provincia>();
 
-            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, localidades);
+            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, localidades, provincias);
 
             foreach (Viaje v in viaje)
                 db.Viajes.Add(v);
@@ -178,7 +180,7 @@ namespace SAV.Controllers
             SearchViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
             SearchViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
 
-            viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio);
+            viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo);
 
             SearchViaje.ViajesActivos = viajesActivos.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             SearchViaje.ViajesFinalizados = viajesFinalizados.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -190,6 +192,12 @@ namespace SAV.Controllers
 
             SearchViaje.ViajesActivos.OrderBy(x => x.FechaSalida);
             SearchViaje.ViajesFinalizados.OrderBy(x => x.FechaSalida);
+
+            ViewBag.idOrigen = searchViajeViewModel.Origen;
+            ViewBag.idDestino = searchViajeViewModel.SelectDestino;
+            ViewBag.fechaSalida = searchViajeViewModel.FechaSalida;
+            ViewBag.servicio = searchViajeViewModel.Servicio;
+            ViewBag.codigo = searchViajeViewModel.Codigo;
 
             return View("Search", SearchViaje);
         }
@@ -204,6 +212,7 @@ namespace SAV.Controllers
             else
                 conductor = "Conductor no asignado";
             string patente = viaje.Patente;
+            string patenteSuplente = viaje.PatenteSuplente;
             string interno = viaje.Interno.ToString();
             string viajeID = viaje.ID.ToString();
             string origen = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Origen.Nombre : viaje.OrigenCerrado;
@@ -234,7 +243,7 @@ namespace SAV.Controllers
             if (pasajeros.Count > 0)
             {
                 List<ICell> HeadPasajerosCell = PasajerosSheet.GetRow(1).Cells;
-                HeadPasajerosCell[0].SetCellValue(string.Format("Hoja de Viaje - Cod. Viaje: {0} - Patente: {1} - Interno: {2} - Conductor: {3}", viajeID, patente, interno, conductor));
+                HeadPasajerosCell[0].SetCellValue(string.Format("Hoja de Viaje - Cod. Viaje: {0} - Patente: {1} - Suplente: {2} - Interno: {3} - Conductor: {4}", viajeID, patente, patenteSuplente, interno, conductor));
 
                 HeadPasajerosCell = PasajerosSheet.GetRow(3).Cells;
                 HeadPasajerosCell[0].SetCellValue(string.Format("Origen: {0} - Destino: {1}", origen, destino));
@@ -283,6 +292,80 @@ namespace SAV.Controllers
             tamplateWorckbook.Write(ms);
 
             return File(ms.ToArray(), "application/vnd.ms-excel", name + ".xls");
+        }
+
+        public ActionResult ExportViajeCNRT(int id)
+        {
+            var viaje = db.Viajes.Find(id);
+            var configuracion = db.Configuracion.FirstOrDefault();
+
+            if (configuracion == null)
+            {
+                configuracion = new Configuracion();
+            }
+
+            string origen = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Origen.Nombre : viaje.OrigenCerrado;
+            string provinciaOrigen = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Origen.ID)).First().Codigo : viaje.ProvienciaOrigenCerrado.Codigo;
+            string destino = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Destino.Nombre : viaje.DestinoCerrado;
+            string provinciaDestino = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Destino.ID)).First().Codigo : viaje.ProvienciaDestinoCerrado.Codigo;
+
+            CNRTViaje cnrtViaje = new CNRTViaje()
+            {
+                fecha_inicio = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm"),
+                fecha_fin = viaje.FechaArribo.ToString("dd/MM/yyyy HH:mm"),
+                origen = origen,
+                provincia_origen = provinciaOrigen,
+                destino = destino,
+                provincia_destino = provinciaDestino,
+                dominio = viaje.Patente,
+                dominio_suplente = viaje.PatenteSuplente,
+                tripulante_1_cuit = viaje.Conductor.CUIL != null? viaje.Conductor.CUIL.Replace("-", ""): null,
+                tripulante_1_nombre = viaje.Conductor.Nombre,
+                tripulante_1_apellido = viaje.Conductor.Apellido,
+                tripulante_1_es_chofer = "1",
+                contratante_denominacion = configuracion.ContratanteDenominacion,
+                contenido_programacion_turistica = configuracion.ContenidoProgramacionTuristica,
+                contratante_cuit = configuracion.ContrtanteCuit != null? configuracion.ContrtanteCuit.Replace("-", ""): null,
+                contratante_domicilio = (configuracion.ContratanteDomicilio != null)? string.Format("{0} {1}", configuracion.ContratanteDomicilio.Calle, configuracion.ContratanteDomicilio.Numero)  : ""
+            };
+
+            List<CNRTPasajero> cnrtPasajeros = new List<CNRTPasajero>();
+
+            int butaca = 1;
+            foreach (ClienteViaje clienteViaje in viaje.ClienteViaje)
+            {
+                cnrtPasajeros.Add(new CNRTPasajero()
+                {
+                    tipo_documento = "1",
+                    numero_documento = clienteViaje.Cliente.DNI.ToString(),
+                    nombre = clienteViaje.Cliente.Nombre,
+                    apellido = clienteViaje.Cliente.Apellido,
+                    sexo = clienteViaje.Cliente.Sexo == Sexo.Femenino? "F": clienteViaje.Cliente.Sexo == Sexo.Masculino? "M": "O",
+                    menor = clienteViaje.Cliente.Edad == Edad.Menor? "1": "0",
+                    origen = origen,
+                    provincia_origen = provinciaOrigen,
+                    destino = destino,
+                    provincia_destino = provinciaDestino,
+                    nacionalidad = clienteViaje.Cliente.Nacionalidad,
+                    numero_butaca = butaca,
+                    numero_boleto = clienteViaje.ID
+                });
+
+                butaca++;
+            }
+
+            StringBuilder archivoCVS = new StringBuilder();
+
+            archivoCVS.AppendLine("clase_modalidad");
+            archivoCVS.AppendLine("TU");
+            archivoCVS.Append(ConvertirCVSHelper.ToCsv<CNRTViaje>(";", new List<CNRTViaje>() { cnrtViaje }));
+            archivoCVS.AppendLine("pasajeros_ini");
+            archivoCVS.Append(ConvertirCVSHelper.ToCsv<CNRTPasajero>(";", cnrtPasajeros));
+            archivoCVS.AppendLine("pasajeros_fin");
+
+            string name = String.Format("CNRT{0}_{1}_{2}_{3}", viaje.ID, origen, destino, viaje.FechaSalida.ToString("dd-MM_HH:mm"));
+
+            return File(Encoding.UTF8.GetBytes(archivoCVS.ToString()), "text/csv", name + ".csv");
         }
 
         public ActionResult AddCliente(int idCliente, int idViaje)
@@ -353,13 +436,14 @@ namespace SAV.Controllers
             }
         }
 
-        public void Actualizar(string patente, string interno, int idViaje)
+        public void Actualizar(string patente, string PatenteSuplente, string interno, int idViaje)
         {
             ViewBag.IdViaje = idViaje;
 
             Viaje viaje = db.Viajes.Find(idViaje);
             viaje.Interno = int.Parse(interno);
             viaje.Patente = patente;
+            viaje.PatenteSuplente = PatenteSuplente;
 
             db.Entry(viaje).State = EntityState.Modified;
             db.SaveChanges();
@@ -440,16 +524,17 @@ namespace SAV.Controllers
             return PartialView("_CierreGastosTable", db.Viajes.Find(IdViaje).Gastos.ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
-        public ActionResult SearchPagingViajesAbiertos(int? pageNumber, string UpdateTargetId, int? origen, int? destino, string fechaSalida, string servicio)
+        public ActionResult SearchPagingViajesAbiertos(int? pageNumber, string UpdateTargetId, int? origen, int? destino, string fechaSalida, string servicio, int codigo)
         {
             ViewBag.idOrigen = origen;
             ViewBag.idDestino = destino;
             ViewBag.fechaSalida = fechaSalida;
             ViewBag.servicio = servicio;
+            ViewBag.codigo = codigo;
 
             IPagedList<Viaje> viajesResult;
 
-            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(ViajeHelper.getViajesActivos(db.Viajes.ToList<Viaje>()), origen, destino, fechaSalida, servicio).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(ViajeHelper.getViajesActivos(db.Viajes.ToList<Viaje>()), origen, destino, fechaSalida, servicio, codigo).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesAbiertosTable", viajesResult);
         }

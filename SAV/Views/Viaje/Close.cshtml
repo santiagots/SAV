@@ -71,11 +71,14 @@
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Patente)</p>
                 @Html.TextBoxFor(model => model.DatosBasicosViaje.Patente, new { id = "Patente" })
 
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)</p>
-                @Html.TextBoxFor(model => model.DatosBasicosViaje.Interno, new { id = "Interno" })
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.PatenteSuplente, new { id = "PatenteSuplente" })
             </div>
 
             <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)</p>
+                @Html.TextBoxFor(model => model.DatosBasicosViaje.Interno, new { id = "Interno" })
+
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Estado)</p>
                 @Html.TextBoxFor(model => model.DatosBasicosViaje.Estado, new { @disabled = "disabled" })
             </div>
@@ -179,6 +182,7 @@
             <p>@Html.ValidationMessageFor(model => model.NewGastos.NroTicket)</p>
             <p>@Html.ValidationMessageFor(model => model.NewGastos.Monto)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
         </div>
         <div id="Error" class="contenidoDatosError">

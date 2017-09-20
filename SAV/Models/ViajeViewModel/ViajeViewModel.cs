@@ -33,10 +33,22 @@ namespace SAV.Models
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Origen solo debe contener letras")]
         public string OrigenCerrado { get; set; }
 
+        [Display(Name = "Provincia Origen:")]
+        public List<KeyValuePair<int, string>> ProvinciaOrigenCerrado { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar un Provincia Origen")]
+        public int SelectProvinciaOrigenCerrado { get; set; }
+
         [Display(Name = "Destino:")]
         [Required(ErrorMessage = "Debe ingresar un Destino")]
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Destino solo debe contener letras")]
         public string DestinoCerrado { get; set; }
+
+        [Display(Name = "Provincia Destino:")]
+        public List<KeyValuePair<int, string>> ProvinciaDestinoCerrado { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar un Provincia Destino")]
+        public int SelectProvinciaDestinoCerrado { get; set; }
 
         [Display(Name = "Costo:")]
         [Required(ErrorMessage = "Debe ingresar un Costo")]
@@ -73,6 +85,10 @@ namespace SAV.Models
         [RegularExpression("(^[A-ZÑ]{3}\\d{3})|(^[A-ZÑ]{2}\\d{3}[A-ZÑ]{2})$", ErrorMessage = "La patente ingresada es invalida debe respetar el formato XXX999 o XX999XX")]
         [Display(Name = "Patente:")]
         public string Patente { get; set; }
+
+        [RegularExpression("(^[A-ZÑ]{3}\\d{3})|(^[A-ZÑ]{2}\\d{3}[A-ZÑ]{2})$", ErrorMessage = "La patente suplente ingresada es invalida debe respetar el formato XXX999 o XX999XX")]
+        [Display(Name = "Patente Suplente:")]
+        public string PatenteSuplente { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una Interno")]
         [RegularExpression("^[1-9][0-9]?[0-9]?$", ErrorMessage = "El interno debe ser un numero del 1 al 999")]

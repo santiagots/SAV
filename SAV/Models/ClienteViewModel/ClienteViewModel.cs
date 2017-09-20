@@ -26,6 +26,18 @@ namespace SAV.Models
         [RegularExpression("^(?!\\.?$)\\d{0,8}?$", ErrorMessage = "El DNI solo debe contener numeros sin separado de miles")]
         public string DNI { get; set; }
 
+        [Display(Name = "Edad:")]
+        [Required(ErrorMessage = "Debe ingresar una Edad")]
+        public Edad? Edad { get; set; }
+
+        [Display(Name = "Sexo:")]
+        [Required(ErrorMessage = "Debe ingresar un Sexo")]
+        public Sexo? Sexo { get; set; }
+
+        [Display(Name = "Nacionalidad:")]
+        [Required(ErrorMessage = "Debe ingresar una Nacionalidad")]
+        public string Nacionalidad { get; set; }
+
         #region domicilio principal
         [Display(Name = "Provincia:")]
         public List<KeyValuePair<int, string>> ProvinciaPrincipal { get; set; }
@@ -218,6 +230,8 @@ namespace SAV.Models
             LocalidadSecundaria = new List<KeyValuePair<int, string>>();
             LocalidadOtros = new List<KeyValuePair<int, string>>();
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            Nacionalidad = "Argentino";
         }
 
         public ClienteViewModel(List<Provincia> provincias, Cliente cliente)
@@ -228,6 +242,9 @@ namespace SAV.Models
             Email = cliente.Email;
             DNI = cliente.DNI.ToString();
             Estudiante = cliente.Estudiante;
+            Sexo = cliente.Sexo;
+            Edad = cliente.Edad;
+            Nacionalidad = cliente.Nacionalidad;
 
             if (cliente.ClienteViaje == null)
                 Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -466,6 +483,9 @@ namespace SAV.Models
 
             cliente.Telefono = clienteViewModel.Telefono;
             cliente.Email = clienteViewModel.Email;
+            cliente.Edad = clienteViewModel.Edad.Value;
+            cliente.Sexo = clienteViewModel.Sexo.Value;
+            cliente.Nacionalidad = clienteViewModel.Nacionalidad;
             cliente.Estudiante = clienteViewModel.Estudiante;
         }
 

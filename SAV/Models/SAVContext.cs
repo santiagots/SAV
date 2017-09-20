@@ -46,17 +46,10 @@ namespace SAV.Models
 
         public DbSet<Pago> Pagos { get; set; }
 
+        public DbSet<Configuracion> Configuracion { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
-
-        //modelBuilder.Entity<Domicilio>()
-        //            .Property(e => e.ID)
-        //            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-        //modelBuilder.Entity<Domicilio>()
-        //            .HasRequired(e => e.Cliente)
-        //            .WithRequiredDependent(s => s.Domicilio);
         }
     }
 }

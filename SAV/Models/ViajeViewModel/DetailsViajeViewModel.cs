@@ -30,7 +30,7 @@ namespace SAV.Models
             DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
         }
 
-        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad)
+        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia)
             : this(viaje, conductores)
         {
             if (viaje.Servicio != ViajeTipoServicio.Cerrado)
@@ -41,12 +41,16 @@ namespace SAV.Models
             else
             {
                 DatosBasicosViaje.OrigenCerrado = viaje.OrigenCerrado;
+                DatosBasicosViaje.SelectProvinciaOrigenCerrado = viaje.ProvienciaOrigenCerrado.ID;
                 DatosBasicosViaje.DestinoCerrado = viaje.DestinoCerrado;
+                DatosBasicosViaje.SelectProvinciaDestinoCerrado = viaje.ProvienciaDestinoCerrado.ID;
                 DatosBasicosViaje.CostoCerrado = viaje.CostoCerrado.ToString();
             }
 
             DatosBasicosViaje.Destino = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.Origen = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            DatosBasicosViaje.ProvinciaDestinoCerrado = provincia.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            DatosBasicosViaje.ProvinciaOrigenCerrado = provincia.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
         }
 
          public DetailsViajeViewModel(Viaje viaje)
@@ -65,6 +69,7 @@ namespace SAV.Models
             DatosBasicosViaje.Servicio = viaje.Servicio;
             DatosBasicosViaje.Disponible = viaje.Asientos - viaje.ClienteViaje.Count;
             DatosBasicosViaje.Patente = viaje.Patente;
+            DatosBasicosViaje.PatenteSuplente = viaje.PatenteSuplente;
             DatosBasicosViaje.Interno = viaje.Interno;
             DatosBasicosViaje.Estado = viaje.Estado;
         }

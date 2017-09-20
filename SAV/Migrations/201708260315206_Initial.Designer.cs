@@ -5,13 +5,13 @@ namespace SAV.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class aa : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(aa));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201404030243421_aa"; }
+            get { return "201708260315206_Initial"; }
         }
         
         string IMigrationMetadata.Source

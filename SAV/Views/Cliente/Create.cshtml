@@ -29,9 +29,32 @@
             </div>
 
             <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Sexo)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Sexo, from c in Enum.GetNames(typeof(SAV.Models.Sexo))
+                                                            select new SelectListItem
+                                                            {
+                                                                Text = c,
+                                                                Value = c
+                                                            }, "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Edad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Edad, from c in Enum.GetNames(typeof(SAV.Models.Edad))
+                                                           select new SelectListItem
+                                                           {
+                                                               Text = c,
+                                                               Value = c
+                                                           }, "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Nacionalidad)<b>(*)</b></p>
+                @Html.EditorFor(model => model.Nacionalidad)
+
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Email)</p>
                 @Html.EditorFor(model => model.Email)
+            </div>
 
+            <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Estudiante)</p>
                 @Html.EditorFor(model => model.Estudiante)
             </div>
@@ -238,6 +261,9 @@
             <p>@Html.ValidationMessageFor(model => model.Nombre)</p>
             <p>@Html.ValidationMessageFor(model => model.DNI)</p>
             <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
+            <p>@Html.ValidationMessageFor(model => model.Sexo)</p>
+            <p>@Html.ValidationMessageFor(model => model.Edad)</p>
+            <p>@Html.ValidationMessageFor(model => model.Nacionalidad)</p>
             <p>@Html.ValidationMessageFor(model => model.SelectLocalidadPrincipal)</p>
             <p>@Html.ValidationMessageFor(model => model.SelectProvinciaPrincipal)</p>
             <p>@Html.ValidationMessageFor(model => model.CallePrincipal)</p>

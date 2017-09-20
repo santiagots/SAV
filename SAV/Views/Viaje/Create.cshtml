@@ -25,13 +25,14 @@
 
             </div>
 
+            <div id="ServicioAbierto">
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Origen)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectOrigen, new SelectList(Model.DatosBasicosViaje.Origen, "Key", "Value"), "Elija una opción")
 
-            <div id="ServicioAbierto" class="datosInputs">
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Origen)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectOrigen, new SelectList(Model.DatosBasicosViaje.Origen, "Key", "Value"), "Elija una opción")
-
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Destino)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectDestino, new SelectList(Model.DatosBasicosViaje.Destino, "Key", "Value"), "Elija una opción")
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Destino)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectDestino, new SelectList(Model.DatosBasicosViaje.Destino, "Key", "Value"), "Elija una opción")
+                </div>
             </div>
 
             <div id="ServicioCerrado">
@@ -39,8 +40,15 @@
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.OrigenCerrado)<b>(*)</b></p>
                     @Html.TextBoxFor(model => model.DatosBasicosViaje.OrigenCerrado)
 
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ProvinciaOrigenCerrado)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectProvinciaOrigenCerrado, new SelectList(Model.DatosBasicosViaje.ProvinciaOrigenCerrado, "Key", "Value"), "Elija una opción")
+                </div>
+                <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.DestinoCerrado)<b>(*)</b></p>
                     @Html.TextBoxFor(model => model.DatosBasicosViaje.DestinoCerrado)
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ProvinciaDestinoCerrado)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectProvinciaDestinoCerrado, new SelectList(Model.DatosBasicosViaje.ProvinciaOrigenCerrado, "Key", "Value"), "Elija una opción")
                 </div>
                 <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.CostoCerrado)<b>(*)</b></p>
@@ -77,6 +85,10 @@
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Patente)<b>(*)</b></p>
                 @Html.EditorFor(model => model.DatosBasicosViaje.Patente)
 
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.PatenteSuplente)
+            </div>
+            <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)<b>(*)</b></p>
                 @Html.EditorFor(model => model.DatosBasicosViaje.Interno)
             </div>
@@ -135,6 +147,8 @@
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectDestino)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.OrigenCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.DestinoCerrado)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectProvinciaOrigenCerrado)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectProvinciaDestinoCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.CostoCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraSalida)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.HoraArribo)</p>
@@ -143,6 +157,7 @@
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Asientos)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectConductorNombre)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
         </div>
         <div id="Error" class="contenidoDatosError">

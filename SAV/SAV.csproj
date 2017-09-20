@@ -211,6 +211,7 @@
     <Compile Include="Common\ClienteHelper.cs" />
     <Compile Include="Common\ComisionHelper.cs" />
     <Compile Include="Common\ConductorHelper.cs" />
+    <Compile Include="Common\ConvertirCVSHelper.cs" />
     <Compile Include="Common\CuentaCorrienteHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Common\AppConfiguration.cs" />
     <Compile Include="Common\ViajeHelper.cs" />
     <Compile Include="Controllers\ConductorController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CuentaCorrienteController.cs" />
     <Compile Include="Controllers\DestinosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -226,6 +228,10 @@
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708260315206_Initial.cs" />
+    <Compile Include="Migrations\201708260315206_Initial.Designer.cs">
+      <DependentUpon>201708260315206_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -235,6 +241,8 @@
     <Compile Include="Models\ClienteViaje.cs" />
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
     <Compile Include="Models\ClienteViewModel\SearchClienteViewModel.cs" />
+    <Compile Include="Models\CNRTPasajero.cs" />
+    <Compile Include="Models\CNRTViaje.cs" />
     <Compile Include="Models\Comision.cs" />
     <Compile Include="Models\ComisionGasto.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
@@ -245,6 +253,8 @@
     <Compile Include="Models\Conductor.cs" />
     <Compile Include="Models\ConductorViewModel\ConductorViewModel.cs" />
     <Compile Include="Models\ConductorViewModel\SearchConductorViewModel.cs" />
+    <Compile Include="Models\Configuracion.cs" />
+    <Compile Include="Models\ConfiguracionViewModel\DetailsConfiguracionViewModel.cs" />
     <Compile Include="Models\CuentaCorriente.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\CuentaCorrienteViewModel.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\SearchCuentaCorrienteViewModel.cs" />
@@ -492,14 +502,20 @@
     <Content Include="Views\Viaje\_CierrePasajerosViajeCerradoTable.cshtml" />
     <Content Include="Views\Balance\ExportVendedor.cshtml" />
     <Content Include="Views\Balance\Vendedor.cshtml" />
+    <Content Include="Views\Configuracion\Details.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201708260315206_Initial.resx">
+      <DependentUpon>201708260315206_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

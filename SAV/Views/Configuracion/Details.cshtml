@@ -1,0 +1,166 @@
+﻿@model SAV.Models.DetailsConfiguracionViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Datos Empresa</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CUIT)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.CUIT)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.RazonSocial)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.RazonSocial)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Telefono)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Telefono)
+            </div>
+        </div>
+        <div class="headTables medio">
+            <p>Domicilio</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Provincia)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Localidad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Calle)<b>(*)</b></p>
+                @Html.EditorFor(model => model.Calle)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumero)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleNumero)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePiso)</p>
+                @Html.EditorFor(model => model.CallePiso)
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+        <div class="headTables selected">
+            <p>Datos Contratante</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.ContrtanteCuit)</p>
+                @Html.TextBoxFor(model => model.ContrtanteCuit)
+
+                <p class="edicion">@Html.LabelFor(model => model.ContratanteDenominacion)</p>
+                @Html.TextBoxFor(model => model.ContratanteDenominacion)
+            </div>
+        </div>
+        <div class="headTables medio">
+            <p>Domicilio</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteProvincia)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.ContratanteSelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteLocalidad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.ContratanteSelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteCalle)<b>(*)</b></p>
+                @Html.EditorFor(model => model.ContratanteCalle)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteCalleNumero)<b>(*)</b></p>
+                @Html.EditorFor(model => model.ContratanteCalleNumero)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteCallePiso)</p>
+                @Html.EditorFor(model => model.ContratanteCallePiso)
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+        <div class="headTables selected">
+            <p>Contenido Programación Turística</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.ProgramacionTuristica)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.ProgramacionTuristica)
+            </div>
+        </div>
+        <div class="contenidoDatos">
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="Guardar" class="centroBotonGris waiting" type="submit" value="Guardar" />
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+    </div>
+
+}
+@section Scripts {
+<script>
+$(document).ready(function () {
+
+    $("#SelectProvincia").change(function () {
+        if ($(this).val() == "") {
+            $("#SelectProvincia").html("<option value=''>Elija una opción</option>");
+            return;
+        }
+        $.ajax({
+            url: '/Cliente/GetLocalidades',
+            type: 'POST',
+            data: { "IdProvincia": $("#SelectProvincia > option:selected").attr("value") },
+            dataType: "json",
+            success: function (data) { addLocalidades(data, $("#SelectLocalidad")); },
+            error: function (error) { addLocalidadesError(error);}
+        });
+    });
+
+    $("#ContratanteSelectProvincia").change(function () {
+        if ($(this).val() == "") {
+            $("#ContratanteSelectProvincia").html("<option value=''>Elija una opción</option>");
+            return;
+        }
+        $.ajax({
+            url: '/Cliente/GetLocalidades',
+            type: 'POST',
+            data: { "IdProvincia": $("#ContratanteSelectProvincia > option:selected").attr("value") },
+            dataType: "json",
+            success: function (data) { addLocalidades(data, $("#ContratanteSelectLocalidad")); },
+            error: function (error) { addLocalidadesError(error); }
+        });
+    });
+});
+
+function addLocalidades(localidades, control) {
+    if ($("#ErrorLocalidades").length)
+        $("#ErrorLocalidades").remove();
+
+    var item = "<option value=''>Elija una opción</option>";
+    $.each(localidades, function (i, provincia) {
+        item += "<option value='" + provincia.Value + "'>" + provincia.Text + "</option>";
+    });
+    $(control).html(item);
+}
+
+function addLocalidadesError(error) {
+    if ($("#ErrorLocalidades").length == 0)
+        $("#Error").append("<span id='ErrorLocalidades' class='field-validation-error'><p>Hubo un error al recuperar las localidades</p></span>");
+}
+</script>
+}

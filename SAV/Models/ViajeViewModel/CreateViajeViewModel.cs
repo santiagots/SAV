@@ -47,12 +47,15 @@ namespace SAV.Models
             DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
         }
 
-        public CreateViajeViewModel(List<Conductor> conductores, List<Localidad> localidad): this(conductores)
+        public CreateViajeViewModel(List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincias) : this(conductores)
         {
             List<Localidad> destinos = ViajeHelper.getDestinos(localidad);
 
             DatosBasicosViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+
+            DatosBasicosViaje.ProvinciaOrigenCerrado = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            DatosBasicosViaje.ProvinciaDestinoCerrado = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
         }
 
         public CreateViajeViewModel(): base()

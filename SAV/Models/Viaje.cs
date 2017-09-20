@@ -18,7 +18,9 @@ namespace SAV.Models
         public virtual Localidad Origen { get; set; }
         public virtual Localidad Destino { get; set; }
         public String OrigenCerrado { get; set; }
+        public virtual Provincia ProvienciaOrigenCerrado { get; set; }
         public String DestinoCerrado { get; set; }
+        public virtual Provincia ProvienciaDestinoCerrado { get; set; }
         public Decimal CostoCerrado { get; set; }
         public int Asientos { get; set; }
         public DateTime FechaSalida { get; set; }
@@ -26,17 +28,18 @@ namespace SAV.Models
         public virtual ViajeEstados Estado { get; set; }
         public virtual ViajeTipoServicio Servicio { get; set; }
         public virtual string Patente { get; set; }
+        public virtual string PatenteSuplente { get; set; }
         public virtual int Interno { get; set; }
 
         public Viaje(): base()
         { }
 
-        public Viaje(DateTime fechaSalida, DateTime fechaArribo, ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades)
+        public Viaje(DateTime fechaSalida, DateTime fechaArribo, ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades, List<Provincia> provincias)
         {
-            Set(fechaSalida, fechaArribo, viajeViewModel, conductores, localidades);
+            Set(fechaSalida, fechaArribo, viajeViewModel, conductores, localidades, provincias);
         }
 
-        public List<Viaje> CreateViajes(CreateViajeViewModel createViajeViewModel, List<Conductor> conductores, List<Localidad> localidades)
+        public List<Viaje> CreateViajes(CreateViajeViewModel createViajeViewModel, List<Conductor> conductores, List<Localidad> localidades, List<Provincia> provincias)
         {
             List<Viaje> viajes = new List<Viaje>();
 
@@ -46,7 +49,7 @@ namespace SAV.Models
             if (FechaArribo < FechaSalida)
                 FechaArribo = FechaArribo.AddDays(1);
 
-            viajes.Add(new Viaje(FechaSalida, FechaArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+            viajes.Add(new Viaje(FechaSalida, FechaArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
 
             if (String.IsNullOrEmpty(createViajeViewModel.FechaRepeticionFin))
                 return viajes;
@@ -65,38 +68,38 @@ namespace SAV.Models
                 {
                     case DayOfWeek.Monday:
                         if(createViajeViewModel.Lunes)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Tuesday:
                         if(createViajeViewModel.Martes)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Wednesday:
                         if(createViajeViewModel.Miercoles)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Thursday:
                         if (createViajeViewModel.Jueves)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Friday:
                         if(createViajeViewModel.Viernes)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Saturday:
                         if (createViajeViewModel.Sabado)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                     case DayOfWeek.Sunday:
                         if (createViajeViewModel.Domingo)
-                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades));
+                            viajes.Add(new Viaje(repeticionSalida, repeticionArribo, createViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias));
                         break;
                 }
             }
             return viajes;
         }
 
-        public void UpDate(ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades)
+        public void UpDate(ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades, List<Provincia> provincias)
         {
             List<Viaje> viajes = new List<Viaje>();
 
@@ -106,10 +109,10 @@ namespace SAV.Models
             if (FechaArribo < FechaSalida)
                 FechaArribo = FechaArribo.AddDays(1);
 
-            Set(FechaSalida, FechaArribo, viajeViewModel, conductores, localidades);
+            Set(FechaSalida, FechaArribo, viajeViewModel, conductores, localidades, provincias);
         }
 
-        public void Set(DateTime fechaSalida, DateTime fechaArribo, ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades)
+        public void Set(DateTime fechaSalida, DateTime fechaArribo, ViajeViewModel viajeViewModel, List<Conductor> conductores, List<Localidad> localidades, List<Provincia> provincias)
         {
             Conductor = conductores.Where(x => x.ID == int.Parse(viajeViewModel.SelectConductorNombre)).FirstOrDefault();
 
@@ -127,14 +130,18 @@ namespace SAV.Models
                 Destino = null;
                 CostoCerrado = decimal.Parse(viajeViewModel.CostoCerrado);
                 OrigenCerrado = viajeViewModel.OrigenCerrado;
+                ProvienciaOrigenCerrado = provincias.Where(x => x.ID == viajeViewModel.SelectProvinciaOrigenCerrado).First();
                 DestinoCerrado = viajeViewModel.DestinoCerrado;
+                ProvienciaDestinoCerrado = provincias.Where(x => x.ID == viajeViewModel.SelectProvinciaDestinoCerrado).First();
             }
+
             Asientos = viajeViewModel.Asientos;
             FechaSalida = fechaSalida;
             FechaArribo = fechaArribo;
             Servicio = viajeViewModel.Servicio;
             Estado = ViajeEstados.Abierto;
             Patente = viajeViewModel.Patente.ToUpper();
+            PatenteSuplente = viajeViewModel.PatenteSuplente != null? viajeViewModel.PatenteSuplente.ToUpper() : null;
             Interno = viajeViewModel.Interno;
         }
 

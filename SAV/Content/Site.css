@@ -88,6 +88,10 @@ body {
     background: url("../img/masterFase2.png") no-repeat scroll -1211px -179px transparent;
 }
 
+.action.exportarCNRT {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -259px transparent;
+}
+
 .action.clonar {
     background: url("../img/masterFase2.png") no-repeat scroll -1211px -123px transparent;
 }
@@ -364,9 +368,14 @@ table tbody tr td {
     text-decoration: none;
 }
 
-.type5 {
+.type6 {
     width: 63px;
 }
+
+.type6 {
+    width: 90px;
+}
+
 
 .type13 {
     width: 76px;
@@ -403,6 +412,10 @@ table tbody tr td {
 
 .type106 {
     width: 156px;
+}
+
+.type107 {
+    width: 146px;
 }
 
 .type112 {

@@ -7,6 +7,8 @@ using System.Web;
 
 namespace SAV.Models
 {
+    public enum Sexo { Femenino, Masculino, Otro }
+    public enum Edad { Mayor, Menor }
     public class Cliente
     {
         public int ID { get; set; }
@@ -16,7 +18,13 @@ namespace SAV.Models
         public string Apellido { get; set; }
 
         public long DNI { get; set; }
-        
+
+        public virtual Sexo Sexo { get; set; }
+
+        public virtual Edad Edad { get; set; }
+
+        public string Nacionalidad { get; set; }
+
         public virtual Domicilio DomicilioPrincipal { get; set; }
 
         public virtual Domicilio DomicilioSecundario { get; set; }

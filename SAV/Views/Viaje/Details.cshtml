@@ -38,8 +38,15 @@
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.OrigenCerrado)<b>(*)</b></p>
                     @Html.TextBoxFor(model => model.DatosBasicosViaje.OrigenCerrado)
 
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ProvinciaOrigenCerrado)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectProvinciaOrigenCerrado, new SelectList(Model.DatosBasicosViaje.ProvinciaOrigenCerrado, "Key", "Value"), "Elija una opción")
+                </div>
+                <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.DestinoCerrado)<b>(*)</b></p>
                     @Html.TextBoxFor(model => model.DatosBasicosViaje.DestinoCerrado)
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ProvinciaDestinoCerrado)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectProvinciaDestinoCerrado, new SelectList(Model.DatosBasicosViaje.ProvinciaOrigenCerrado, "Key", "Value"), "Elija una opción")
                 </div>
                 <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.CostoCerrado)<b>(*)</b></p>
@@ -72,11 +79,14 @@
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Patente)<b>(*)</b></p>
                 @Html.EditorFor(model => model.DatosBasicosViaje.Patente)
 
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)<b>(*)</b></p>
-                @Html.EditorFor(model => model.DatosBasicosViaje.Interno)
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.PatenteSuplente)
             </div>
 
             <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Interno)<b>(*)</b></p>
+                @Html.EditorFor(model => model.DatosBasicosViaje.Interno)
+
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ConductorNombre)<b>(*)</b></p>
                 @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectConductorNombre, new SelectList(Model.DatosBasicosViaje.ConductorNombre, "Key", "Value"), "Elija una opción")
             </div>
@@ -95,6 +105,11 @@
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
                     <input id="exportar" class="centroBotonGris" type="button" value="Exportar"onclick="location.href='@Url.Action("ExportViaje", new { id = Model.DatosBasicosViaje.viajeID })'" ></input>
+                    <div class="finBotonGris"></div>
+                </div>
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar CNRT" onclick="location.href='@Url.Action("ExportViajeCNRT", new { id = Model.DatosBasicosViaje.viajeID })'"></input>
                     <div class="finBotonGris"></div>
                 </div>
                 <div class="boton">

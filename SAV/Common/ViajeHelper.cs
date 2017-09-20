@@ -37,7 +37,7 @@ namespace SAV.Common
             return viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now.AddHours(4)) < 0 && x.Estado == ViajeEstados.Abierto).ToList<Viaje>();
         }
 
-        public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio)
+        public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio, int codigo)
         {
             if (IdOrigen.HasValue)
                 viajes = viajes.Where(x => x.Origen != null && x.Origen.ID == IdOrigen.Value).ToList<Viaje>();
@@ -54,6 +54,11 @@ namespace SAV.Common
             if (!string.IsNullOrEmpty(Servicio))
             {
                 viajes = viajes.Where(x => x.Servicio.ToString() == Servicio).ToList<Viaje>();
+            }
+
+            if (codigo > 0)
+            {
+                viajes = viajes.Where(x => x.ID == codigo).ToList<Viaje>();
             }
 
             return viajes;

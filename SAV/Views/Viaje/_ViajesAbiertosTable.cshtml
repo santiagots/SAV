@@ -5,7 +5,7 @@
 <div class="alertTablesExtended" id="alertTablesExtended">
 		  <div class="seccion">
 
-                 @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingViajesAbiertos", new {pageNumber = page, origen = ViewBag.idOrigen, destino = ViewBag.idDestino, fechaSalida = ViewBag.fechaSalida, servicio = ViewBag.servicio })
+                 @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingViajesAbiertos", new {pageNumber = page, origen = ViewBag.idOrigen, destino = ViewBag.idDestino, fechaSalida = ViewBag.fechaSalida, servicio = ViewBag.servicio, codigo = ViewBag.codigo })
 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
                                                                                                     , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "ViajesAbiertos" }))
 
@@ -17,8 +17,8 @@
 				<table id="tablaParts" class="tablesorter">
 					<thead>
 						<tr class="headTitles noBorder">
-							<th class="type2 type106"><p>Origen</p><span class="ordenamiento"></span></th>
-							<th class="type2 type106"><p>Destino</p><span class="ordenamiento"></span></th>
+							<th class="type2 type107"><p>Origen</p><span class="ordenamiento"></span></th>
+							<th class="type2 type107"><p>Destino</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Fecha Salida</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Fecha Arribo</p><span class="ordenamiento"></span></th>
 							<th class="type2 type204"><p>Servicio</p><span class="ordenamiento"></span></th>
@@ -35,25 +35,26 @@
                             {
 						        <tr>
                                     @if(item.Origen != null){
-							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
+							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
                                     }
                                     else{
-                                    <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
+                                    <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
                                     }
                                     @if(item.Destino != null){
-							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
+							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
                                     }
                                     else{
-                                    <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
+                                    <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
                                     }
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaSalida)</p></td>
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaArribo)</p></td>
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type204 waiting"><p>@Html.DisplayFor(modelItem => item.Servicio)</p></td>
 							        <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type122 waiting"><p>@Html.DisplayFor(modelItem => item.Asientos)</p></td>
                                     <td onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type122 waiting"><p>@(item.Asientos - item.ClienteViaje.Count)</p></td>
-                                    <td class="type5">
+                                    <td class="type6">
                                         <a onclick = "return confirmSpinner('Esta seguro que desea borrar el viaje?');" href="@Url.Action("Delete", new { id = item.ID })" ><span id="Span43" class="action retirar" title="Eliminar"/></a>
                                         <a href="@Url.Action("ExportViaje", new { id = item.ID })" ><span id="Span44" class="action exportar" title="Exportar"/></a>
+                                        <a href="@Url.Action("ExportViajeCNRT", new { id = item.ID })"><span id="Span44" class="action exportarCNRT" title="Exportar para CNRT" /></a>
                                     </td>
 						        </tr>
                             }
@@ -61,16 +62,16 @@
                             {
                                 <tr>
                                     @if(item.Origen != null){
-							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
+							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
                                     }
                                     else{
-                                    <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
+                                    <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
                                     }
                                     @if(item.Destino != null){
-							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
+							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
                                     }
                                     else{
-                                    <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
+                                    <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
                                     }
 							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaSalida)</p></td>
 							        <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaArribo)</p></td>

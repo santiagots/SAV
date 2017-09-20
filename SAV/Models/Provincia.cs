@@ -12,6 +12,8 @@ namespace SAV.Models
         [Required]
         public string Nombre { get; set; }
         [Required]
+        public string Codigo { get; set; }
+        [Required]
         public virtual List<Localidad> Localidad { get; set; }
     }
 }

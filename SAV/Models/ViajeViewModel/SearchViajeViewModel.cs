@@ -17,6 +17,9 @@ namespace SAV.Models
         [Display(Name = "Destino:")]
         public List<KeyValuePair<int, string>> Destino { get; set; }
 
+        [Display(Name = "Código:")]
+        public int Codigo { get; set; }
+
         public int? SelectDestino { get; set; }
 
         [Display(Name = "Fecha de Salida:")]

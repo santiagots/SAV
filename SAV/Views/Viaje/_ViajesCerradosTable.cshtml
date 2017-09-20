@@ -17,8 +17,8 @@
 				<table id="tablaParts" class="tablesorter">
 					<thead>
 						<tr class="headTitles noBorder">
-							<th class="type2 type106"><p>Origen</p><span class="ordenamiento"></span></th>
-							<th class="type2 type106"><p>Destino</p><span class="ordenamiento"></span></th>
+							<th class="type2 type107"><p>Origen</p><span class="ordenamiento"></span></th>
+							<th class="type2 type107"><p>Destino</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Fecha Salida</p><span class="ordenamiento"></span></th>
 							<th class="type2 type203"><p>Fecha Arribo</p><span class="ordenamiento"></span></th>
 							<th class="type2 type204"><p>Servicio</p><span class="ordenamiento"></span></th>
@@ -32,16 +32,16 @@
                         {
 						<tr>
                             @if(item.Origen != null){
-							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
+							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Origen.Nombre)</p></td>
                             }
                             else{
-                            <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
+                            <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.OrigenCerrado)</p></td>
                             }
                             @if(item.Destino != null){
-							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
+							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.Destino.Nombre)</p></td>
                             }
                             else{
-                            <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type106 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
+                            <td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type107 waiting"><p>@Html.DisplayFor(modelItem => item.DestinoCerrado)</p></td>
                             }
 							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaSalida)</p></td>
 							<td onclick="location.href='@Url.Action("Close", new { id = item.ID })'" class="type2 type203 waiting"><p>@Html.DisplayFor(modelItem => item.FechaArribo)</p></td>
