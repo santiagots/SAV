@@ -381,6 +381,10 @@ namespace SAV.Models
             clienteViaje.Cliente = cliente;
             clienteViaje.Viaje = viaje;
             clienteViaje.Pago = clienteViewModel.Pago;
+            if (clienteViewModel.Pago)
+                clienteViaje.FechaPago = DateTime.Now;
+            else
+                clienteViaje.FechaPago = null;
             clienteViaje.AscensoDomicilioPrincipal = clienteViewModel.AscensoDomicilioPrincipal;
             clienteViaje.DescensoDomicilioPrincipal = clienteViewModel.DescensoDomicilioPrincipal;
             clienteViaje.DescensoDomicilioOtros = clienteViewModel.DescensoDomicilioOtros;

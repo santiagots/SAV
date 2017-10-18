@@ -16,6 +16,8 @@ namespace SAV.Models
 
         public bool Pago { get; set; }
 
+        public DateTime? FechaPago { get; set; }
+
         public virtual Parada Ascenso { get; set; }
 
         public virtual Parada Descenso { get; set; }

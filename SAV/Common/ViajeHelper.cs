@@ -37,7 +37,7 @@ namespace SAV.Common
             return viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now.AddHours(4)) < 0 && x.Estado == ViajeEstados.Abierto).ToList<Viaje>();
         }
 
-        public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio, int codigo)
+        public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio, int? codigo, string nombrePasajero, string estadoViaje)
         {
             if (IdOrigen.HasValue)
                 viajes = viajes.Where(x => x.Origen != null && x.Origen.ID == IdOrigen.Value).ToList<Viaje>();
@@ -56,9 +56,19 @@ namespace SAV.Common
                 viajes = viajes.Where(x => x.Servicio.ToString() == Servicio).ToList<Viaje>();
             }
 
-            if (codigo > 0)
+            if (codigo.HasValue && codigo.Value > 0)
             {
-                viajes = viajes.Where(x => x.ID == codigo).ToList<Viaje>();
+                viajes = viajes.Where(x => x.ID == codigo.Value).ToList<Viaje>();
+            }
+
+            if (!string.IsNullOrEmpty(nombrePasajero))
+            {
+                viajes = viajes.Where(x => x.ClienteViaje.Any(y => y.Cliente.Nombre.ToUpper().ToString().Contains(nombrePasajero) || y.Cliente.Apellido.ToUpper().ToString().Contains(nombrePasajero))).ToList<Viaje>();
+            }
+
+            if (!string.IsNullOrEmpty(estadoViaje))
+            {
+                viajes = viajes.Where(x => x.Estado.ToString() == estadoViaje).ToList<Viaje>();
             }
 
             return viajes;
@@ -137,8 +147,9 @@ namespace SAV.Common
                 return clienteViaje.Ascenso.Nombre;
             }
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Cerrado)
-                return clienteViaje.Viaje.OrigenCerrado;
-
+                if (clienteViaje.Cliente.DomicilioPrincipal != null)
+                    return clienteViaje.Cliente.DomicilioPrincipal.getDomicilio;
+                
             return string.Empty;
         }
 

@@ -17,8 +17,14 @@ namespace SAV.Models
         [Display(Name = "Destino:")]
         public List<KeyValuePair<int, string>> Destino { get; set; }
 
+        [Display(Name = "Estado:")]
+        public string Estado { get; set; }
+
         [Display(Name = "Código:")]
         public int Codigo { get; set; }
+
+        [Display(Name = "Cliente:")]
+        public String Cliente { get; set; }
 
         public int? SelectDestino { get; set; }
 
@@ -33,6 +39,7 @@ namespace SAV.Models
         public IPagedList<Viaje> ViajesFinalizados { get; set; }
 
         public SearchViajeViewModel(): base()
-        { }
+        {
+        }
     }
 }

@@ -374,7 +374,7 @@ namespace SAV.Controllers
 
                     List<ICell> HeadComisionesCell = ComisionesSheet.GetRow(2).Cells;
 
-                    HeadComisionesCell[0].SetCellValue(string.Format("Comisiones: {0}", ComisionePorResponsable.Key));
+                    HeadComisionesCell[0].SetCellValue(string.Format("Comisiones: {0} Día: {1}", ComisionePorResponsable.Key, DateTime.Now.ToString("dd/MM/yyyy")));
 
                     HeadComisionesCell = ComisionesSheet.GetRow(3).Cells;
 

@@ -6,34 +6,48 @@
 
 
 <div id="content">
-	<div class="headTables selected">
-		<p>Buscar</p>
-	</div>
+    <div class="headTables selected">
+        <p>Buscar</p>
+    </div>
     @using (Html.BeginForm())
     {
-           @Html.ValidationSummary(false)
-	<div class="contenidoDatos">
-		<div class="datosInputs">
-			<p class="edicion">@Html.LabelFor(model => model.Origen)</p>
-            @Html.DropDownListFor(model => model.SelectOrigen, new SelectList(Model.Origen, "Key", "Value"), "Elija una opción")
+        @Html.ValidationSummary(false)
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Origen)</p>
+                @Html.DropDownListFor(model => model.SelectOrigen, new SelectList(Model.Origen, "Key", "Value"), "Elija una opción")
 
-            <p class="edicion">@Html.LabelFor(model => model.Destino)</p>
-			@Html.DropDownListFor(model => model.SelectDestino, new SelectList(Model.Destino, "Key", "Value"), "Elija una opción")
-		</div>
+                <p class="edicion">@Html.LabelFor(model => model.Destino)</p>
+                @Html.DropDownListFor(model => model.SelectDestino, new SelectList(Model.Destino, "Key", "Value"), "Elija una opción")
+            </div>
 
-        <div class="datosInputs">
+            <div class="datosInputs">
 
-            <p class="edicion obligatorio">@Html.LabelFor(model => model.Codigo)</p>
-            @Html.TextBoxFor(model => model.Codigo)
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Estado)</p>
+                @Html.DropDownListFor(model => model.Estado, from c in Enum.GetNames(typeof(SAV.Models.ViajeEstados))
+                                                             select new SelectListItem
+                                                             {
+                                                                 Text = c,
+                                                                 Value = c
+                                                             }, "Elija una opción")
 
-            <p class="edicion">@Html.LabelFor(model => model.Servicio)</p>
-            @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ViajeTipoServicio))
+                <p class="edicion">@Html.LabelFor(model => model.Cliente)</p>
+                @Html.TextBoxFor(model => model.Cliente)
+            </div>
+
+            <div class="datosInputs">
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Codigo)</p>
+                @Html.TextBoxFor(model => model.Codigo)
+
+                <p class="edicion">@Html.LabelFor(model => model.Servicio)</p>
+                @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ViajeTipoServicio))
                                                                select new SelectListItem
                                                                {
                                                                    Text = c,
                                                                    Value = c
                                                                }, "Elija una opción")
-        </div>
+            </div>
 
 
             <div class="datosInputs">
@@ -61,16 +75,15 @@
                 </div>
             </div>
         </div>
-    <div class="footerTables"></div>
+        <div class="footerTables"></div>
     }
-     <!-- RESULTADO TABLES -->
-        <div id="ViajesAbiertos">
-            @Html.Partial("_ViajesAbiertosTable", Model.ViajesActivos)
-        </div>
+    <!-- RESULTADO TABLES -->
+    <div id="ViajesAbiertos">
+        @Html.Partial("_ViajesAbiertosTable", Model.ViajesActivos)
+    </div>
 
-      <!-- VIAJES POR CERRAR TABLES -->
-        <div id="ViajesCerrados">
-            @Html.Partial("_ViajesCerradosTable", Model.ViajesFinalizados)
-        </div>	
+    <!-- VIAJES POR CERRAR TABLES -->
+    <div id="ViajesCerrados">
+        @Html.Partial("_ViajesCerradosTable", Model.ViajesFinalizados)
+    </div>
 </div>
-    

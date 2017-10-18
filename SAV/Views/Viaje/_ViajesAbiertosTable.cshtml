@@ -5,7 +5,7 @@
 <div class="alertTablesExtended" id="alertTablesExtended">
 		  <div class="seccion">
 
-                 @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingViajesAbiertos", new {pageNumber = page, origen = ViewBag.idOrigen, destino = ViewBag.idDestino, fechaSalida = ViewBag.fechaSalida, servicio = ViewBag.servicio, codigo = ViewBag.codigo })
+                 @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingViajesAbiertos", new {pageNumber = page, origen = ViewBag.idOrigen, destino = ViewBag.idDestino, fechaSalida = ViewBag.fechaSalida, servicio = ViewBag.servicio, codigo = ViewBag.codigo, nombrePasajero = ViewBag.nombrePasajero, estadoViaje = ViewBag.estadoViaje })
 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
                                                                                                     , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "ViajesAbiertos" }))
 

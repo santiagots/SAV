@@ -237,6 +237,8 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceComisionDiarioViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceVendedorDiarioViewModel.cs" />
+    <Compile Include="Models\BalanceViewModel\CierreCajaViewModel.cs" />
+    <Compile Include="Models\BalanceViewModel\ItemBalanceViewModel.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ClienteViaje.cs" />
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
@@ -341,6 +343,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="App_Browsers\qt.browser" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\smarterasp.net.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="img\alertPixel.png" />
@@ -503,6 +506,8 @@
     <Content Include="Views\Balance\ExportVendedor.cshtml" />
     <Content Include="Views\Balance\Vendedor.cshtml" />
     <Content Include="Views\Configuracion\Details.cshtml" />
+    <Content Include="Views\Balance\CierreCaja.cshtml" />
+    <Content Include="Views\Balance\ExportCierreCaja.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

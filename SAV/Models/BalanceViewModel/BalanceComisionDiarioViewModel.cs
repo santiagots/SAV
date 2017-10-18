@@ -39,7 +39,5 @@ namespace SAV.Models
 
         [Display(Name = "Monto")]
         public decimal Monto { get; set; }
-
-       
     }
 }

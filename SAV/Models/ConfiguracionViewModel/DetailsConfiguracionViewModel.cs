@@ -112,9 +112,9 @@ namespace SAV.Models
             ProgramacionTuristica = configuracion.ContenidoProgramacionTuristica;
             ContratanteSelectProvincia = configuracion.ContratanteDomicilio.Provincia.ID;
             ContratanteSelectLocalidad = configuracion.ContratanteDomicilio.Localidad.ID;
-            ContratanteCalle = configuracion.Domicilio.Calle;
-            ContratanteCalleNumero = configuracion.Domicilio.Numero;
-            ContratanteCallePiso = configuracion.Domicilio.Piso;
+            ContratanteCalle = configuracion.ContratanteDomicilio.Calle;
+            ContratanteCalleNumero = configuracion.ContratanteDomicilio.Numero;
+            ContratanteCallePiso = configuracion.ContratanteDomicilio.Piso;
         }
 
         public DetailsConfiguracionViewModel(List<Provincia> provincias, List<Localidad> Localidades)

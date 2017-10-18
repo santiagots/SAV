@@ -15,6 +15,45 @@ namespace SAV.Controllers
     {
         private SAVContext db = new SAVContext();
 
+        public ActionResult CierreCaja()
+        {
+            CierreCajaViewModel balanceViewModel = new CierreCajaViewModel();
+
+            return View(balanceViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult CierreCaja(CierreCajaViewModel cierreCajaViewModel)
+        {
+            if (!cierreCajaViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
+            {
+                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
+                return View(cierreCajaViewModel);
+            }
+            DateTime fecha = ViajeHelper.getFecha(cierreCajaViewModel.Fecha);
+            if (string.IsNullOrEmpty(cierreCajaViewModel.FechaHasta))
+            {
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date && x.Pago).ToList<ClienteViaje>();
+                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, null);
+            }
+            else
+            {
+                DateTime fechaHasta = ViajeHelper.getFecha(cierreCajaViewModel.FechaHasta);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0 && x.Pago).ToList<ClienteViaje>();
+                List<Viaje> Viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, Viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
+            }
+
+            return View(cierreCajaViewModel);
+        }
+
         public ActionResult Viaje()
         {
             BalanceViajeDiarioViewModel balanceViewModel = new BalanceViajeDiarioViewModel();
@@ -163,7 +202,7 @@ namespace SAV.Controllers
             }
             else
             {
-                DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
+                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
                 List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
                 List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
                 List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
@@ -180,6 +219,47 @@ namespace SAV.Controllers
             Response.Charset = "utf-8";
 
             return View(balanceComisionDiarioViewModel);
+        }
+
+        public ActionResult ExportCierreCaja(String fechaBusqueda, String fechaHastaBusqueda)
+        {
+            DateTime fecha = ViajeHelper.getFecha(fechaBusqueda);
+            CierreCajaViewModel cierreCajaViewModel = new CierreCajaViewModel();
+            string name;
+
+            if (string.IsNullOrEmpty(fechaHastaBusqueda))
+            {
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date && x.Pago).ToList<ClienteViaje>();
+                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, null);
+
+                name = String.Format("Reporte_Cierre_Caja_{0}", fecha.ToString("dd_MM_yyyy"));
+                @ViewBag.titulo = string.Format("Cierre Caja día {0}", fecha.ToString("dd/MM/yyyy"));
+            }
+            else
+            {
+                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0 && x.Pago).ToList<ClienteViaje>();
+                List<Viaje> Viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && EntityFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<ComisionGasto> comisionGastos = db.ComisionGastos.Where(x => EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<ComisionGasto>();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, Viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
+
+                name = String.Format("Reporte_Cierre_Caja_{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
+                @ViewBag.titulo = string.Format("Consolidado Cierre Caja desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
+            }
+
+            @ViewBag.fecha = fecha.ToString("dd/MM/yyyy");
+
+            Response.AddHeader("content-disposition", "attachment;filename=" + name + ".xls");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.Charset = "utf-8";
+
+            return View(cierreCajaViewModel);
         }
 
         public ActionResult ExportVendedor(String fechaBusqueda, String fechaHastaBusqueda)

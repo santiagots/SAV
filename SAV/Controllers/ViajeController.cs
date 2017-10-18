@@ -180,7 +180,7 @@ namespace SAV.Controllers
             SearchViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
             SearchViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
 
-            viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo);
+            viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo, searchViajeViewModel.Cliente, searchViajeViewModel.Estado);
 
             SearchViaje.ViajesActivos = viajesActivos.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             SearchViaje.ViajesFinalizados = viajesFinalizados.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -198,6 +198,8 @@ namespace SAV.Controllers
             ViewBag.fechaSalida = searchViajeViewModel.FechaSalida;
             ViewBag.servicio = searchViajeViewModel.Servicio;
             ViewBag.codigo = searchViajeViewModel.Codigo;
+            ViewBag.nombrePasajero = searchViajeViewModel.Cliente;
+            ViewBag.estadoViaje = searchViajeViewModel.Estado;
 
             return View("Search", SearchViaje);
         }
@@ -421,15 +423,17 @@ namespace SAV.Controllers
         {
             if (clienteViajeID > 0)
             {
-                List<ClienteViaje> clienteViaje = db.ClienteViajes.ToList<ClienteViaje>();
+                ClienteViaje clienteViaje = db.ClienteViajes.Find(clienteViajeID);
 
-
-                ClienteViaje select = clienteViaje.Where(x => x.ID == clienteViajeID).FirstOrDefault();
-                if (select != null)
+                if (clienteViaje != null)
                 {
-                    select.Presente = Convert.ToBoolean(presente);
-                    select.Pago = Convert.ToBoolean(pago);
-                    db.Entry(select).State = EntityState.Modified;
+                    clienteViaje.Presente = Convert.ToBoolean(presente);
+                    clienteViaje.Pago = Convert.ToBoolean(pago);
+                    if (Convert.ToBoolean(pago))
+                        clienteViaje.FechaPago = DateTime.Now;
+                    else
+                        clienteViaje.FechaPago = null;
+                    db.Entry(clienteViaje).State = EntityState.Modified;
                 }
 
                 db.SaveChanges();
@@ -524,17 +528,19 @@ namespace SAV.Controllers
             return PartialView("_CierreGastosTable", db.Viajes.Find(IdViaje).Gastos.ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
-        public ActionResult SearchPagingViajesAbiertos(int? pageNumber, string UpdateTargetId, int? origen, int? destino, string fechaSalida, string servicio, int codigo)
+        public ActionResult SearchPagingViajesAbiertos(int? pageNumber, int? origen, int? destino, string fechaSalida, string servicio, int? codigo, string nombrePasajero, string estadoViaje)
         {
             ViewBag.idOrigen = origen;
             ViewBag.idDestino = destino;
             ViewBag.fechaSalida = fechaSalida;
             ViewBag.servicio = servicio;
             ViewBag.codigo = codigo;
+            ViewBag.nombrePasajero = nombrePasajero;
+            ViewBag.estadoViaje = estadoViaje;
 
             IPagedList<Viaje> viajesResult;
 
-            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(ViajeHelper.getViajesActivos(db.Viajes.ToList<Viaje>()), origen, destino, fechaSalida, servicio, codigo).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(ViajeHelper.getViajesActivos(db.Viajes.ToList<Viaje>()), origen, destino, fechaSalida, servicio, codigo, nombrePasajero, estadoViaje).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesAbiertosTable", viajesResult);
         }

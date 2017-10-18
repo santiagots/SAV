@@ -118,6 +118,121 @@ namespace SAV.Common
             return balance;
         }
 
+        internal static CierreCajaViewModel getBalanceCierreCaja(List<ClienteViaje> clienteViaje, List<Viaje> viajes, List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<ComisionGasto> comisionGastos, DateTime fecha, DateTime? fechaHasta)
+        {
+            CierreCajaViewModel balance = new CierreCajaViewModel();
+
+            var grupoConductores = viajes.GroupBy(x => x.Conductor != null ? x.Conductor.ID : -1).ToList();
+            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.RazonSocial);
+
+            List<Viaje> viajesAuxiliar = new List<Viaje>();
+
+            foreach (ClienteViaje item in clienteViaje)
+            {
+                Viaje viaje = viajesAuxiliar.FirstOrDefault(x => x.ID == item.Viaje.ID);
+
+                if (viaje != null)
+                    viaje.ClienteViaje.Add(item);
+                else
+                    viajesAuxiliar.Add(
+                        new Viaje() {
+                            ID = item.Viaje.ID,
+                            Servicio = item.Viaje.Servicio,
+                            Patente = item.Viaje.Patente,
+                            ClienteViaje = new List<ClienteViaje>() }
+                        );
+            }
+
+            foreach (var viaje in viajesAuxiliar)
+            {
+                balance.Pasajeros.Add(new ItemBalanceViewModel()
+                {
+                    Concepto = string.Format("Servicio {0} Patente {1} (Total pasajeros {2})", viaje.Servicio.ToString(), viaje.Patente.ToString(), viaje.ClienteViaje.Count),
+                    Importe = viaje.ClienteViaje.Sum(x => x.Costo)
+                });
+            }
+
+            foreach (var item in grupoConductores)
+            {
+                if (item.FirstOrDefault().Conductor == null)
+                    continue;
+
+                Conductor conductor = item.FirstOrDefault().Conductor;
+
+                balance.Conductores.Add(new ItemBalanceViewModel()
+                {
+                    Concepto = string.Format("Conductor {0} {1} {2} ({3})", conductor.Apellido, conductor.Nombre, conductor.CUIL, item.Count()),
+                    Importe = item.Sum(x => -x.Conductor.ComisionViaje)
+                });
+            }
+
+            foreach (var item in grupoGastos)
+            {
+                Gasto gasto = item.FirstOrDefault();
+
+                balance.Gastos.Add(new ItemBalanceViewModel()
+                {
+                    Concepto = string.Format("Gastos {0} {1} ({2})", gasto.RazonSocial, gasto.CUIT, item.Count()),
+                    Importe = item.Sum(x => -decimal.Parse(x.Monto))
+                });
+            }
+
+            foreach (Comision item in comisiones)
+            {
+                balance.Comisiones.Add(new ItemBalanceViewModel()
+                {
+                    Concepto = string.Format("Pago comisión {0}", item.Contacto),
+                    Importe = item.Costo
+                });
+                balance.totalComision += item.Costo;
+            }
+
+            foreach (CuentaCorriente item in cuentasCorrientes)
+            {
+                List<Pago> Pagos = new List<Pago>();
+                    if(fechaHasta.HasValue)
+                        Pagos = item.Pagos.Where(x => x.Fecha.Date.CompareTo(fecha.Date) >= 0 && x.Fecha.Date.CompareTo(fechaHasta.Value.Date) <= 0).ToList();
+                    else
+                        Pagos = item.Pagos.Where(x => x.Fecha.Date == fecha.Date).ToList();
+
+                foreach (Pago pago in Pagos)
+                {
+                    balance.Comisiones.Add(new ItemBalanceViewModel()
+                    {
+                        Concepto = string.Format("Pago en cuenta {0}", item.RazonSocial),
+                        Importe = pago.Monto
+                    });
+                }
+                balance.totalComision += Pagos.Sum(x => x.Monto);
+            }
+
+            foreach (ComisionGasto item in comisionGastos)
+            {
+                balance.Gastos.Add(new ItemBalanceViewModel()
+                {
+                    Concepto = item.Descripcion,
+                    Importe = -item.Monto
+                });
+            }
+
+            balance.totalPasajeros = balance.Pasajeros.Sum(x => x.Importe);
+
+            balance.totalConductores = balance.Conductores.Sum(x => x.Importe);
+
+            balance.totalComision = balance.Comisiones.Sum(x => x.Importe);
+
+            balance.totalGasto = balance.Gastos.Sum(x => x.Importe);
+
+            balance.total = balance.totalPasajeros + balance.totalConductores + balance.totalComision + balance.totalGasto;
+
+            return balance;
+        }
+
+        internal static CierreCajaViewModel getBalanceCierreCaja(List<Viaje> viajes, List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<ComisionGasto> comisionGastos, DateTime fecha, DateTime fechaHasta)
+        {
+            throw new NotImplementedException();
+        }
+
         public static BalanceComisionDiarioViewModel getBalanceComision(List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<ComisionGasto> comisionGasto, DateTime fecha)
         {
 

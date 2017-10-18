@@ -368,7 +368,7 @@ table tbody tr td {
     text-decoration: none;
 }
 
-.type6 {
+.type5 {
     width: 63px;
 }
 
@@ -391,6 +391,10 @@ table tbody tr td {
 
 .type39 {
     width: 303px;
+}
+
+.type235 {
+    width: 235px;
 }
 
 .type49 {
@@ -883,6 +887,11 @@ table tbody tr td {
 
 .type49 {
     width: 48px;
+    text-align: center;
+}
+
+.type30 {
+    width: 30px;
     text-align: center;
 }
 

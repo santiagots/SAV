@@ -226,6 +226,10 @@ namespace SAV.Controllers
                         clienteViaje.DescensoDomicilioOtros = NewclienteViaje.DescensoDomicilioOtros;
                         clienteViaje.Costo = NewclienteViaje.Costo;
                         clienteViaje.Pago = NewclienteViaje.Pago;
+                        if (clienteViewModel.Pago)
+                            clienteViaje.FechaPago = DateTime.Now;
+                        else
+                            clienteViaje.FechaPago = null;
                         db.Entry(clienteViaje).State = EntityState.Modified;
                     }
                 }
