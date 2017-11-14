@@ -1,0 +1,67 @@
+﻿@model SAV.Models.ResponsableViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <title>Responsable</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("ResponsableAdd", "Comision", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true)
+            <div id="content">
+                <div class="headTables selected">
+                    <p>Datos del Responsable</p>
+                </div>
+                <div class="contenidoDatos">
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.NuevoApellido)<b>(*)</b></p>
+                        @Html.TextBoxFor(model => model.NuevoApellido, new { id = "NuevoApellido" })
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.NuevoNombre)<b>(*)</b></p>
+                        @Html.TextBoxFor(model => model.NuevoNombre, new { id = "NuevoNombre" })
+                    </div>
+                    <div class="botones">
+                        <div class="boton">
+                            <div class="inicioBotonGris"></div>
+                            <input id="Guardar" class="centroBotonGris waiting" type="button" value="Guardar" onclick="agregarResponsable();"></input>
+                            <div class="finBotonGris"></div>
+                            <div class="boton">
+                                <div class="inicioBotonGris"></div>
+                                <input id="cerrar" class="centroBotonGris waiting disableValidation" type="button" value="Cerrar" onclick="CerrarResponsable();"></input>
+                                <div class="finBotonGris"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footerTables"></div>
+
+                <!-- RESULTADO TABLES -->
+                <div id="TableResponsables">
+                    @Html.Partial("_ResponsableTable", Model.Responsables)
+                </div>
+                
+                <div id="ErrorResponsable" class="contenidoDatosError">
+                </div>
+            </div>
+        }
+
+        <div id="loadingPopUp">
+
+        </div>
+</body>
+@section Scripts {
+
+    <script src="/Scripts/ComisionesResponsable.js"></script>
+}
+</html>

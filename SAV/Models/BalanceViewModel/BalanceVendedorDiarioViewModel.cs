@@ -19,23 +19,26 @@ namespace SAV.Models
         [Required(ErrorMessage = "Debe ingresar una Clave")]
         public string Clave { get; set; }
 
-        public List<ItemBalanceVendedorViewModel> Items { get; set; }
-        public decimal total { get; set; }
+        public List<BalanceVendedorViewModel> BalanceVendedor { get; set; }
 
         public BalanceVendedorDiarioViewModel()
         {
-            Items = new List<ItemBalanceVendedorViewModel>();
+            BalanceVendedor = new List<BalanceVendedorViewModel>();
         }
     }
 
     public class ItemBalanceVendedorViewModel
     {
-        [Display(Name = "Concepto")]
+        public string Concepto { get; set; }
+        public decimal Monto { get; set; }
+    }
+
+    public class BalanceVendedorViewModel
+    {
         public string Concepto { get; set; }
 
-        [Display(Name = "Monto")]
-        public decimal Monto { get; set; }
+        public decimal total { get; set; }
 
-
+        public List<ItemBalanceVendedorViewModel> Items { get; set; }
     }
 }

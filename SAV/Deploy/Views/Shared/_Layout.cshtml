@@ -1,0 +1,83 @@
+﻿@{ 
+   var currentController = ViewContext.RouteData.Values["controller"] as string ?? "Home";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="-1" />
+        @RenderSection("metatags", false)
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/Waiting")
+    @RenderSection("scripts", required: false)
+    <body>
+        <header>
+        <div class="header">
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">SAV</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                    <nav>
+                        <div id="header">
+					        <div class="bottom">
+						        <ul class="nav">
+							        <li>@Html.ActionLink("Viajes", "Search", "Viaje", null, new { @class = currentController == "Viaje"? "selected waitingMenuBar":"waitingMenuBar" })</li>
+                                    <li>@Html.ActionLink("Cuenta Corriente", "Search", "CuentaCorriente", null, new { @class = currentController == "CuentaCorriente" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+							        <li>@Html.ActionLink("Clientes", "Search", "Cliente", null, new { @class = currentController == "Cliente"? "selected waitingMenuBar":"waitingMenuBar" })</li>
+							        <li>@Html.ActionLink("Conductor", "Search", "Conductor", null, new { @class = currentController == "Conductor"? "selected waitingMenuBar":"waitingMenuBar" })</li>
+                                    <li><a href="#">Comisiones</a>
+                                        <ul>
+                                            <li>@Html.ActionLink("Administración", "Search", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Gastos", "Spending", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Reportes</a>
+                                        <ul>
+                                            <li>@Html.ActionLink("Cierre Caja", "CierreCaja", "Balance", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Viajes", "Viaje", "Balance", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Comisiones", "Comision", "Balance", null, new { @class = currentController == "Balance" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                            <li>@Html.ActionLink("Vendedores", "Vendedor", "Balance", null, new { @class = currentController == "Balance" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                        </ul>
+                                    </li>
+                                    <li>@Html.ActionLink("Destinos", "Create", "Destinos", null, new { @class = currentController == "Destinos" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                    <li>@Html.ActionLink("Configuración", "Details", "Configuracion", null, new { @class = currentController == "Configuracion" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
+                                </ul>
+					        </div>
+				        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            @RenderBody()
+        <div id="loading">
+            
+        </div>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year.ToString() - SAV Application</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

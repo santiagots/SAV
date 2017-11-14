@@ -1,7 +1,6 @@
 ﻿var ErrorClose = false;
 
 $(document).ready(function () {
-
     $("#cerrar").click(function () {
         return cerrar();
     });
@@ -20,7 +19,7 @@ $(document).ready(function () {
 
 function addEventToPasajeros()
 {
-    $("#tablaPasajeros [class='check-box']").change(function () {
+    $("#tablaPasajeros [type='checkbox']").change(function () {
         actualizarInfoCliente();
     });
 

@@ -1,0 +1,55 @@
+﻿@model SAV.Models.DestinoViewModel
+@using SAV.Models
+@{
+    ViewBag.Title = "Create";
+}
+
+<div id="content">
+    <div class="headTables selected">
+        <p>Datos Destinos</p>
+    </div>
+    <div class="contenidoDatos">
+        <div class="datosInputs">
+            <p class="edicion obligatorio" style="width: 100px">@Html.LabelFor(model => model.Provincia)<b>(*)</b></p>
+            @Html.DropDownListFor(model => model.SelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), new { size = "20", style = "height:auto" })
+
+            <p class="edicion obligatorio" style="width: 100px">@Html.LabelFor(model => model.Localidad)<b>(*)</b></p>
+            @Html.DropDownListFor(model => model.SelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), new { size = "20", style = "height:auto" })
+
+            <p class="edicion obligatorio" style="width: 100px">@Html.LabelFor(model => model.Parada)<b>(*)</b></p>
+            @Html.DropDownListFor(model => model.SelectParada, new SelectList(Model.Parada, "Key", "Value"), new { size = "20", style = "height:auto" })
+        </div>
+    </div>
+    <div class="contenidoDatos">
+        <div class="datosInputs">
+            @Html.TextBoxFor(model => model.NuevaParada, new { size = "20", style = "height:auto;float:right;margin-right: 84px;" })
+            <p class="edicion obligatorio" style="float: right; width: auto">@Html.LabelFor(model => model.NuevaParada)<b>(*)</b></p>
+        </div>
+        <div class="botones">
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="AgregarParada" class="centroBotonGris waiting" type="button" value="Agregar Parada" />
+                <div class="finBotonGris"></div>
+            </div>
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="ModificarParada" class="centroBotonGris waiting" type="button" value="Modificar Parada" />
+                <div class="finBotonGris"></div>
+            </div>
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="EliminarParada" class="centroBotonGris waiting" type="button" value="Eliminar Parada" />
+                <div class="finBotonGris"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footerTables"></div>
+    <div id="Error" class="contenidoDatosError">
+</div>
+</div>
+
+
+@section Scripts {
+
+    <script src="/Scripts/DestinoCreate.js"></script>
+    }

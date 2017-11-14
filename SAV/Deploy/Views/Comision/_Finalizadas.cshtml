@@ -1,0 +1,62 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.Comision>
+
+
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+  @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingComisionFinalizadas", new { Numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"], pageNumber = page })
+                                                                                                    , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "finalizadaTable" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Comisiones Finalizadas</p>
+            <a id="Busqueda" name="Busqueda" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2" style="width: 55px;"><p>Numero</p></th>
+                        <th class="type2" style="width: 170px;"><p>Contacto</p></th>
+                        <th class="type2" style="width: 85px;"><p>Fecha Alta</p></th>
+                        <th class="type2" style="width: 85px;"><p>Fecha Envio</p></th>
+                        <th class="type2" style="width: 85px;"><p>F. Entrega</p></th>
+                        <th class="type2" style="width: 85px;"><p>Fecha Pago</p></th>
+                        <th class="type2" style="width: 65px;"><p>Costo</p></th>
+                        <th class="type2" style="width: 170px;"><p>Cuenta Corriente</p></th>
+                        <th style="width: 120px;"></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="type2" style="width: 55px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.ID)</p></td>
+                            <td class="type2" style="width: 170px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.Contacto)</p></td>
+                            @{var fecha = item.FechaAlta.ToString("dd/MM/yyyy");}
+                            <td class="type2" style="width: 85px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaEnvio.HasValue ? item.FechaEnvio.Value.Date.ToString("dd/MM/yyyy") : "";}
+                            <td class="type2" style="width: 85px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaEntrega.HasValue ? item.FechaEntrega.Value.Date.ToString("dd/MM/yyyy") : "";}
+                            <td class="type2" style="width: 85px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaPago.HasValue ? item.FechaPago.Value.Date.ToString("dd/MM/yyyy") : "";}
+                            <td class="type2" style="width: 85px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.Costo)</p></td>
+                            @{var cuentaCorriente = item.CuentaCorriente == null ? string.Empty : item.CuentaCorriente.RazonSocial;}
+                            <td class="type2" style="width: 170px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => cuentaCorriente)</p></td>
+                            <td style="width: 120px;">
+                                <a href="@Url.Action("RegresarAProgreso", "comision", new { ID = item.ID, numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"] })"><span class="action volver" title="Regresar" /></a>
+                                <a href="@Url.Action("clone", "comision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span id="Span44" class="action clonar" title="Copiar" /></a>
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", new { id = item.ID })"><span id="Span43" class="action retirar" title="Eliminar" /></a>
+                            </td>
+                        </tr>
+                                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

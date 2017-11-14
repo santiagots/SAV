@@ -184,7 +184,7 @@
                 {
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
-                        @Html.TextBoxFor(model => model.Costo)
+                        @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaAscenso)</p>
@@ -198,7 +198,7 @@
                 {
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
-                        @Html.TextBoxFor(model => model.Costo)
+                        @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoAscenso)</p>
@@ -225,7 +225,7 @@
                 }
                 <div class="datosInputs">
                     <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)</p>
-                    @Html.EditorFor(model => model.Pago)
+                    @Html.CheckBoxFor(model => model.Pago, Model.Pago ?(object)new {@disabled = "disabled" }: (object)new { })
                 </div>
                 <div class="botones">
                     <div class="boton">

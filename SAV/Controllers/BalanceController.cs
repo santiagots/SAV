@@ -105,14 +105,14 @@ namespace SAV.Controllers
 
             if (string.IsNullOrEmpty(balanceViewModel.FechaHasta))
             {
-                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
-                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
             }
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(balanceViewModel.FechaHasta);
-                List<Viaje> viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
             }
 
             return View(balanceViewModel);
@@ -270,8 +270,8 @@ namespace SAV.Controllers
 
             if (string.IsNullOrEmpty(fechaHastaBusqueda))
             {
-                List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
-                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
                 name = String.Format("Reporte_Dia_Viajes{0}", fecha.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Cierre día {0}", fecha.ToString("dd/MM/yyyy"));
             }
@@ -279,8 +279,8 @@ namespace SAV.Controllers
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
-                List<Viaje> viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(viajes);
+                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
+                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
                 name = String.Format("Consolidado_Vendedores{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Consolidado Vendedores desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
             }

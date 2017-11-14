@@ -127,7 +127,7 @@ namespace SAV.Models
         [Required(ErrorMessage = "Debe ingresar un Teléfono")]
         [RegularExpression("^(\\d{2,5})\\s(\\d{5,10})$", ErrorMessage = "El Teléfono debe ser en formaro CARACTERISTICA[5] NUMERO[10]")]
         public string Telefono { get; set; }
-    
+
         [Display(Name = "Email:")]
         [DataType(DataType.EmailAddress)]
         [EmailAddress(ErrorMessage = "El Email ingresado no tiene un formato valido")]
@@ -164,7 +164,7 @@ namespace SAV.Models
 
         [Display(Name = "Descenso:")]
         public List<KeyValuePair<int, string>> ServicioDirectoDescenso { get; set; }
-        
+
         [Required(ErrorMessage = "Debe ingresar un Descenso")]
         public int SelectServicioDirectoDescenso { get; set; }
 
@@ -190,10 +190,10 @@ namespace SAV.Models
         [RegularExpression("[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Costo debe ser un valor numerico entre 0 y 999 con 2 digitos decimales")]
         public string Costo { get; set; }
 
-        public ClienteViewModel():base()
-        {}
+        public ClienteViewModel() : base()
+        { }
 
-        public ClienteViewModel( List<Provincia> provincias, Viaje viaje): this(provincias)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje) : this(provincias)
         {
             if (viaje.Servicio != ViajeTipoServicio.Cerrado)
             {
@@ -261,7 +261,7 @@ namespace SAV.Models
 
                     LocalidadPrincipal = provincias.Where(x => x.ID == cliente.DomicilioPrincipal.Provincia.ID).FirstOrDefault().Localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
 
-                    if(cliente.DomicilioPrincipal.Localidad != null)
+                    if (cliente.DomicilioPrincipal.Localidad != null)
                         SelectLocalidadPrincipal = cliente.DomicilioPrincipal.Localidad.ID;
                 }
                 else
@@ -296,7 +296,7 @@ namespace SAV.Models
             LocalidadOtros = new List<KeyValuePair<int, string>>();
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, String vendedor):this(provincias, cliente)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, String vendedor) : this(provincias, cliente)
         {
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
 
@@ -382,7 +382,10 @@ namespace SAV.Models
             clienteViaje.Viaje = viaje;
             clienteViaje.Pago = clienteViewModel.Pago;
             if (clienteViewModel.Pago)
+            {
                 clienteViaje.FechaPago = DateTime.Now;
+                clienteViaje.VendedorCobro = Vendedor;
+            }
             else
                 clienteViaje.FechaPago = null;
             clienteViaje.AscensoDomicilioPrincipal = clienteViewModel.AscensoDomicilioPrincipal;
@@ -416,12 +419,14 @@ namespace SAV.Models
                 }
                 else if (clienteViewModel.DescensoDomicilioOtros)
                 {
-                    clienteViaje.DomicilioDescenso = new Domicilio() {
+                    clienteViaje.DomicilioDescenso = new Domicilio()
+                    {
                         Calle = clienteViewModel.CalleOtros,
                         Localidad = localidades.Where(x => x.ID == clienteViewModel.SelectLocalidadOtros).FirstOrDefault(),
                         Numero = clienteViewModel.CalleNumeroOtros,
                         Piso = clienteViewModel.CallePisoOtros,
-                        Provincia = provincias.Where(x => x.ID == clienteViewModel.SelectProvinciaOtros).FirstOrDefault() };
+                        Provincia = provincias.Where(x => x.ID == clienteViewModel.SelectProvinciaOtros).FirstOrDefault()
+                    };
 
                     clienteViaje.Descenso = null;
                 }
@@ -449,7 +454,7 @@ namespace SAV.Models
             cliente.Nombre = clienteViewModel.Nombre.ToUpper();
             cliente.DNI = long.Parse(clienteViewModel.DNI);
 
-            if(cliente.DomicilioPrincipal == null)
+            if (cliente.DomicilioPrincipal == null)
                 cliente.DomicilioPrincipal = new Domicilio();
 
             if (clienteViewModel.SelectProvinciaPrincipal > 0)
@@ -462,12 +467,12 @@ namespace SAV.Models
                 cliente.DomicilioPrincipal.Calle = clienteViewModel.CallePrincipal.ToUpper(); ;
 
             if (!String.IsNullOrEmpty(clienteViewModel.CalleNumeroPrincipal))
-            cliente.DomicilioPrincipal.Numero = clienteViewModel.CalleNumeroPrincipal;
+                cliente.DomicilioPrincipal.Numero = clienteViewModel.CalleNumeroPrincipal;
 
             if (!String.IsNullOrEmpty(clienteViewModel.CallePisoPrincipal))
-            cliente.DomicilioPrincipal.Piso = clienteViewModel.CallePisoPrincipal;
+                cliente.DomicilioPrincipal.Piso = clienteViewModel.CallePisoPrincipal;
 
-            if(cliente.DomicilioSecundario == null)
+            if (cliente.DomicilioSecundario == null)
                 cliente.DomicilioSecundario = new Domicilio();
 
             if (clienteViewModel.SelectProvinciaSecundaria > 0)
@@ -476,14 +481,14 @@ namespace SAV.Models
             if (clienteViewModel.SelectLocalidadSecundaria > 0)
                 cliente.DomicilioSecundario.Localidad = localidades.Where(x => x.ID == clienteViewModel.SelectLocalidadSecundaria).FirstOrDefault();
 
-            if(!String.IsNullOrEmpty(clienteViewModel.CalleSecundaria))
+            if (!String.IsNullOrEmpty(clienteViewModel.CalleSecundaria))
                 cliente.DomicilioSecundario.Calle = clienteViewModel.CalleSecundaria.ToUpper();
 
             if (!String.IsNullOrEmpty(clienteViewModel.CalleNumeroSecundaria))
-            cliente.DomicilioSecundario.Numero = clienteViewModel.CalleNumeroSecundaria;
+                cliente.DomicilioSecundario.Numero = clienteViewModel.CalleNumeroSecundaria;
 
             if (!String.IsNullOrEmpty(clienteViewModel.CallePisoSecundaria))
-            cliente.DomicilioSecundario.Piso = clienteViewModel.CallePisoSecundaria;
+                cliente.DomicilioSecundario.Piso = clienteViewModel.CallePisoSecundaria;
 
             cliente.Telefono = clienteViewModel.Telefono;
             cliente.Email = clienteViewModel.Email;

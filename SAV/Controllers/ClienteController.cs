@@ -224,12 +224,14 @@ namespace SAV.Controllers
                         clienteViaje.AscensoDomicilioPrincipal = NewclienteViaje.AscensoDomicilioPrincipal;
                         clienteViaje.DescensoDomicilioPrincipal = NewclienteViaje.DescensoDomicilioPrincipal;
                         clienteViaje.DescensoDomicilioOtros = NewclienteViaje.DescensoDomicilioOtros;
-                        clienteViaje.Costo = NewclienteViaje.Costo;
-                        clienteViaje.Pago = NewclienteViaje.Pago;
-                        if (clienteViewModel.Pago)
+                        clienteViaje.Vendedor = User.Identity.Name;
+                        if (NewclienteViaje.Pago && !clienteViaje.FechaPago.HasValue)
+                        {
+                            clienteViaje.Costo = NewclienteViaje.Costo;
+                            clienteViaje.Pago = NewclienteViaje.Pago;
+                            clienteViaje.VendedorCobro = User.Identity.Name;
                             clienteViaje.FechaPago = DateTime.Now;
-                        else
-                            clienteViaje.FechaPago = null;
+                        }
                         db.Entry(clienteViaje).State = EntityState.Modified;
                     }
                 }

@@ -1,0 +1,69 @@
+﻿@model SAV.Models.SearchClienteViewModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+
+<div id="content">
+	<div class="headTables selected">
+		<p>Buscar</p>
+	</div>
+    @using (Html.BeginForm())
+    {
+           @Html.ValidationSummary(false)
+	<div class="contenidoDatos">
+		<div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.Apellido)</p>
+            @Html.TextBoxFor(model => model.Apellido)
+
+			<p class="edicion">@Html.LabelFor(model => model.Nombre)</p>
+            @Html.TextBoxFor(model => model.Nombre)
+		</div>
+
+        <div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.DNI)</p>
+            @Html.TextBoxFor(model => model.DNI)
+
+			<p class="edicion">@Html.LabelFor(model => model.Telefono)</p>
+            @Html.TextBoxFor(model => model.Telefono)
+		</div>
+   
+		<div class="botones">
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+				<input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar" formaction="@Url.Action("Search", new { IdViaje = ViewBag.IdViaje })"/>
+				<div class="finBotonGris"></div>
+			</div>
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create", new { IdViaje = ViewBag.IdViaje })'"></input>
+				<div class="finBotonGris"></div>
+			</div>
+            @if (ViewBag.IdViaje !=null )
+            {
+            <div class="boton">
+				<div class="inicioBotonGris"></div>
+                 @if (ViewBag.From == "Cierre")
+                        {
+                            <input type="button" class="centroBotonGris waiting" value="Volver" onclick="location.href='@Url.Action("Close", "Viaje", new { id = ViewBag.IdViaje })    '"></input>
+                        }
+                        else
+                        {
+                            <input type="button" class="centroBotonGris waiting" value="Volver" onclick="location.href='@Url.Action("Details", "Viaje" ,new { id = ViewBag.IdViaje })    '"></input>
+                        }
+                
+
+				<div class="finBotonGris"></div>
+			</div>
+            }
+		</div>	
+	</div>
+    <div class="footerTables"></div>
+    }
+     <!-- RESULTADO TABLES -->
+    <div id="partialViewClientes">
+            @Html.Partial("_ClientesTable", Model.Clientes)
+    </div>
+</div>
+    

@@ -1,0 +1,70 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.Pasajeros>
+
+<div class="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CierrePagingPasajerosViajeCerrado", new { IdViaje = ViewBag.IdViaje, pageNumber = page, time = DateTime.Now})
+                                                                                            , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                            , new AjaxOptions() { HttpMethod = "GET",OnBegin= "enableSpinner", OnSuccess= "addEventToPasajeros", UpdateTargetId = "partialViewPasajeros" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Pasajeros</p>
+            <a id="Pasajeros" name="Pasajeros" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaPasajeros" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type63">
+                            <p>@Html.DisplayNameFor(model => model.First().Apellido) , @Html.DisplayNameFor(model => model.First().Nombre) </p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type119">
+                            <p>@Html.DisplayNameFor(model => model.First().DNI)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type39">
+                            <p>Dirección</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type140">
+                            <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2 type119">
+                            <p>Viajes Ausentes</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type49">&nbsp;&nbsp;&nbsp;</th>
+                    </tr>
+
+                </thead>
+                <tbody id="tablaPasajeros">
+                    @for (int i = 0; i < Model.Count; i++ )
+                    {
+                        <tr>
+                            @Html.HiddenFor((m => m[i].ClienteViajeID))
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type63 waitingMenuBar">
+                                <p>@Html.DisplayFor(m => m[i].Apellido) , @Html.DisplayFor(m => m[i].Nombre)</p>
+                            </td>
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type119 waitingMenuBar">
+                                <p>@Html.DisplayFor(m => m[i].DNI)</p>
+                            </td>
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type39 waitingMenuBar">
+                                <p>@Html.DisplayFor(m => m[i].Domicilio)</p>
+                            </td>
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type140 waitingMenuBar">
+                                <p>@Html.DisplayFor(m => m[i].Telefono)</p>
+                            </td>
+                            <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type119 waitingMenuBar">
+                                <p>@Html.DisplayFor(m => m[i].Ausencias)</p>
+                            </td>
+                            <td class="type49">
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar el pasajero?');" href="@Url.Action("Delete", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.idViaje, From = "Close" })">
+                                    <span id="Span43" class="action retirar" title="Eliminar" />
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

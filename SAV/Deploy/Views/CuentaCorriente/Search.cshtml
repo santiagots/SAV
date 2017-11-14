@@ -1,0 +1,48 @@
+﻿@model SAV.Models.SearchCuentaCorrienteViewModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+
+<div id="content">
+	<div class="headTables selected">
+		<p>Buscar</p>
+	</div>
+    @using (Html.BeginForm())
+    {
+           @Html.ValidationSummary(false)
+	<div class="contenidoDatos">
+		<div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.RazonSocial)</p>
+            @Html.TextBoxFor(model => model.RazonSocial)
+
+			<p class="edicion">@Html.LabelFor(model => model.CUIL)</p>
+            @Html.TextBoxFor(model => model.CUIL)
+		</div>
+   
+		<div class="botones">
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+				<input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"/>
+				<div class="finBotonGris"></div>
+			</div>
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create")'"></input>
+				<div class="finBotonGris"></div>
+			</div>
+		</div>	
+	</div>
+    <div class="footerTables"></div>
+    }
+     <!-- RESULTADO TABLES -->
+    <div id="partialViewCuentaCorrientes">
+            @Html.Partial("_CuentaCorrienteTable", Model.CuentaCorriente)
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="/Scripts/CuentaCorrienteCreate.js"></script>
+}

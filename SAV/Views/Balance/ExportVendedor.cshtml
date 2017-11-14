@@ -60,15 +60,26 @@
     <tr>
         <td colspan="2" class="headTables2">@ViewBag.titulo</td>
     </tr>
-    <tr>
-        <td class="headTables1" style="width: 510px">Concepto</td>
-        <td class="headTables1" style="width: 85px">Importe</td>
-    </tr>
-    @foreach (var item in Model.Items)
+    @foreach (var Vendedor in Model.BalanceVendedor)
     {
         <tr>
-            <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
-            <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
+            <td colspan="2" class="headTables1">@Vendedor.Concepto</td>
         </tr>
+        <tr>
+            <td class="headTables1" style="width: 510px">Concepto</td>
+            <td class="headTables1" style="width: 85px">Importe</td>
+        </tr>
+        foreach (var item in Vendedor.Items)
+        {
+            <tr>
+                <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
+            </tr>
+        }
+        <tr>
+            <td class="headTables1" style="width: 510px">Total</td>
+            <td class="headTables1" style="width: 75px">@Vendedor.total</td>
+        </tr>
+        <tr></tr>
     }
 </table>

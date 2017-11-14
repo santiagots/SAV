@@ -429,10 +429,11 @@ namespace SAV.Controllers
                 {
                     clienteViaje.Presente = Convert.ToBoolean(presente);
                     clienteViaje.Pago = Convert.ToBoolean(pago);
-                    if (Convert.ToBoolean(pago))
+                    if (Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
+                    { 
                         clienteViaje.FechaPago = DateTime.Now;
-                    else
-                        clienteViaje.FechaPago = null;
+                        clienteViaje.VendedorCobro = User.Identity.Name;
+                    }
                     db.Entry(clienteViaje).State = EntityState.Modified;
                 }
 

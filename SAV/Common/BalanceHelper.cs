@@ -330,20 +330,32 @@ namespace SAV.Common
             return viajes.Where(x => x.FechaArribo.Day == fecha.Day && x.FechaArribo.Month == fecha.Month && x.FechaArribo.Year == fecha.Year && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
         }
 
-        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<Viaje> viajes)
+        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<ClienteViaje> clienteViaje)
         {
             BalanceVendedorDiarioViewModel balance = new BalanceVendedorDiarioViewModel();
 
-            var grupoCendedores = viajes.SelectMany(x => x.ClienteViaje).GroupBy(y => y.Vendedor);
+            var grupoVendedores = clienteViaje.GroupBy(x => x.VendedorCobro);
 
-            foreach (var item in grupoCendedores)
+            foreach (var vendedor in grupoVendedores)
             {
-                balance.Items.Add(new ItemBalanceVendedorViewModel()
+
+                BalanceVendedorViewModel balanceVendedor = new BalanceVendedorViewModel()
                 {
-                    Concepto = string.Format("{0} ({1})", item.First().Vendedor, item.Count()),
-                    Monto = item.Where(x=>x.Pago).Sum(x => x.Costo)
-                });
-                balance.total += item.Where(x => x.Pago).Sum(x => x.Costo);
+                    Concepto = string.Format("Vendedor {0}", vendedor.First().VendedorCobro),
+                    Items = new List<ItemBalanceVendedorViewModel>()
+                };
+
+                foreach (var item in vendedor)
+                {
+                    balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                    {
+                        Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", item.Cliente.Apellido, item.Cliente.Nombre, item.Viaje.ID, item.Viaje.FechaSalida, item.Viaje.Servicio),
+                        Monto = item.Costo
+                    });
+                    balanceVendedor.total += item.Costo;
+                }
+
+                balance.BalanceVendedor.Add(balanceVendedor);
             }
 
             return balance;

@@ -35,7 +35,7 @@
                     <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
                     <div class="finBotonGris"></div>
                 </div>
-                @if (Model.Items.Count > 0)
+                @if (Model.BalanceVendedor.Count > 0)
                 {
                     <div class="boton">
                         <div class="inicioBotonGris"></div>
@@ -52,29 +52,31 @@
             <p>@Html.ValidationSummary(true)</p>
         </div>
     }
-        <div class="alertTablesExtended" id="alertTablesExtended">
-            <div class="seccion">
-                <div class="headAlertTablesExtended selected">
-                    <p>Vendedores</p>
-                    <a id="Balance" name="Balance" href="#" class="desplegado"></a>
-                </div>
-                <div id="tablaBalance" class="desplegableTablaCamp" style="display: block;">
-                    <table id="tablaParts" class="tablesorter">
-                        <thead>
-                            <tr class="headTitles noBorder">
-                                <th class="type2" style="width: 500px;">
-                                    <p>@Html.DisplayNameFor(model => model.Items.First().Concepto)</p>
-                                    <span class="ordenamiento"></span>
-                                </th>
-                                <th style="width: 400px;">
-                                    <p>@Html.DisplayNameFor(model => model.Items.First().Monto)</p>
-                                    <span class="ordenamiento"></span>
-                                </th>
-                            </tr>
+@foreach (var vendedor in Model.BalanceVendedor)
+{
+    <div class="alertTablesExtended" id="alertTablesExtended">
+        <div class="seccion">
+            <div class="headAlertTablesExtended selected">
+                <p>@vendedor.Concepto</p>
+                <a id="Balance" name="Balance" href="#" class="desplegado"></a>
+            </div>
+            <div id="tablaBalance" class="desplegableTablaCamp" style="display: block;">
+                <table class="tablesorter">
+                    <thead>
+                        <tr class="headTitles noBorder">
+                            <th class="type2" style="width: 500px;">
+                                <p>Concepto</p>
+                                <span class="ordenamiento"></span>
+                            </th>
+                            <th style="width: 400px;">
+                                <p>Monto</p>
+                                <span class="ordenamiento"></span>
+                            </th>
+                        </tr>
 
-                        </thead>
-                        <tbody id="tablaPasajeros">
-                            @foreach (var item in Model.Items)
+                    </thead>
+                    <tbody>
+                        @foreach (var item in vendedor.Items)
                             {
                                 <tr>
                                     <td class="type2" style="width: 500px;">
@@ -85,11 +87,20 @@
                                     </td>
                                 </tr>
                             }
+                                <tr class="headTitles noBorder" style="font-weight: bold">
+                                    <td class="type2" style="width: 500px;">
+                                        <p>Total:</p>
+                                    </td>
+                                    <td style="width: 400px;">
+                                        <p>@vendedor.total</p>
+                                    </td>
+                                </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+}
 </div>
 
 <script language="javascript">

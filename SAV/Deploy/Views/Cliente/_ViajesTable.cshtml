@@ -1,0 +1,56 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.ClienteViaje>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+		  <div class="seccion">
+
+                 @Html.PagedListPager((IPagedList)Model, page => Url.Action("CreatePagingViajes", new {id = Model.First().Cliente.ID, pageNumber = page })
+, PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "ViajesCliente" }))
+
+                <div class="headAlertTablesExtended selected">
+				<p>Viajes del Cliente</p>
+				<a id="Busqueda" name="Busqueda" href="#" class="desplegado"></a>
+			</div>
+			<div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+				<table id="tablaParts" class="tablesorter">
+					<thead>
+						<tr class="headTitles noBorder">
+							<th class="type2 type106"><p>Origen</p><span class="ordenamiento"></span></th>
+							<th class="type2 type106"><p>Destino</p><span class="ordenamiento"></span></th>
+							<th class="type2 type203"><p>Fecha Salida</p><span class="ordenamiento"></span></th>
+							<th class="type2 type203"><p>Fecha Arribo</p><span class="ordenamiento"></span></th>
+							<th class="type2 type204"><p>Servicio</p><span class="ordenamiento"></span></th>
+							<th class="type119"><p>Presente</p><span class="ordenamiento"></span></th>
+						</tr>
+							
+					</thead>
+					<tbody>
+                        @foreach (var item in Model)
+                        {
+						<tr>
+                            @if(item.Viaje.Origen != null){
+							<td class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Viaje.Origen.Nombre)</p></td>
+                            }
+                            else{
+                            <td class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Viaje.OrigenCerrado)</p></td>
+                            }
+                            @if (item.Viaje.Destino != null)
+                            {
+							<td class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Viaje.Destino.Nombre)</p></td>
+                            }
+                            else{
+                            <td class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Viaje.DestinoCerrado)</p></td>
+                            }
+							<td class="type2 type203"><p>@Html.DisplayFor(modelItem => item.Viaje.FechaSalida)</p></td>
+							<td class="type2 type203"><p>@Html.DisplayFor(modelItem => item.Viaje.FechaArribo)</p></td>
+							<td class="type2 type204"><p>@Html.DisplayFor(modelItem => item.Viaje.Servicio)</p></td>
+							<td class="type119"><p>@Html.DisplayFor(modelItem => item.Presente)</p></td>
+						</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+    </div>

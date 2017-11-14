@@ -67,10 +67,10 @@
                                 <p>@Html.DisplayFor(m => m[i].Vendedor)</p>
                             </td>
                             <td class="type2 type112">
-                                <p>@Html.EditorFor(m => m[i].Pago)</p>
+                                <p>@Html.CheckBoxFor(m => m[i].Pago, Model[i].Pago ? (object)new { @disabled = "disabled" } : (object)new { })</p>
                             </td>
                             <td class="type2 type5">
-                                <p>@Html.EditorFor(m =>Model[i].Presente)</p>
+                                <p>@Html.CheckBoxFor(m =>Model[i].Presente)</p>
                             </td>
                             <td class="type30">
                                 <a onclick="return confirmSpinner('Esta seguro que desea borrar el pasajero?');" href="@Url.Action("Delete", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.idViaje, From = "Close" })">

@@ -1,0 +1,176 @@
+﻿@model SAV.Models.SearchComisionViewModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<div id="content">
+	<div class="headTables selected">
+		<p>Buscar</p>
+	</div>
+    @using (Html.BeginForm())
+    {
+           @Html.ValidationSummary(false)
+	<div class="contenidoDatos">
+		<div class="datosInputs">
+			<p class="edicion">@Html.LabelFor(model => model.ID)</p>
+            @Html.TextBoxFor(model => model.ID)
+
+			<p class="edicion">@Html.LabelFor(model => model.Contacto)</p>
+            @Html.TextBoxFor(model => model.Contacto)
+		</div>
+        <div class="datosInputs">
+             <p class="edicion">@Html.LabelFor(model => model.Servicio)</p>
+                @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ComisionServicio))
+                                                               select new SelectListItem
+                                                               {
+                                                                   Text = c,
+                                                                   Value = c
+                                                               }, "Elija una opción")
+
+                 <p class="edicion">@Html.LabelFor(model => model.Accion)</p>
+                @Html.DropDownListFor(model => model.Accion, from c in Enum.GetNames(typeof(SAV.Models.ComisionAccion))
+                                                             select new SelectListItem
+                                                             {
+                                                                 Text = c,
+                                                                 Value = c
+                                                             }, "Elija una opción")
+		</div>
+        <div class="datosInputs">
+            
+            <p class="edicion">@Html.LabelFor(model => model.FechaAlta)</p>
+            @Html.TextBoxFor(model => model.FechaAlta, new { @class = "fecha", @id = "fechaAlta", @name = "fechaAlta", @readonly = true })
+
+            <p class="edicion">@Html.LabelFor(model => model.FechaEnvio)</p>
+            @Html.TextBoxFor(model => model.FechaEnvio, new { @class = "fecha", @id = "fechaEnvio", @name = "fechaEnvio", @readonly = true })
+        </div>
+
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.FechaEntrega)</p>
+            @Html.TextBoxFor(model => model.FechaEntrega, new { @class = "fecha", @id = "fechaEntrega", @name = "fechaEntrega", @readonly = true })
+
+            <p class="edicion">@Html.LabelFor(model => model.FechaPago)</p>
+            @Html.TextBoxFor(model => model.FechaPago, new { @class = "fecha", @id = "fechaPago", @name = "fechaPago", @readonly = true })
+        </div>
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.Costo)</p>
+            @Html.TextBoxFor(model => model.Costo)
+
+            <p class="edicion">@Html.LabelFor(model => model.Responsable)</p>
+            @Html.DropDownListFor(model => model.SelectResponsable, new SelectList(Model.Responsable, "Key", "Value"), "Elija una opción")
+        </div>
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.CuentaCorriente)</p>
+            @Html.DropDownListFor(model => model.SelectCuentaCorriente, new SelectList(Model.CuentaCorriente, "Key", "Value"), "Elija una opción")
+        </div>
+
+   
+		<div class="botones">
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+				<input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"/>
+				<div class="finBotonGris"></div>
+			</div>
+			<div class="boton">
+				<div class="inicioBotonGris"></div>
+                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create")'"></input>
+				<div class="finBotonGris"></div>
+			</div>
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input type="button" class="centroBotonGris waiting" value="Planilla Viaje" onclick="location.href='@Url.Action("GenerarPlanilla")'; Actualizar();"></input>
+                <div class="finBotonGris"></div>
+            </div>
+		</div>	
+	</div>
+    }
+
+    <div id="tabs">
+        <div class="headTables medio">
+            <ul>
+                <li class="selected tabItem"><a href="#tabs-1">Envio</a></li>
+                <li class="tabItem"><a href="#tabs-2">Pendiente</a></li>
+                <li class="tabItem"><a href="#tabs-3">Finalizada</a></li>
+            </ul>
+        </div>
+        <div class="contenidoDatos">
+            <div id="tabs-1" class="tabContent">
+                <div id="envioTable">                                                                                                                                       
+                    @Html.Partial("_Envio", Model.ComisionesEnvio, new ViewDataDictionary { { "Numero", Model.ID }, { "Contacto", Model.Contacto }, { "Servicio", Model.Servicio }, { "Accion", Model.Accion }, { "FechaAlta", Model.FechaAlta }, { "FechaEnvio", Model.FechaEnvio }, { "FechaEntrega", Model.FechaEntrega }, { "FechaPago", Model.FechaPago }, { "Costo", Model.Costo }, { "IdResponsable", Model.SelectResponsable }, { "IdCuentaCorriente", Model.SelectCuentaCorriente } })
+                </div>
+            </div>
+            <div id="tabs-2" class="tabContent">
+                <div id="pendienteTable">
+                    @Html.Partial("_EnProgreso", Model.ComisionesPendientes , new ViewDataDictionary { { "Numero", Model.ID }, { "Contacto", Model.Contacto }, { "Servicio", Model.Servicio }, { "Accion", Model.Accion }, { "FechaAlta", Model.FechaAlta }, { "FechaEnvio", Model.FechaEnvio }, { "FechaEntrega", Model.FechaEntrega }, { "FechaPago", Model.FechaPago }, { "Costo", Model.Costo }, { "IdResponsable", Model.SelectResponsable }, { "IdCuentaCorriente", Model.SelectCuentaCorriente } })
+                </div>
+            </div>
+            <div id="tabs-3" class="tabContent">
+                <div id="finalizadaTable">
+                    @Html.Partial("_Finalizadas", Model.ComisionesFinalizadas, new ViewDataDictionary { { "Numero", Model.ID }, { "Contacto", Model.Contacto }, { "Servicio", Model.Servicio }, { "Accion", Model.Accion }, { "FechaAlta", Model.FechaAlta }, { "FechaEnvio", Model.FechaEnvio }, { "FechaEntrega", Model.FechaEntrega }, { "FechaPago", Model.FechaPago }, { "Costo", Model.Costo }, { "IdResponsable", Model.SelectResponsable }, { "IdCuentaCorriente", Model.SelectCuentaCorriente } })
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+    </div>
+    <div class="contenidoDatosError">
+        <p>@Html.ValidationMessageFor(model => model.ID)</p>
+        <p>@Html.ValidationMessageFor(model => model.Contacto)</p>
+        <p>@Html.ValidationMessageFor(model => model.Servicio)</p>
+        <p>@Html.ValidationMessageFor(model => model.Accion)</p>
+        <p>@Html.ValidationMessageFor(model => model.FechaAlta)</p>
+        <p>@Html.ValidationMessageFor(model => model.FechaEnvio)</p>
+        <p>@Html.ValidationMessageFor(model => model.FechaEntrega)</p>
+        <p>@Html.ValidationMessageFor(model => model.FechaPago)</p>
+        <p>@Html.ValidationMessageFor(model => model.Costo)</p>
+        <p>@Html.ValidationMessageFor(model => model.Responsable)</p>
+        <p>@Html.ValidationMessageFor(model => model.CuentaCorriente)</p>
+    </div>
+    <div id="Error" class="contenidoDatosError">
+    </div>
+ </div>
+
+<script>
+    $(document).ready(function () {
+        addEventToEnvio();
+    });
+
+    function addEventToEnvio()
+    {
+        $("#envioTable [class='check-box']").change(function () {
+            addEnvio();
+        });
+
+        disableSpinner();
+    }
+
+    function addEnvio()
+    {
+        //Tr perteneciente al pasajero a modificar
+        var contexto = $(event.target).closest("tr");
+
+        //Obtengo la informacion del pasajero que se esta actualizando
+        var datos = {
+            "idComision": $("[name*='item.ID']", contexto).val(),
+            "Enviar": $("[name*='item.Enviar']:checked", contexto).length,
+        };
+
+        $.ajax({
+            async: false,
+            url: '/Comision/setEnvio',
+            type: 'POST',
+            data: datos,
+            dataType: "html",
+            success: function (data) { disableSpinner(); },
+            error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al registrar el pago o la asistencia del pasajero."); ErrorClose = true; }
+        });
+        $(this).closest("tr")
+    }
+
+    function Actualizar()
+    {
+        setTimeout(function () {
+            window.location.reload(1);
+            }, 5000);
+    }
+</script>
+    

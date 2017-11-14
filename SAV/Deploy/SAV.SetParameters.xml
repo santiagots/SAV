@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <setParameter name="IIS Web Application Name" value="Cinderella" />
-  <setParameter name="SAVContext-Web.config Connection String" value="Data Source=localhost;Initial Catalog=sav;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" />
-</parameters>

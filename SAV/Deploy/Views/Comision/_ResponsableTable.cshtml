@@ -1,0 +1,40 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.ComisionResponsable>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingResponsable", new { pageNumber = page })
+, PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                             , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "TableResponsables" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Resultado</p>
+            <a id="Busqueda" name="Busqueda" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type39"><p>Apellido</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type39"><p>Nombre</p><span class="ordenamiento"></span></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+{
+    <tr class="Responsables" data-responsable-id="@item.ID" data-responsable-apellido="@item.Apellido" data-responsable-nombre="@item.Nombre">
+        <td class="type2 type39"><p>@Html.DisplayFor(modelItem => item.Apellido)</p></td>
+        <td class="type2 type39"><p>@Html.DisplayFor(modelItem => item.Nombre)</p></td>
+        <td class=" type5">
+            <a onclick="SpinnerPopUp(); deleteResponsable(@item.ID);"><span id="Span43" class="action retirar" title="Eliminar" /></a>
+        </td>
+    </tr>
+}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

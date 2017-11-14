@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "";
+}
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/custom")
+@Scripts.Render("~/bundles/Waiting")
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(false)
+
+        <div class="headTables selected">
+            <p>Buscar</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">Fecha Desde:</p>
+                <input type="text" class="fecha" id="fechaDesde" name="fechaDesde" readonly="readonly" />
+
+                <p class="edicion">Fecha Hasta:</p>
+                <input type="text" class="fecha" id="fechaHasta" name="fechaHasta" readonly="readonly" />
+            </div>
+
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="buscar" class="centroBotonGris waiting" type="submit" value="Exportar" />
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+    }

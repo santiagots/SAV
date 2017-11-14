@@ -1,0 +1,310 @@
+﻿@model SAV.Models.ClienteViewModel
+@using SAV.Models
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm((string)ViewBag.Action, "Cliente", new { @idViaje = ViewBag.IdViaje }))
+{
+    @Html.ValidationSummary(true)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Datos del Cliente</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Apellido)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Apellido)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Nombre)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Nombre)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DNI)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.DNI)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Telefono)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Telefono)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Sexo)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Sexo, from c in Enum.GetNames(typeof(SAV.Models.Sexo))
+                                                            select new SelectListItem
+                                                            {
+                                                                Text = c,
+                                                                Value = c
+                                                            }, "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Edad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.Edad, from c in Enum.GetNames(typeof(SAV.Models.Edad))
+                                                           select new SelectListItem
+                                                           {
+                                                               Text = c,
+                                                               Value = c
+                                                           }, "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Nacionalidad)<b>(*)</b></p>
+                @Html.EditorFor(model => model.Nacionalidad)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Email)</p>
+                @Html.EditorFor(model => model.Email)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Estudiante)</p>
+                @Html.EditorFor(model => model.Estudiante)
+            </div>
+
+        </div>
+        <div class="headTables medio">
+            <p>Domicilio Principal</p>
+        </div>
+        <div class="contenidoDatos" id="DomicilioPrincipal">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaPrincipal)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvinciaPrincipal, new SelectList(Model.ProvinciaPrincipal, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadPrincipal)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidadPrincipal, new SelectList(Model.LocalidadPrincipal, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePrincipal)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CallePrincipal)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumeroPrincipal)<b>(*)</b></p>
+                @Html.EditorFor(model => model.CalleNumeroPrincipal)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePisoPrincipal)</p>
+                @Html.EditorFor(model => model.CallePisoPrincipal)
+            </div>
+        </div>
+        @if (ViewBag.Servicio == ViajeTipoServicio.Directo)
+        {
+            <div class="headTables medio">
+                <p>Domicilio Otros</p>
+            </div>
+            <div class="contenidoDatos" id="domicilioOtros" >
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaOtros)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.SelectProvinciaOtros, new SelectList(Model.ProvinciaOtros, "Key", "Value"), "Elija una opción")
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadOtros)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.SelectLocalidadOtros, new SelectList(Model.LocalidadOtros, "Key", "Value"), "Elija una opción")
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleOtros)<b>(*)</b></p>
+                    @Html.EditorFor(model => model.CalleOtros)
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumeroOtros)<b>(*)</b></p>
+                    @Html.EditorFor(model => model.CalleNumeroOtros)
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePisoOtros)</p>
+                    @Html.EditorFor(model => model.CallePisoOtros)
+                </div>
+            </div>
+        }
+        @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
+        {
+            <div class="headTables medio">
+                <p>Domicilio Secundario</p>
+            </div>
+            <div class="contenidoDatos">
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaSecundaria)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.SelectProvinciaSecundaria, new SelectList(Model.ProvinciaSecundaria, "Key", "Value"), "Elija una opción")
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadSecundaria)<b>(*)</b></p>
+                    @Html.DropDownListFor(model => model.SelectLocalidadSecundaria, new SelectList(Model.LocalidadSecundaria, "Key", "Value"), "Elija una opción")
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleSecundaria)<b>(*)</b></p>
+                    @Html.EditorFor(model => model.CalleSecundaria)
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CalleNumeroSecundaria)<b>(*)</b></p>
+                    @Html.EditorFor(model => model.CalleNumeroSecundaria)
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.CallePisoSecundaria)</p>
+                    @Html.EditorFor(model => model.CallePisoSecundaria)
+                </div>
+            </div>
+        }
+        <div class="contenidoDatos">
+
+            @if (ViewBag.IdViaje == null)
+            {
+                <div class="botones">
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="Guardar" class="centroBotonGris waiting" type="submit" value="Guardar" />
+                        <div class="finBotonGris"></div>
+                    </div>
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search")    '" ></input>
+                        <div class="finBotonGris"></div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="footerTables"></div>
+        @if (ViewBag.IdViaje != null)
+        {
+            <div class="headTables selected">
+                <p>Datos del Viaje @ViewBag.Servicio</p>
+            </div>
+            <div class="contenidoDatos">
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Vendedor)</p>
+                    @Html.TextBoxFor(model => model.Vendedor, new { @disabled = "disabled" })
+                </div>
+
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Origen)</p>
+                    @Html.TextBoxFor(model => model.Origen, new { @disabled = "disabled" })
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Destino)</p>
+                    @Html.TextBoxFor(model => model.Destino, new { @disabled = "disabled" })
+                </div>
+
+                @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
+                {
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        @Html.TextBoxFor(model => model.Costo)
+                    </div>
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaAscenso)</p>
+                        @Html.DropDownListFor(model => model.SelectServicioPuertaAscenso, new SelectList(Model.ServicioPuertaAscenso, "Key", "Value"), "Elija una opción")
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaDescenso)</p>
+                        @Html.DropDownListFor(model => model.SelectServicioPuertaDescenso, new SelectList(Model.ServicioPuertaDescenso, "Key", "Value"), "Elija una opción")
+                    </div>
+                }
+                @if (ViewBag.Servicio == ViajeTipoServicio.Directo)
+                {
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        @Html.TextBoxFor(model => model.Costo)
+                    </div>
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoAscenso)</p>
+                        @Html.DropDownListFor(model => model.SelectServicioDirectoAscenso, new SelectList(Model.ServicioDirectoAscenso, "Key", "Value"), "Elija una opción")
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoDescenso)</p>
+                        @Html.DropDownListFor(model => model.SelectServicioDirectoDescenso, new SelectList(Model.ServicioDirectoDescenso, "Key", "Value"), "Elija una opción")
+                    </div>
+                    
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.AscensoDomicilioPrincipal)</p>
+                        @Html.EditorFor(model => model.AscensoDomicilioPrincipal)
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.DescensoDomicilioPrincipal)</p>
+                        @Html.EditorFor(model => model.DescensoDomicilioPrincipal)
+                    </div>
+                    
+                    <div class="datosInputs">
+                        <p class="edicion obligatorio" style="width:377px;" ></p>
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.DescensoDomicilioOtros)</p>
+                        @Html.EditorFor(model => model.DescensoDomicilioOtros)
+                    </div>
+                }
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)</p>
+                    @Html.EditorFor(model => model.Pago)
+                </div>
+                <div class="botones">
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="Guardar" class="centroBotonGris waiting" type="submit" value="Guardar" />
+                        <div class="finBotonGris"></div>
+                    </div>
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+
+                        @if (!string.IsNullOrEmpty(ViewBag.From))
+                        {
+                            <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action(ViewBag.From, "Viaje", new { id = ViewBag.IdViaje })'" ></input>
+                        }
+                        else
+                        {
+                            <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search", new { IdViaje = ViewBag.IdViaje })    '" ></input>
+                        }
+                        <div class="finBotonGris"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footerTables"></div>
+        }
+
+        <!-- RESULTADO TABLES -->
+        <div id="ViajesCliente">
+            @Html.Partial("_ViajesTable", Model.Viajes)
+        </div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.Apellido)</p>
+            <p>@Html.ValidationMessageFor(model => model.Nombre)</p>
+            <p>@Html.ValidationMessageFor(model => model.DNI)</p>
+            <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
+            <p>@Html.ValidationMessageFor(model => model.Sexo)</p>
+            <p>@Html.ValidationMessageFor(model => model.Edad)</p>
+            <p>@Html.ValidationMessageFor(model => model.Nacionalidad)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidadPrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectProvinciaPrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.CallePrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.CalleNumeroPrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.CallePisoPrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.Email)</p>
+            <p>@Html.ValidationMessageFor(model => model.Costo)</p>
+            @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
+            {
+                <p>@Html.ValidationMessageFor(model => model.SelectLocalidadSecundaria)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectProvinciaSecundaria)</p>
+                <p>@Html.ValidationMessageFor(model => model.CalleSecundaria)</p>
+                <p>@Html.ValidationMessageFor(model => model.CalleNumeroSecundaria)</p>
+                <p>@Html.ValidationMessageFor(model => model.CallePisoSecundaria)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectServicioPuertaAscenso)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectServicioPuertaDescenso)</p>
+            }
+            @if (ViewBag.Servicio == ViajeTipoServicio.Directo)
+            {
+                <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoAscenso)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoDescenso)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectLocalidadOtros)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectProvinciaOtros)</p>
+                <p>@Html.ValidationMessageFor(model => model.CalleOtros)</p>
+                <p>@Html.ValidationMessageFor(model => model.CalleNumeroOtros)</p>
+                <p>@Html.ValidationMessageFor(model => model.CallePisoOtros)</p>
+            }
+            <p>@Html.ValidationMessage("MaxPlace")</p>
+            <p>@Html.ValidationMessage("ClientCreateMaxPlace")</p>
+        </div>
+        <div id="Error" class="contenidoDatosError">
+        </div>
+    </div>
+    
+    <input type="hidden" id="IdViaje" value="@ViewBag.IdViaje" />
+    <input type="hidden" id="FechaSalida" value="@Model.FechaSalida" />
+    <input type="hidden" id="Servicio" value="@ViewBag.Servicio" />
+}
+
+@section Scripts {
+
+    <script src="/Scripts/ClienteCreate.js"></script>
+}
+

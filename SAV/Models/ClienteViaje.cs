@@ -37,5 +37,7 @@ namespace SAV.Models
         public bool Presente { get; set; }
 
         public string Vendedor { get; set; }
+
+        public string VendedorCobro { get; set; }
     }
 }
