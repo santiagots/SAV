@@ -14,10 +14,14 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Web.Security;
+using SAV.Filters;
+using System.Data.Objects;
 
 namespace SAV.Controllers
 {
     [Authorize]
+    [InitializeSimpleMembership]
     public class ViajeController : Controller
     {
         private SAVContext db = new SAVContext();
@@ -33,10 +37,10 @@ namespace SAV.Controllers
             ViewBag.IdViaje = id;
 
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
-            List<Localidad> localidad = db.Localidades.ToList<Localidad>();
+            List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad, provincia);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia);
 
             return View(detailsViajeViewModel);
         }
@@ -53,10 +57,11 @@ namespace SAV.Controllers
             ViewBag.IdViaje = id;
 
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
-            List<Localidad> localidad = db.Localidades.ToList<Localidad>();
+            List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
+            List<TipoGasto> TipoGasto = db.TipoGasto.ToList<TipoGasto>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, localidad, provincia);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia, TipoGasto);
 
             return View(detailsViajeViewModel);
         }
@@ -85,10 +90,10 @@ namespace SAV.Controllers
             Viaje viaje = db.Viajes.Find(idViaje);
 
             List<Conductor> conductores = db.Conductores.ToList<Conductor>();
-            List<Localidad> localidades = db.Localidades.ToList<Localidad>();
+            List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
 
-            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, localidades, provincias);
+            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, destinos, provincias);
 
             db.Entry(viaje).State = EntityState.Modified;
             db.SaveChanges();
@@ -98,10 +103,10 @@ namespace SAV.Controllers
         public ActionResult Create()
         {
             var conductores = db.Conductores.ToList<Conductor>();
-            var localidades = db.Localidades.ToList<Localidad>();
+            var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var provincias = db.Provincias.ToList<Provincia>();
 
-            var CreateViajeViewModel = new CreateViajeViewModel(conductores, localidades, provincias);
+            var CreateViajeViewModel = new CreateViajeViewModel(conductores, destinos, provincias);
 
             return View(CreateViajeViewModel);
         }
@@ -109,11 +114,11 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Create(CreateViajeViewModel createViajeViewModel)
         {
-            var localidades = db.Localidades.ToList<Localidad>();
+            var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var conductores = db.Conductores.ToList<Conductor>();
             var provincias = db.Provincias.ToList<Provincia>();
 
-            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, localidades, provincias);
+            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, destinos, provincias);
 
             foreach (Viaje v in viaje)
                 db.Viajes.Add(v);
@@ -147,14 +152,10 @@ namespace SAV.Controllers
 
         public ActionResult Search()
         {
-            var viajes = db.Viajes.ToList<Viaje>();
-            var localidades = db.Localidades.ToList<Localidad>();
+            var viajesActivos = db.Viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now) >= 0 && x.Estado == ViajeEstados.Abierto);
+            var viajesFinalizados = db.Viajes.Where(x =>  x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var SearchViaje = new SearchViajeViewModel();
-
-            List<Viaje> viajesActivos = ViajeHelper.getViajesActivos(viajes);
-            List<Viaje> viajesFinalizados = ViajeHelper.getViajesFinalizados(viajes);
-
-            List<Localidad> destinos = ViajeHelper.getDestinos(localidades);
 
             SearchViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
             SearchViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
@@ -168,22 +169,18 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Search(SearchViajeViewModel searchViajeViewModel)
         {
-            var viajes = db.Viajes.ToList<Viaje>();
-            var localidades = db.Localidades.ToList<Localidad>();
             var SearchViaje = new SearchViajeViewModel();
 
-            List<Viaje> viajesActivos = ViajeHelper.getViajesActivos(viajes);
-            List<Viaje> viajesFinalizados = ViajeHelper.getViajesFinalizados(viajes);
-
-            List<Localidad> destinos = ViajeHelper.getDestinos(localidades);
+            var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
 
             SearchViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
             SearchViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
 
-            viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo, searchViajeViewModel.Cliente, searchViajeViewModel.Estado);
+            var viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(db.Viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo, searchViajeViewModel.Cliente, searchViajeViewModel.Estado);
+            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
-            SearchViaje.ViajesActivos = viajesActivos.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            SearchViaje.ViajesFinalizados = viajesFinalizados.ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            SearchViaje.ViajesActivos = viajesActivos.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            SearchViaje.ViajesFinalizados = viajesFinalizados.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             SearchViaje.SelectDestino = searchViajeViewModel.SelectDestino ?? 0;
             SearchViaje.SelectOrigen = searchViajeViewModel.SelectOrigen ?? 0;
@@ -202,6 +199,43 @@ namespace SAV.Controllers
             ViewBag.estadoViaje = searchViajeViewModel.Estado;
 
             return View("Search", SearchViaje);
+        }
+
+        public ActionResult ProgramacionTuristica(int id = 0)
+        {
+            Viaje viaje = db.Viajes.Find(id);
+            string origen;
+            string destino;
+            if (viaje.Servicio == ViajeTipoServicio.Cerrado)
+            {
+                origen = viaje.OrigenCerrado;
+                destino = viaje.DestinoCerrado;
+            }
+            else
+            {
+                origen = viaje.Origen.Nombre;
+                destino = viaje.Destino.Nombre;
+            }
+
+            ProgramacionTuristicaViewModel ProgramacionTuristicaViewModel = new ProgramacionTuristicaViewModel()
+            {
+                ViajeID = id,
+                ProgramacionTuristica = string.Format(ConfigurationManager.AppSettings["ProgramacionTuristica"], origen.ToUpper(), destino.ToUpper())
+            };
+
+            return View(ProgramacionTuristicaViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult ProgramacionTuristica(ProgramacionTuristicaViewModel programacionTuristicaViewModel)
+        {
+            Viaje viaje = db.Viajes.Find(programacionTuristicaViewModel.ViajeID);
+            viaje.ProgramacionTuristica = programacionTuristicaViewModel.ProgramacionTuristica;
+
+            db.Entry(viaje).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("ExportViajeCNRT", new { id = programacionTuristicaViewModel.ViajeID });
         }
 
         public ActionResult ExportViaje(int id)
@@ -303,7 +337,7 @@ namespace SAV.Controllers
 
             if (configuracion == null)
             {
-                configuracion = new Configuracion();
+                configuracion = new DatosEmpresa();
             }
 
             string origen = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Origen.Nombre : viaje.OrigenCerrado;
@@ -321,14 +355,14 @@ namespace SAV.Controllers
                 provincia_destino = provinciaDestino,
                 dominio = viaje.Patente,
                 dominio_suplente = viaje.PatenteSuplente,
-                tripulante_1_cuit = viaje.Conductor.CUIL != null? viaje.Conductor.CUIL.Replace("-", ""): null,
+                tripulante_1_cuit = viaje.Conductor.CUIL != null ? viaje.Conductor.CUIL.Replace("-", "") : null,
                 tripulante_1_nombre = viaje.Conductor.Nombre,
                 tripulante_1_apellido = viaje.Conductor.Apellido,
                 tripulante_1_es_chofer = "1",
                 contratante_denominacion = configuracion.ContratanteDenominacion,
-                contenido_programacion_turistica = configuracion.ContenidoProgramacionTuristica,
-                contratante_cuit = configuracion.ContrtanteCuit != null? configuracion.ContrtanteCuit.Replace("-", ""): null,
-                contratante_domicilio = (configuracion.ContratanteDomicilio != null)? string.Format("{0} {1}", configuracion.ContratanteDomicilio.Calle, configuracion.ContratanteDomicilio.Numero)  : ""
+                contenido_programacion_turistica = viaje.ProgramacionTuristica,
+                contratante_cuit = configuracion.ContrtanteCuit != null ? configuracion.ContrtanteCuit.Replace("-", "") : null,
+                contratante_domicilio = (configuracion.ContratanteDomicilio != null) ? string.Format("{0} {1}", configuracion.ContratanteDomicilio.Calle, configuracion.ContratanteDomicilio.Numero) : ""
             };
 
             List<CNRTPasajero> cnrtPasajeros = new List<CNRTPasajero>();
@@ -342,8 +376,8 @@ namespace SAV.Controllers
                     numero_documento = clienteViaje.Cliente.DNI.ToString(),
                     nombre = clienteViaje.Cliente.Nombre,
                     apellido = clienteViaje.Cliente.Apellido,
-                    sexo = clienteViaje.Cliente.Sexo == Sexo.Femenino? "F": clienteViaje.Cliente.Sexo == Sexo.Masculino? "M": "O",
-                    menor = clienteViaje.Cliente.Edad == Edad.Menor? "1": "0",
+                    sexo = clienteViaje.Cliente.Sexo == Sexo.Femenino ? "F" : clienteViaje.Cliente.Sexo == Sexo.Masculino ? "M" : "O",
+                    menor = clienteViaje.Cliente.Edad == Edad.Menor ? "1" : "0",
                     origen = origen,
                     provincia_origen = provinciaOrigen,
                     destino = destino,
@@ -430,7 +464,7 @@ namespace SAV.Controllers
                     clienteViaje.Presente = Convert.ToBoolean(presente);
                     clienteViaje.Pago = Convert.ToBoolean(pago);
                     if (Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
-                    { 
+                    {
                         clienteViaje.FechaPago = DateTime.Now;
                         clienteViaje.VendedorCobro = User.Identity.Name;
                     }
@@ -454,13 +488,14 @@ namespace SAV.Controllers
             db.SaveChanges();
         }
 
-        public ActionResult AddGasto(string razonSocial, string cuit, string nroTicket, string monto, string comentario, int idViaje)
+        public ActionResult AddGasto(int idTipoGasto, string monto, string comentario, int idViaje)
         {
+
+            TipoGasto tipoGasto = db.TipoGasto.Find(idTipoGasto);
+
             Gasto gasto = new Gasto()
             {
-                RazonSocial = razonSocial,
-                CUIT = cuit,
-                NroTicket = long.Parse(nroTicket),
+                TipoGasto = tipoGasto,
                 Monto = monto,
                 Comentario = comentario
             };
@@ -476,24 +511,6 @@ namespace SAV.Controllers
 
             return PartialView("_CierreGastosTable", viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
-
-        //public ActionResult DetailsPagingComisiones(int? IdViaje, int? pageNumber)
-        //{
-        //    ViewBag.IdViaje = IdViaje;
-
-        //    IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
-
-        //    return PartialView("_ComisionesTable", Comisiones);
-        //}
-
-        //public ActionResult CierrePagingComisiones(int? IdViaje, int? pageNumber)
-        //{
-        //    ViewBag.IdViaje = IdViaje;
-
-        //    IPagedList<Comisiones> Comisiones = ViajeHelper.getComisiones(db.Viajes.Find(IdViaje).ComisionesViaje, pageNumber.Value);
-
-        //    return PartialView("_CierreComisionesTable", Comisiones);
-        //}
 
         public ActionResult DetailsPagingPasajeros(int? IdViaje, int? pageNumber)
         {
@@ -541,7 +558,9 @@ namespace SAV.Controllers
 
             IPagedList<Viaje> viajesResult;
 
-            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(ViajeHelper.getViajesActivos(db.Viajes.ToList<Viaje>()), origen, destino, fechaSalida, servicio, codigo, nombrePasajero, estadoViaje).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            var viajesActivos = db.Viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now) >= 0 && x.Estado == ViajeEstados.Abierto);
+
+            viajesResult = ViajeHelper.filtrarSerchViajesViewModel(viajesActivos, origen, destino, fechaSalida, servicio, codigo, nombrePasajero, estadoViaje).OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesAbiertosTable", viajesResult);
         }
@@ -550,7 +569,8 @@ namespace SAV.Controllers
         {
             IPagedList<Viaje> viajesResult;
 
-            viajesResult = ViajeHelper.getViajesFinalizados(db.Viajes.ToList<Viaje>()).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            viajesResult = viajesFinalizados.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesCerradosTable", viajesResult);
         }

@@ -3,6 +3,7 @@ using SAV.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Objects;
 using System.Linq;
 using System.Web;
 
@@ -27,84 +28,44 @@ namespace SAV.Common
             return DateTime.ParseExact(fechaSalida, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public static List<Viaje> getViajesActivos(List<Viaje> viajes)
-        {
-            return viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now) >= 0 && x.Estado == ViajeEstados.Abierto).ToList<Viaje>();
-        }
-
-        public static List<Viaje> getViajesFinalizados(List<Viaje> viajes)
-        {
-            return viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now.AddHours(4)) < 0 && x.Estado == ViajeEstados.Abierto).ToList<Viaje>();
-        }
-
-        public static List<Viaje> filtrarSerchViajesViewModel(List<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio, int? codigo, string nombrePasajero, string estadoViaje)
+        public static IQueryable<Viaje> filtrarSerchViajesViewModel(IQueryable<Viaje> viajes, int? IdOrigen, int? IdDestiono, string FechaSalida, string Servicio, int? codigo, string nombrePasajero, string estadoViaje)
         {
             if (IdOrigen.HasValue)
-                viajes = viajes.Where(x => x.Origen != null && x.Origen.ID == IdOrigen.Value).ToList<Viaje>();
+                viajes = viajes.Where(x => x.Origen != null && x.Origen.ID == IdOrigen.Value);
 
             if (IdDestiono.HasValue)
-                viajes = viajes.Where(x => x.Destino != null && x.Destino.ID == IdDestiono.Value).ToList<Viaje>();
+                viajes = viajes.Where(x => x.Destino != null && x.Destino.ID == IdDestiono.Value);
 
             if (!string.IsNullOrEmpty(FechaSalida))
             {
                 DateTime fecha = ViajeHelper.getFecha(FechaSalida);
-                viajes = viajes.Where(x => x.FechaSalida.Day == fecha.Day && x.FechaSalida.Month == fecha.Month && x.FechaSalida.Year == fecha.Year).ToList<Viaje>();
+                viajes = viajes.Where(x => x.FechaSalida.Day == fecha.Day && x.FechaSalida.Month == fecha.Month && x.FechaSalida.Year == fecha.Year);
             }
 
             if (!string.IsNullOrEmpty(Servicio))
             {
-                viajes = viajes.Where(x => x.Servicio.ToString() == Servicio).ToList<Viaje>();
+                ViajeTipoServicio servicio = (ViajeTipoServicio)Enum.Parse(typeof(ViajeTipoServicio), Servicio);
+                viajes = viajes.Where(x => x.Servicio == servicio);
             }
 
             if (codigo.HasValue && codigo.Value > 0)
             {
-                viajes = viajes.Where(x => x.ID == codigo.Value).ToList<Viaje>();
+                viajes = viajes.Where(x => x.ID == codigo.Value);
             }
 
             if (!string.IsNullOrEmpty(nombrePasajero))
             {
-                viajes = viajes.Where(x => x.ClienteViaje.Any(y => y.Cliente.Nombre.ToUpper().ToString().Contains(nombrePasajero) || y.Cliente.Apellido.ToUpper().ToString().Contains(nombrePasajero))).ToList<Viaje>();
+                viajes = viajes.Where(x => x.ClienteViaje.Any(y => y.Cliente.Nombre.ToUpper().Contains(nombrePasajero.ToUpper()) || y.Cliente.Apellido.ToUpper().Contains(nombrePasajero.ToUpper())));
             }
 
             if (!string.IsNullOrEmpty(estadoViaje))
             {
-                viajes = viajes.Where(x => x.Estado.ToString() == estadoViaje).ToList<Viaje>();
+                ViajeEstados estado = (ViajeEstados)Enum.Parse(typeof(ViajeEstados), estadoViaje);
+                viajes = viajes.Where(x => x.Estado == estado);
             }
 
             return viajes;
         }
-
-        public static List<Localidad> getDestinos(List<Localidad> localidades)
-        {
-            return localidades.Where(x => x.Parada != null && x.Parada.Count > 0).ToList<Localidad>();
-        }
-
-        //public static List<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje)
-        //{
-        //    return ComisionesViaje.Select(x => new Comisiones()
-        //                                            {
-        //                                                ComisionID = x.Comision.ID,
-        //                                                ComisionViajeID = x.ID,
-        //                                                Responsable = x.Comision.Responsable != null? x.Comision.Responsable.Apellido + " " + x.Comision.Responsable.Nombre: "No definido",
-        //                                                Contacto = x.Comision.Contacto,
-        //                                                Telefono = x.Comision.Telefono,
-        //                                                Accion = x.Comision.Accion,
-        //                                                Servicio = x.Comision.Servicio,
-        //                                                EntregarPuerta = x.Comision.DomicilioEntregar != null ? x.Comision.DomicilioEntregar.getDomicilio : string.Empty,
-        //                                                RetirarPuerta = x.Comision.DomicilioRetirar != null ? x.Comision.DomicilioRetirar.getDomicilio : string.Empty,
-        //                                                EntregarDirecto = x.Entregar != null ? x.Entregar.Nombre : string.Empty,
-        //                                                RetirarDirecto = x.Retirar != null ? x.Retirar.Nombre : string.Empty,
-        //                                                Costo = x.Comision.Costo.ToString(),
-        //                                                Comentaro = x.Comision.Comentario,
-        //                                                Pago = x.Pago,
-        //                                                EntregaRetira = x.EntregaRetira
-        //                                            }).ToList<Comisiones>();
-        //}
-
-        //public static IPagedList<Comisiones> getComisiones(List<ComisionViaje> ComisionesViaje, int pageNumber)
-        //{
-        //    return getComisiones(ComisionesViaje).ToPagedList<Comisiones>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-        //}
 
         public static List<Pasajeros> getPasajeros(List<ClienteViaje> ClienteViaje)
         {

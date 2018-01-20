@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 
 namespace SAV.Common
 {
@@ -63,7 +64,7 @@ namespace SAV.Common
             balance.Veiculos.Add(balanceVeiculoViewModel);
 
             var grupoConductores = viajes.GroupBy(x => x.Conductor != null? x.Conductor.ID:-1).ToList();
-            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.RazonSocial);
+            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.TipoGasto.Descripcion);
             var grupoPasajeros = viajes.GroupBy(x => new { x.Servicio, x.Patente }).ToList();
 
             foreach (var item in grupoPasajeros)
@@ -108,7 +109,7 @@ namespace SAV.Common
 
                 balanceVeiculoViewModel.Items.Add(new ItemBalanceViewModel()
                 {
-                    Concepto = string.Format("Gastos {0} {1} ({2})", gasto.RazonSocial, gasto.CUIT, item.Count()),
+                    Concepto = string.Format("Gastos {0} ({1})", item.Key, item.Count()),
                     Importe = item.Sum(x => -decimal.Parse(x.Monto))
                 });
             }
@@ -123,7 +124,7 @@ namespace SAV.Common
             CierreCajaViewModel balance = new CierreCajaViewModel();
 
             var grupoConductores = viajes.GroupBy(x => x.Conductor != null ? x.Conductor.ID : -1).ToList();
-            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.RazonSocial);
+            var grupoGastos = viajes.SelectMany(x => x.Gastos).GroupBy(y => y.TipoGasto.Descripcion);
 
             List<Viaje> viajesAuxiliar = new List<Viaje>();
 
@@ -172,7 +173,7 @@ namespace SAV.Common
 
                 balance.Gastos.Add(new ItemBalanceViewModel()
                 {
-                    Concepto = string.Format("Gastos {0} {1} ({2})", gasto.RazonSocial, gasto.CUIT, item.Count()),
+                    Concepto = string.Format("Gastos {0} ({1})", gasto.TipoGasto.Descripcion, item.Count()),
                     Importe = item.Sum(x => -decimal.Parse(x.Monto))
                 });
             }
@@ -330,11 +331,14 @@ namespace SAV.Common
             return viajes.Where(x => x.FechaArribo.Day == fecha.Day && x.FechaArribo.Month == fecha.Month && x.FechaArribo.Year == fecha.Year && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
         }
 
-        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<ClienteViaje> clienteViaje)
+        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<ClienteViaje> clienteViaje, String[] Rol, String Usuario)
         {
             BalanceVendedorDiarioViewModel balance = new BalanceVendedorDiarioViewModel();
-
-            var grupoVendedores = clienteViaje.GroupBy(x => x.VendedorCobro);
+            List<IGrouping<string, ClienteViaje>> grupoVendedores;
+            if (Rol.Contains("Administrador"))
+                grupoVendedores = clienteViaje.GroupBy(x => x.VendedorCobro).ToList();
+            else
+                grupoVendedores = clienteViaje.Where(x => x.VendedorCobro == Usuario).GroupBy(x => x.VendedorCobro).ToList();
 
             foreach (var vendedor in grupoVendedores)
             {
@@ -345,14 +349,25 @@ namespace SAV.Common
                     Items = new List<ItemBalanceVendedorViewModel>()
                 };
 
-                foreach (var item in vendedor)
+                var Grupospagos = vendedor.GroupBy(x => x.FormaPago).ToList();
+
+                foreach (var pagos in Grupospagos)
                 {
+                    foreach (var item in pagos)
+                    { 
+                        balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                        {
+                            Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", item.Cliente.Apellido, item.Cliente.Nombre, item.Viaje.ID, item.Viaje.FechaSalida, item.Viaje.Servicio),
+                            Monto = item.Costo
+                        });
+                    }
+
                     balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
                     {
-                        Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", item.Cliente.Apellido, item.Cliente.Nombre, item.Viaje.ID, item.Viaje.FechaSalida, item.Viaje.Servicio),
-                        Monto = item.Costo
+                        Concepto = string.Format("Sub Total ({0})", pagos.Key!=null? pagos.Key.Descripcion: string.Empty),
+                        Monto = pagos.Sum(x => x.Costo)
                     });
-                    balanceVendedor.total += item.Costo;
+                    balanceVendedor.total += pagos.Sum(x => x.Costo);
                 }
 
                 balance.BalanceVendedor.Add(balanceVendedor);

@@ -18,16 +18,10 @@
             <table id="tablaParts" class="tablesorter">
                 <thead>
                     <tr class="headTitles noBorder">
-                        <th class="type2 type203">
-                            <p>@Html.DisplayNameFor(model => model.First().RazonSocial)</p>
+                        <th class="type2 type39">
+                            <p>@Html.DisplayNameFor(model => model.First().TipoGasto)</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type2 type140">
-                            <p>@Html.DisplayNameFor(model => model.First().CUIT)</p>
-                            <span class="ordenamiento"></span></th>
-                        <th class="type2 type140">
-                            <p>@Html.DisplayNameFor(model => model.First().NroTicket)</p>
-                            <span class="ordenamiento"></span></th>
-                         <th class="type2 type140">
+                         <th class="type2 type57">
                             <p>@Html.DisplayNameFor(model => model.First().Monto)</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type39">
@@ -41,16 +35,10 @@
                     @for (int i = 0; i < Model.Count; i++)
                     {
                         <tr>
-                            <td class="type2 type203">
-                                <p>@Html.DisplayFor(m => m[i].RazonSocial)</p>
+                            <td class="type2 type39">
+                                <p>@Html.DisplayFor(m => m[i].TipoGasto.Descripcion)</p>
                             </td>
-                            <td class="type2 type140">
-                                <p>@Html.DisplayFor(m => m[i].CUIT)</p>
-                            </td>
-                            <td class="type2 type140">
-                                <p>@Html.DisplayFor(m => m[i].NroTicket)</p>
-                            </td>
-                            <td class="type2 type140">
+                            <td class="type2 type57">
                                 <p>@Html.DisplayFor(m => m[i].Monto)</p>
                             </td>
                             <td class="type2 type39">

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Cinderella" />
+  <setParameter name="SAVContext-Web.config Connection String" value="Data Source=SQL5002.SmarterASP.NET;Initial Catalog=DB_9B1463_sav;User Id=DB_9B1463_sav_admin;Password=matambre64;" />
+</parameters>

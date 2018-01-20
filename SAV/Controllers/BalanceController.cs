@@ -7,6 +7,7 @@ using SAV.Models;
 using SAV.Common;
 using System.Configuration;
 using System.Data.Objects;
+using System.Web.Security;
 
 namespace SAV.Controllers
 {
@@ -25,11 +26,6 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult CierreCaja(CierreCajaViewModel cierreCajaViewModel)
         {
-            if (!cierreCajaViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
-            {
-                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
-                return View(cierreCajaViewModel);
-            }
             DateTime fecha = ViajeHelper.getFecha(cierreCajaViewModel.Fecha);
             if (string.IsNullOrEmpty(cierreCajaViewModel.FechaHasta))
             {
@@ -64,11 +60,6 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Viaje(BalanceViajeDiarioViewModel balanceViewModel)
         {
-            if (!balanceViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
-            {
-                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
-                return View(balanceViewModel);
-            }
             DateTime fecha = ViajeHelper.getFecha(balanceViewModel.Fecha);
 
             if (string.IsNullOrEmpty(balanceViewModel.FechaHasta))
@@ -96,24 +87,20 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Vendedor(BalanceVendedorDiarioViewModel balanceViewModel)
         {
-            if (!balanceViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
-            {
-                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
-                return View(balanceViewModel);
-            }
             DateTime fecha = ViajeHelper.getFecha(balanceViewModel.Fecha);
+            List<ClienteViaje> ClienteViaje = new List<Models.ClienteViaje>();
 
             if (string.IsNullOrEmpty(balanceViewModel.FechaHasta))
             {
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
+               ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
             }
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(balanceViewModel.FechaHasta);
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
+                ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
             }
+
+            balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name);
 
             return View(balanceViewModel);
         }
@@ -128,11 +115,6 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Comision(BalanceComisionDiarioViewModel balanceComisionDiarioViewModel)
         {
-            if (!balanceComisionDiarioViewModel.Clave.Equals(ConfigurationManager.AppSettings["ClaveReporte"]))
-            {
-                ModelState.AddModelError("", "La clave ingresada es incorrecta.");
-                return View(balanceComisionDiarioViewModel);
-            }
             DateTime fecha = ViajeHelper.getFecha(balanceComisionDiarioViewModel.Fecha);
             if (string.IsNullOrEmpty(balanceComisionDiarioViewModel.FechaHasta))
             {
@@ -266,12 +248,12 @@ namespace SAV.Controllers
         {
             DateTime fecha = ViajeHelper.getFecha(fechaBusqueda);
             BalanceVendedorDiarioViewModel balanceViewModel;
+            List<ClienteViaje> ClienteViaje = new List<Models.ClienteViaje>();
             string name;
 
             if (string.IsNullOrEmpty(fechaHastaBusqueda))
             {
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
+                ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList<ClienteViaje>();
                 name = String.Format("Reporte_Dia_Viajes{0}", fecha.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Cierre día {0}", fecha.ToString("dd/MM/yyyy"));
             }
@@ -279,11 +261,12 @@ namespace SAV.Controllers
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
-                balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje);
+                ClienteViaje = db.ClienteViajes.Where(x => x.Pago && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && EntityFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList<ClienteViaje>();
                 name = String.Format("Consolidado_Vendedores{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Consolidado Vendedores desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
             }
+
+            balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name);
 
             Response.AddHeader("content-disposition", "attachment;filename=" + name + ".xls");
             Response.ContentType = "application/vnd.ms-excel";

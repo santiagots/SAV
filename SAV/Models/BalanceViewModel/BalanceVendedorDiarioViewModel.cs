@@ -15,10 +15,6 @@ namespace SAV.Models
         [Display(Name = "Fecha Hasta:")]
         public string FechaHasta { get; set; }
 
-        [Display(Name = "Clave:")]
-        [Required(ErrorMessage = "Debe ingresar una Clave")]
-        public string Clave { get; set; }
-
         public List<BalanceVendedorViewModel> BalanceVendedor { get; set; }
 
         public BalanceVendedorDiarioViewModel()

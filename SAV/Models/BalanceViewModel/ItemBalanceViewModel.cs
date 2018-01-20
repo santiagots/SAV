@@ -23,7 +23,7 @@ namespace SAV.Models
         public ItemBalanceViewModel(Viaje viaje)
         {
             IdViaje = viaje.ID;
-            if (viaje.Servicio != ViajeTipoServicio.Cerrado)
+            if (viaje.Servicio == ViajeTipoServicio.Cerrado)
             {
                 Concepto = String.Format("Pasajeros ({0})", getTotalPasajerosViajaron(viaje));
                 Importe = viaje.CostoCerrado;
@@ -47,7 +47,7 @@ namespace SAV.Models
 
         public ItemBalanceViewModel(Gasto gasto)
         {
-            Concepto = String.Format("Gasto {0} {1}", gasto.RazonSocial, gasto.CUIT);
+            Concepto = String.Format("Gasto {0}", gasto.TipoGasto.Descripcion);
             Importe = -decimal.Parse(gasto.Monto);
         }
 

@@ -1,0 +1,38 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.FormaPago>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingFormaPago", new { pageNumber = page })
+, PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                                                             , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "TableFormaPago" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Resultado</p>
+            <a id="Busqueda" name="Busqueda" href="#" class="desplegado"></a>
+        </div>
+        <div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2 type41"><p>Descripcion</p><span class="ordenamiento"></span></th>
+                        <th class="type6"><p>Habilitado</p><span class="ordenamiento"></span></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="Responsables">
+                            @Html.HiddenFor((modelItem => item.ID))
+                            <td class="type2 type41"><p>@Html.DisplayFor(modelItem => item.Descripcion)</p></td>
+                            <td class="type6"><p>@Html.CheckBoxFor(modelItem => item.Habilitado)</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -15,10 +15,6 @@ namespace SAV.Models
         [Display(Name = "Fecha Hasta:")]
         public string FechaHasta { get; set; }
 
-        [Display(Name = "Clave:")]
-        [Required(ErrorMessage = "Debe ingresar una Clave")]
-        public string Clave { get; set; }
-
         public List<ItemBalanceComisionViewModel> Comisiones { get; set; }
         public List<ItemBalanceComisionViewModel> Gastos { get; set; }
         public decimal totalComision { get; set; }

@@ -1,0 +1,75 @@
+﻿@model SAV.Models.FormaPagoViewModel
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Tipos de Gastos</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs xxl">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.FormaPago)
+            </div>
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="Guardar" class="centroBotonGris waiting" type="submit" value="Guardar"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+        <!-- RESULTADO TABLES -->
+        <div id="TableFormaPago">
+            @Html.Partial("_FormaPagoTable", Model.FormaPagos)
+        </div>
+
+        <div id="ErrorResponsable" class="contenidoDatosError">
+        </div>
+    </div>
+}
+<div class="contenidoDatosError">
+    <p>@Html.ValidationMessageFor(model => model.FormaPago)</p>
+</div>
+<div id="Error" class="contenidoDatosError">
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $("#TableFormaPago [type='checkbox']").change(function () {
+            actualizarHabilitado();
+        });
+
+        disableSpinner();
+    })
+
+    function actualizarHabilitado() {
+        //Tr perteneciente al tipoGasto a modificar
+        var contexto = $(event.target).closest("tr");
+        var datos = {
+            "FormaPagoID": $("[name*='ID']", contexto).val(),
+            "Habilitado": $("[name*='Habilitado']:checked", contexto).length,
+        };
+
+        $.ajax({
+            async: false,
+            url: '/Configuracion/setHabilitadoFormaPago',
+            type: 'POST',
+            data: datos,
+            dataType: "html",
+            success: function (data) { disableSpinner(); },
+            error: function (error) { addError(error, "setHabilitadoTipoGasto", "Hubo un error al modificar el tipo de gasto."); ErrorClose = true; }
+        });
+        $(this).closest("tr")
+    }
+
+    function addError(error, displayError, mesage) {
+        if ($("#Error" + displayError).length == 0)
+            $("#Error").append("<span id='Error" + displayError + "' class='field-validation-error'><p>" + mesage + "</p></span>");
+    }
+
+    </script>
+}

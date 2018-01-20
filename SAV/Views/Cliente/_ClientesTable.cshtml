@@ -35,7 +35,7 @@
 							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type203"><p>@Html.DisplayFor(modelItem => item.DomicilioPrincipal.getDomicilio)</p></td>
 							<td class="type2 type166 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.Telefono)</p></td>
                             <td class="type2 type119" onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.getClienteViaje)</p></td>
-                            <td class=" type112">
+                            <td class="type112">
                                 <a onclick = "return confirmSpinner('Esta seguro que desea borrar el cliente?');" href="@Url.Action("DeleteCliente", new { id = item.ID, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, dni =  ViewBag.dni, telefono =  ViewBag.telefono, IdViaje = ViewBag.IdViaje})" ><span id="Span43" class="action retirar" title="Eliminar"/></a>                                
                             </td>
 						</tr>

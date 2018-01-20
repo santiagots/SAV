@@ -85,7 +85,7 @@ namespace SAV.Controllers
 
         public ActionResult Delete(int id)
         {
-            CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(id);
+            CuentaCorriente cuentaCorriente = db.CuentaCorriente.Include("Comisiones").Include("Pagos").FirstOrDefault(x => x.ID == id);
             if (cuentaCorriente == null)
             {
                 return HttpNotFound();

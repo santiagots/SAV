@@ -1,0 +1,71 @@
+﻿@model SAV.Models.CreateViewModel
+
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+@Html.ValidationSummary(true)
+<div id="content">
+    <div class="headTables selected">
+        <p>Crear Usuario</p>
+    </div>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "aa" }))
+    {
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.NewUsuario)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.NewUsuario)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.NewClave)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.NewClave)
+            </div>
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Roles)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectRol, new SelectList(Model.Roles, "Key", "Value"), "Elija una opción")
+            </div>
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="Modificar" class="centroBotonGris waiting" type="submit" value="Crear"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.NewUsuario)</p>
+            <p>@Html.ValidationMessageFor(model => model.NewClave)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectRol)</p>
+            <p>@Html.ValidationMessage("Error")</p>
+        </div>
+    }
+    <!-- RESULTADO TABLES -->
+    <div id="TableUsuarios">
+        @Html.Partial("_UsuariosTable", Model.Usuarios)
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function Abrir(Url) {
+
+            $("#input, #select").prop('disabled', true);
+
+        var $dialog = $('<div style="overflow: hidden"; "></div>')
+                       .html('<iframe style="border: 0px; " src="' + Url + '" width="100%" height="200px" scrolling="no"></iframe>')
+                       .dialog({
+                           autoOpen: false,
+                           modal: true,
+                           resizable: false,
+                           height: 'auto',
+                           width: 1010,
+                           title: "Modificar Usuario",
+                           close: function (event, ui) {
+                               location.reload();
+                           }
+                       });
+        $dialog.dialog('open');
+    }
+    </script>
+}

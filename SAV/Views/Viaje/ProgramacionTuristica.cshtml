@@ -1,0 +1,48 @@
+﻿@model SAV.Models.ProgramacionTuristicaViewModel
+@{
+    Layout = null;
+}
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/custom")
+@Scripts.Render("~/bundles/Waiting")
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Programacion Turistica</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.ViajeID)
+        @Html.ValidationSummary(true)
+        <div id="content">
+            <div class="headTables selected">
+                <p>Datos</p>
+            </div>
+            <div class="contenidoDatos">
+                <div class="datosInputs">
+                    @Html.TextAreaFor(model => model.ProgramacionTuristica, new { style = "margin-left: 12px; width: 940px;" })
+                </div>
+                <div class="botones">
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="Guardar" class="centroBotonGris waiting" onclick="$(this).closest('.ui-dialog-content').dialog('close');" type="submit" value="Exportar CNRT"></input>
+                        <div class="finBotonGris"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footerTables"></div>
+
+            <div class="contenidoDatosError">
+                <p>@Html.ValidationMessageFor(model => model.ProgramacionTuristica)</p>
+            </div>
+        </div>
+    }
+</body>
+</html>

@@ -46,7 +46,11 @@ namespace SAV.Models
 
         public DbSet<Pago> Pagos { get; set; }
 
-        public DbSet<Configuracion> Configuracion { get; set; }
+        public DbSet<DatosEmpresa> Configuracion { get; set; }
+
+        public DbSet<TipoGasto> TipoGasto { get; set; }
+
+        public DbSet<FormaPago> FormaPago { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

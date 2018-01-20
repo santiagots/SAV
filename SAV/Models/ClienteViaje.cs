@@ -28,6 +28,8 @@ namespace SAV.Models
 
         public decimal Costo { get; set; }
 
+        public virtual FormaPago FormaPago { get; set; }
+
         public bool AscensoDomicilioPrincipal { get; set; }
 
         public bool DescensoDomicilioPrincipal { get; set; }

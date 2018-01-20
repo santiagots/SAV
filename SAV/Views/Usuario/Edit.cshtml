@@ -1,0 +1,49 @@
+﻿@model SAV.Models.EditViewModel
+
+@{
+    Layout = "";
+}
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/custom")
+@Scripts.Render("~/bundles/Waiting")
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div id="content">
+        <div class="headTables selected">
+            <p>Datos Usuario</p>
+        </div>
+        @Html.HiddenFor(model => model.UsuarioID)
+        @Html.HiddenFor(model => model.RolAnterior)
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Usuario)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Usuario)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Clave)</p>
+                @Html.TextBoxFor(model => model.Clave)
+            </div>
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Roles)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectRol, new SelectList(Model.Roles, "Key", "Value"), "Elija una opción")
+            </div>
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="Crear" class="centroBotonGris waiting" type="submit" value="Modificar"></input>
+                <div class="finBotonGris"></div>
+            </div>
+        </div>
+
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.Usuario)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectRol)</p>
+            <p>@Html.ValidationMessage("Error")</p>
+        </div>
+    </div>
+}

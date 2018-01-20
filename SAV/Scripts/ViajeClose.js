@@ -45,7 +45,8 @@ function cerrar()
 }
 
     function agregarGasto()
-    {
+{
+        debugger;
         if ($("form").valid()) {
 
             enableSpinner();
@@ -56,9 +57,7 @@ function cerrar()
                 type: 'POST',
                 data:
                     {
-                        "razonSocial": $("#RazonSocial").val(),
-                        "cuit": $("#CUIT").val(),
-                        "nroTicket": $("#NroTicket").val(),
+                        "idTipoGasto": $("#NewGastos_TipoGasto").val(),
                         "monto": $("#Monto").val(),
                         "comentario": $("#Comentario").val(),
                         "idViaje": $("#viajeID").val()

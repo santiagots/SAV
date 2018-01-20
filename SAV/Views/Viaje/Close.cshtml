@@ -143,17 +143,10 @@
                     <table id="newGasto" class="tablesorter" style="height: 23px; margin-top: -10px">
                         <tbody>
                             <tr style="float: left; width: 965px">
-                                <td class="type2 type203">
-
-                                    <p>@Html.TextBoxFor(model => model.NewGastos.RazonSocial, new { id = "RazonSocial" })</p>
+                                <td class="type2 type39">
+                                    <p>@Html.DropDownListFor(model => model.NewGastos.TipoGasto, new SelectList(Model.NewGastos.TipoGasto, "Key", "Value"), "Elija una opción", new { @class = "type203" })</p>
                                 </td>
-                                <td class="type2 type140">
-                                    <p>@Html.TextBoxFor(model => model.NewGastos.CUIT, new { id = "CUIT" })</p>
-                                </td>
-                                <td class="type2 type140">
-                                    <p>@Html.TextBoxFor(model => model.NewGastos.NroTicket, new { id = "NroTicket" })</p>
-                                </td>
-                                <td class="type2 type140">
+                                <td class="type2 type57">
                                     <p>@Html.TextBoxFor(model => model.NewGastos.Monto, new { id = "Monto" })</p>
                                 </td>
                                 <td class="type2 type39">
@@ -177,9 +170,7 @@
 
 
         <div class="contenidoDatosError">
-            <p>@Html.ValidationMessageFor(model => model.NewGastos.RazonSocial)</p>
-            <p>@Html.ValidationMessageFor(model => model.NewGastos.CUIT)</p>
-            <p>@Html.ValidationMessageFor(model => model.NewGastos.NroTicket)</p>
+            <p>@Html.ValidationMessageFor(model => model.NewGastos.TipoGasto)</p>
             <p>@Html.ValidationMessageFor(model => model.NewGastos.Monto)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>

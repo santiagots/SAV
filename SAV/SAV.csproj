@@ -213,6 +213,7 @@
     <Compile Include="Common\ConductorHelper.cs" />
     <Compile Include="Common\ConvertirCVSHelper.cs" />
     <Compile Include="Common\CuentaCorrienteHelper.cs" />
+    <Compile Include="Common\UsuarioHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
@@ -224,14 +225,11 @@
     <Compile Include="Controllers\CuentaCorrienteController.cs" />
     <Compile Include="Controllers\DestinosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ViajeController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708260315206_Initial.cs" />
-    <Compile Include="Migrations\201708260315206_Initial.Designer.cs">
-      <DependentUpon>201708260315206_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -255,8 +253,14 @@
     <Compile Include="Models\Conductor.cs" />
     <Compile Include="Models\ConductorViewModel\ConductorViewModel.cs" />
     <Compile Include="Models\ConductorViewModel\SearchConductorViewModel.cs" />
-    <Compile Include="Models\Configuracion.cs" />
+    <Compile Include="Models\ConfiguracionViewModel\TipoGastoViewModel.cs" />
+    <Compile Include="Models\FormaPago.cs" />
+    <Compile Include="Models\UsuarioViewModel\EditViewModel.cs" />
+    <Compile Include="Models\UsuarioViewModel\UsuarioViewModel.cs" />
+    <Compile Include="Models\UsuarioViewModel\CreateViewModel.cs" />
+    <Compile Include="Models\DatosEmpresa.cs" />
     <Compile Include="Models\ConfiguracionViewModel\DetailsConfiguracionViewModel.cs" />
+    <Compile Include="Models\ConfiguracionViewModel\FormaPagoViewModel.cs" />
     <Compile Include="Models\CuentaCorriente.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\CuentaCorrienteViewModel.cs" />
     <Compile Include="Models\CuentaCorrienteViewModel\SearchCuentaCorrienteViewModel.cs" />
@@ -268,10 +272,13 @@
     <Compile Include="Models\Parada.cs" />
     <Compile Include="Models\Provincia.cs" />
     <Compile Include="Models\SAVContext.cs" />
+    <Compile Include="Models\TipoGasto.cs" />
     <Compile Include="Models\Viaje.cs" />
     <Compile Include="Models\ViajeViewModel\CreateViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\DetailsViajeViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceViajeDiarioViewModel.cs" />
+    <Compile Include="Models\ViajeViewModel\GastoViewModel.cs" />
+    <Compile Include="Models\ViajeViewModel\ProgramacionTuristicaViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\SearchViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\ViajeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -508,17 +515,20 @@
     <Content Include="Views\Configuracion\Details.cshtml" />
     <Content Include="Views\Balance\CierreCaja.cshtml" />
     <Content Include="Views\Balance\ExportCierreCaja.cshtml" />
+    <Content Include="Views\Viaje\ProgramacionTuristica.cshtml" />
+    <Content Include="Views\Configuracion\TipoGastos.cshtml" />
+    <Content Include="Views\Configuracion\_TipoGastosTable.cshtml" />
+    <Content Include="Views\Usuario\Create.cshtml" />
+    <Content Include="Views\Usuario\_UsuariosTable.cshtml" />
+    <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Configuracion\FormaPago.cshtml" />
+    <Content Include="Views\Configuracion\_FormaPagoTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708260315206_Initial.resx">
-      <DependentUpon>201708260315206_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

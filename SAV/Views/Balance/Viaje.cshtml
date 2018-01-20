@@ -23,12 +23,6 @@
                     @Html.TextBoxFor(model => model.FechaHasta, new { @class = "fecha", @id = "fechaHasta", @name = "fechaHasta", @readonly = true })
                 </div>
             </div>
-            <div class="datosInputs">
-                <p class="edicion">@Html.LabelFor(model => model.Clave)<b>(*)</b></p>
-                <div class="divFecha">
-                    @Html.PasswordFor(model => model.Clave)
-                </div>
-            </div>
             <div class="botones">
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
@@ -48,7 +42,6 @@
         <div class="footerTables"></div>
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.Fecha)</p>
-            <p>@Html.ValidationMessageFor(model => model.Clave)</p>
             <p>@Html.ValidationSummary(true)</p>
         </div>
     }

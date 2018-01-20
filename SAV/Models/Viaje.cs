@@ -30,6 +30,7 @@ namespace SAV.Models
         public virtual string Patente { get; set; }
         public virtual string PatenteSuplente { get; set; }
         public virtual int Interno { get; set; }
+        public virtual String ProgramacionTuristica { get; set; }
 
         public Viaje(): base()
         { }

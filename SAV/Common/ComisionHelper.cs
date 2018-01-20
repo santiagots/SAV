@@ -15,7 +15,7 @@ namespace SAV.Common
                 comisiones = comisiones.Where(x => x.ID == int.Parse(ID)).ToList<Comision>();
 
             if (!String.IsNullOrEmpty(Contacto))
-                comisiones = comisiones.Where(x => x.Contacto.ToUpper().Contains(Contacto)).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Contacto.ToUpper().Contains(Contacto.ToUpper())).ToList<Comision>();
 
             if (!String.IsNullOrEmpty(Servicio))
                 comisiones = comisiones.Where(x => x.Servicio.ToString() == Servicio).ToList<Comision>();

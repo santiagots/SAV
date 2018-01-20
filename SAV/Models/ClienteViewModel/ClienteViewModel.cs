@@ -190,6 +190,12 @@ namespace SAV.Models
         [RegularExpression("[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Costo debe ser un valor numerico entre 0 y 999 con 2 digitos decimales")]
         public string Costo { get; set; }
 
+        [Display(Name = "Forma de Pago:")]
+        public List<KeyValuePair<int, string>> FormaPago { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar una Forma de Pago")]
+        public int SelectFormaPago { get; set; }
+
         public ClienteViewModel() : base()
         { }
 
@@ -234,7 +240,7 @@ namespace SAV.Models
             Nacionalidad = "Argentino";
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Cliente cliente)
+        public ClienteViewModel(List<Provincia> provincias, Cliente cliente, List<FormaPago> formaPagos)
         {
             Apellido = cliente.Apellido;
             Nombre = cliente.Nombre;
@@ -245,6 +251,7 @@ namespace SAV.Models
             Sexo = cliente.Sexo;
             Edad = cliente.Edad;
             Nacionalidad = cliente.Nacionalidad;
+            FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
 
             if (cliente.ClienteViaje == null)
                 Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -296,7 +303,7 @@ namespace SAV.Models
             LocalidadOtros = new List<KeyValuePair<int, string>>();
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, String vendedor) : this(provincias, cliente)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, List<FormaPago> formaPagos, String vendedor) : this(provincias, cliente, formaPagos)
         {
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
 
@@ -332,6 +339,7 @@ namespace SAV.Models
                 {
                     Pago = clienteViaje.Pago;
                     Costo = clienteViaje.Costo.ToString();
+                    SelectFormaPago = clienteViaje.FormaPago != null? clienteViaje.FormaPago.ID : 0;
                     AscensoDomicilioPrincipal = clienteViaje.AscensoDomicilioPrincipal;
                     DescensoDomicilioPrincipal = clienteViaje.DescensoDomicilioPrincipal;
                     DescensoDomicilioOtros = clienteViaje.DescensoDomicilioOtros;
@@ -374,7 +382,7 @@ namespace SAV.Models
             }
         }
 
-        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<Localidad> localidades, List<Provincia> provincias, String Vendedor)
+        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<Localidad> localidades, List<Provincia> provincias, List<FormaPago> formaPagos, String Vendedor)
         {
             ClienteViaje clienteViaje = new ClienteViaje();
 
@@ -392,6 +400,7 @@ namespace SAV.Models
             clienteViaje.DescensoDomicilioPrincipal = clienteViewModel.DescensoDomicilioPrincipal;
             clienteViaje.DescensoDomicilioOtros = clienteViewModel.DescensoDomicilioOtros;
             clienteViaje.Costo = Convert.ToDecimal(clienteViewModel.Costo);
+            clienteViaje.FormaPago = formaPagos.FirstOrDefault(x => x.ID == clienteViewModel.SelectFormaPago);
             clienteViaje.Vendedor = Vendedor;
 
             if (viaje.Servicio == ViajeTipoServicio.Puerta)

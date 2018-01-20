@@ -13,9 +13,6 @@ namespace SAV.Models
         public string Fecha { get; set; }
         [Display(Name = "Fecha Hasta:")]
         public string FechaHasta { get; set; }
-        [Display(Name = "Clave:")]
-        [Required(ErrorMessage = "Debe ingresar una Clave")]
-        public string Clave { get; set; }
         public List<BalanceVeiculoViewModel> Veiculos { get; set; }
         public BalanceViajeDiarioViewModel()
         {

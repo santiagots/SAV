@@ -1,4 +1,4 @@
-﻿@model SAV.Models.DetailsConfiguracionViewModel
+﻿@model SAV.Models.DetailsDatosEmpresaViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -86,17 +86,6 @@
             <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.ContratanteCallePiso)</p>
                 @Html.EditorFor(model => model.ContratanteCallePiso)
-            </div>
-        </div>
-        <div class="footerTables"></div>
-
-        <div class="headTables selected">
-            <p>Contenido Programación Turística</p>
-        </div>
-        <div class="contenidoDatos">
-            <div class="datosInputs">
-                <p class="edicion">@Html.LabelFor(model => model.ProgramacionTuristica)<b>(*)</b></p>
-                @Html.TextBoxFor(model => model.ProgramacionTuristica)
             </div>
         </div>
         <div class="contenidoDatos">

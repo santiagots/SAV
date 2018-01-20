@@ -183,8 +183,11 @@
                 @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
                 {
                     <div class="datosInputs">
-                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)<b>(*)</b></p>
                         @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción")
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaAscenso)</p>
@@ -197,8 +200,11 @@
                 @if (ViewBag.Servicio == ViajeTipoServicio.Directo)
                 {
                     <div class="datosInputs">
-                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)</p>
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)<b>(*)</b></p>
                         @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
+
+                        <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción", Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoAscenso)</p>
@@ -271,6 +277,7 @@
             <p>@Html.ValidationMessageFor(model => model.CallePisoPrincipal)</p>
             <p>@Html.ValidationMessageFor(model => model.Email)</p>
             <p>@Html.ValidationMessageFor(model => model.Costo)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectFormaPago)</p>
             @if (ViewBag.Servicio == ViajeTipoServicio.Puerta)
             {
                 <p>@Html.ValidationMessageFor(model => model.SelectLocalidadSecundaria)</p>

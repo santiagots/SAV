@@ -9,6 +9,7 @@ using SAV.Models;
 using PagedList;
 using System.Configuration;
 using SAV.Common;
+using System.Data.Objects;
 
 namespace SAV.Controllers
 {
@@ -49,10 +50,9 @@ namespace SAV.Controllers
             {
                 ViewBag.IdViaje = IdViaje.Value;
 
-                var viajes = db.Viajes.ToList<Viaje>();
-                List<Viaje> viajesFinalizados = ViajeHelper.getViajesFinalizados(viajes);
+                var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
-                if(viajesFinalizados.Where(x => x.ID == IdViaje.Value).Any())
+                if (viajesFinalizados.Where(x => x.ID == IdViaje.Value).Any())
                     ViewBag.From = "Cierre";
             }
 
@@ -112,6 +112,7 @@ namespace SAV.Controllers
                 List<Provincia> provincias = db.Provincias.ToList<Provincia>();
                 List<Localidad> localidades = db.Localidades.ToList<Localidad>();
                 List<Parada> paradas = db.Paradas.ToList<Parada>();
+                List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
                 Cliente cliente = clienteViewModel.getCliente(clienteViewModel, provincias, localidades);
 
                 if (idViaje.HasValue)
@@ -120,13 +121,12 @@ namespace SAV.Controllers
                   
                     if (viaje.tieneLugar())
                     {
-                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>(), User.Identity.Name);
+                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, localidades, provincias, formaPagos, User.Identity.Name);
                         db.ClienteViajes.Add(clienteViaje);
                         db.Clientes.Add(cliente);
                         db.SaveChanges();
 
-                        var viajes = db.Viajes.ToList<Viaje>();
-                        List<Viaje> viajesFinalizados = ViajeHelper.getViajesFinalizados(viajes);
+                        var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
                         if (viajesFinalizados.Where(x => x.ID == idViaje.Value).Any())
                             return RedirectToAction("Close", "Viaje", new { id = idViaje });
@@ -159,6 +159,7 @@ namespace SAV.Controllers
             Cliente cliente = db.Clientes.Find(id);
             ClienteViewModel clienteViewModel = new ClienteViewModel();
             List<Provincia> Provincias = db.Provincias.ToList<Provincia>();
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
 
             if (error.HasValue)
             {
@@ -171,10 +172,10 @@ namespace SAV.Controllers
                 ViewBag.IdViaje = idViaje;
                 Viaje viaje = db.Viajes.Find(idViaje);
                 ViewBag.Servicio = viaje.Servicio;
-                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, User.Identity.Name);
+                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, formaPagos, User.Identity.Name);
             }
             else
-                clienteViewModel = new ClienteViewModel(Provincias, cliente);
+                clienteViewModel = new ClienteViewModel(Provincias, cliente, formaPagos);
 
             return View("Create", clienteViewModel);
         }
@@ -188,13 +189,14 @@ namespace SAV.Controllers
                 List<Localidad> localidades = db.Localidades.ToList<Localidad>();
                 List<Parada> paradas = db.Paradas.ToList<Parada>();
                 Cliente cliente = db.Clientes.Find(id);
+                List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
 
                 clienteViewModel.upDateCliente(clienteViewModel, provincias, localidades, ref cliente);
 
                 if (idViaje.HasValue) //se ingresa a detalle del cliente desde un viaje
                 {
                     Viaje viaje = db.Viajes.Find(idViaje.Value);
-                    ClienteViaje NewclienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>(), User.Identity.Name);
+                    ClienteViaje NewclienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, db.Localidades.ToList<Localidad>(), db.Provincias.ToList<Provincia>(), formaPagos, User.Identity.Name);
 
                     ClienteViaje clienteViaje = cliente.ClienteViaje.Where(x => x.Viaje != null && x.Viaje.ID == idViaje).FirstOrDefault();
 
@@ -225,9 +227,10 @@ namespace SAV.Controllers
                         clienteViaje.DescensoDomicilioPrincipal = NewclienteViaje.DescensoDomicilioPrincipal;
                         clienteViaje.DescensoDomicilioOtros = NewclienteViaje.DescensoDomicilioOtros;
                         clienteViaje.Vendedor = User.Identity.Name;
-                        if (NewclienteViaje.Pago && !clienteViaje.FechaPago.HasValue)
+                        if (!clienteViaje.FechaPago.HasValue)
                         {
                             clienteViaje.Costo = NewclienteViaje.Costo;
+                            clienteViaje.FormaPago = NewclienteViaje.FormaPago;
                             clienteViaje.Pago = NewclienteViaje.Pago;
                             clienteViaje.VendedorCobro = User.Identity.Name;
                             clienteViaje.FechaPago = DateTime.Now;
@@ -241,8 +244,7 @@ namespace SAV.Controllers
             }
             if (idViaje.HasValue) //se ingresa a detalle del cliente desde un viaje
             {
-                var viajes = db.Viajes.ToList<Viaje>();
-                List<Viaje> viajesFinalizados = ViajeHelper.getViajesFinalizados(viajes);
+                var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
                 if (viajesFinalizados.Where(x => x.ID == idViaje.Value).Any())
                     return RedirectToAction("Close", "Viaje", new { id = idViaje });

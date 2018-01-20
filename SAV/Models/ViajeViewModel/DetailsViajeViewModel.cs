@@ -16,7 +16,7 @@ namespace SAV.Models
 
         public IPagedList<Gasto> Gastos { get; set; }
 
-        public Gasto  NewGastos { get; set; }
+        public GastoViewModel NewGastos { get; set; }
 
         public ViajeViewModel DatosBasicosViaje { get; set; }
 
@@ -47,13 +47,22 @@ namespace SAV.Models
                 DatosBasicosViaje.CostoCerrado = viaje.CostoCerrado.ToString();
             }
 
-            DatosBasicosViaje.Destino = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-            DatosBasicosViaje.Origen = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            DatosBasicosViaje.Destino = localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            DatosBasicosViaje.Origen = localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.ProvinciaDestinoCerrado = provincia.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.ProvinciaOrigenCerrado = provincia.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+
         }
 
-         public DetailsViajeViewModel(Viaje viaje)
+        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<TipoGasto> tipoGasto)
+            : this(viaje, conductores, localidad, provincia)
+        {
+            NewGastos = new GastoViewModel();
+            NewGastos.TipoGasto = tipoGasto.Where(x=>x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
+
+        }
+
+        public DetailsViajeViewModel(Viaje viaje)
         {
             DatosBasicosViaje = new ViajeViewModel();
 

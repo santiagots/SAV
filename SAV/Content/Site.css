@@ -108,6 +108,13 @@ body {
     background: url("../img/masterFase2.png") no-repeat scroll -1151px -151px transparent;
 }
 
+.action.reset {
+    background: url("../img/masterFase2.png") no-repeat scroll -1125px -151px transparent;
+}
+
+.action.editar {
+    background: url("../img/masterFase2.png") no-repeat scroll -1211px -286px transparent;
+}
 
 body, td, input, textarea, select {
     font-family: arial,sans-serif;
@@ -885,6 +892,14 @@ table tbody tr td {
     width: 303px;
 }
 
+.type40 {
+    width: 567px;
+}
+
+.type41 {
+    width: 867px;
+}
+
 .type49 {
     width: 48px;
     text-align: center;
@@ -1343,6 +1358,10 @@ table p {
         width: 167px;
         /*font-family: verdana;*/
         font-size: 14px;
+    }
+
+    .xxl input, .xxl select {
+        width: 567px;
     }
 
 

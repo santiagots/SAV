@@ -6,7 +6,7 @@ using System.Web;
 
 namespace SAV.Models
 {
-    public class DetailsConfiguracionViewModel
+    public class DetailsDatosEmpresaViewModel
     {
         [Display(Name = "Razon Social:")]
         [Required(ErrorMessage = "Debe ingresar una Razon Social")]
@@ -93,10 +93,10 @@ namespace SAV.Models
         [Required(ErrorMessage = "Debe ingresar un Programacion Turistica")]
         public string ProgramacionTuristica { get; set; }
 
-        public DetailsConfiguracionViewModel():base()
+        public DetailsDatosEmpresaViewModel():base()
         { }
 
-        public DetailsConfiguracionViewModel(Configuracion configuracion, List<Provincia> provincias, List<Localidad> Localidades) : this(provincias, Localidades)
+        public DetailsDatosEmpresaViewModel(DatosEmpresa configuracion, List<Provincia> provincias, List<Localidad> Localidades) : this(provincias, Localidades)
         {
             RazonSocial = configuracion.RazonSocial;
             CUIT = configuracion.CUIT;
@@ -109,7 +109,6 @@ namespace SAV.Models
 
             ContrtanteCuit = configuracion.ContrtanteCuit;
             ContratanteDenominacion = configuracion.ContratanteDenominacion;
-            ProgramacionTuristica = configuracion.ContenidoProgramacionTuristica;
             ContratanteSelectProvincia = configuracion.ContratanteDomicilio.Provincia.ID;
             ContratanteSelectLocalidad = configuracion.ContratanteDomicilio.Localidad.ID;
             ContratanteCalle = configuracion.ContratanteDomicilio.Calle;
@@ -117,7 +116,7 @@ namespace SAV.Models
             ContratanteCallePiso = configuracion.ContratanteDomicilio.Piso;
         }
 
-        public DetailsConfiguracionViewModel(List<Provincia> provincias, List<Localidad> Localidades)
+        public DetailsDatosEmpresaViewModel(List<Provincia> provincias, List<Localidad> Localidades)
         {
             Provincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             ContratanteProvincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
@@ -126,7 +125,7 @@ namespace SAV.Models
             ContratanteLocalidad = Localidades.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
         }
 
-        public DetailsConfiguracionViewModel(List<Provincia> provincias)
+        public DetailsDatosEmpresaViewModel(List<Provincia> provincias)
         {
             Provincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             ContratanteProvincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
@@ -135,24 +134,23 @@ namespace SAV.Models
             ContratanteLocalidad = new List<KeyValuePair<int, string>>();
         }
 
-        public static Configuracion getConfiguracion(DetailsConfiguracionViewModel detailsConfiguracionViewModel, Configuracion configuracion, List<Provincia> Provincias, List<Localidad> Localidades)
+        public static DatosEmpresa getConfiguracion(DetailsDatosEmpresaViewModel detailsDatosEmpresaViewModel, DatosEmpresa configuracion, List<Provincia> Provincias, List<Localidad> Localidades)
         {
-            configuracion.ContratanteDenominacion = detailsConfiguracionViewModel.ContratanteDenominacion;
-            configuracion.ContenidoProgramacionTuristica = detailsConfiguracionViewModel.ProgramacionTuristica;
-            configuracion.ContratanteDomicilio.Calle = detailsConfiguracionViewModel.ContratanteCalle;
-            configuracion.ContratanteDomicilio.Localidad = Localidades.Where(x => x.ID == detailsConfiguracionViewModel.ContratanteSelectLocalidad).FirstOrDefault();
-            configuracion.ContratanteDomicilio.Numero = detailsConfiguracionViewModel.ContratanteCalleNumero;
-            configuracion.ContratanteDomicilio.Piso = detailsConfiguracionViewModel.ContratanteCallePiso;
-            configuracion.ContratanteDomicilio.Provincia = Provincias.Where(x => x.ID == detailsConfiguracionViewModel.ContratanteSelectProvincia).FirstOrDefault();
-            configuracion.ContrtanteCuit = detailsConfiguracionViewModel.ContrtanteCuit;
-            configuracion.CUIT = detailsConfiguracionViewModel.CUIT;
-            configuracion.Domicilio.Calle = detailsConfiguracionViewModel.Calle;
-            configuracion.Domicilio.Localidad = Localidades.Where(x => x.ID == detailsConfiguracionViewModel.SelectLocalidad).FirstOrDefault();
-            configuracion.Domicilio.Numero = detailsConfiguracionViewModel.CalleNumero;
-            configuracion.Domicilio.Piso = detailsConfiguracionViewModel.CallePiso;
-            configuracion.Domicilio.Provincia = Provincias.Where(x => x.ID == detailsConfiguracionViewModel.SelectProvincia).FirstOrDefault();
-            configuracion.RazonSocial = detailsConfiguracionViewModel.RazonSocial;
-            configuracion.Telefono = detailsConfiguracionViewModel.Telefono;
+            configuracion.ContratanteDenominacion = detailsDatosEmpresaViewModel.ContratanteDenominacion;
+            configuracion.ContratanteDomicilio.Calle = detailsDatosEmpresaViewModel.ContratanteCalle;
+            configuracion.ContratanteDomicilio.Localidad = Localidades.Where(x => x.ID == detailsDatosEmpresaViewModel.ContratanteSelectLocalidad).FirstOrDefault();
+            configuracion.ContratanteDomicilio.Numero = detailsDatosEmpresaViewModel.ContratanteCalleNumero;
+            configuracion.ContratanteDomicilio.Piso = detailsDatosEmpresaViewModel.ContratanteCallePiso;
+            configuracion.ContratanteDomicilio.Provincia = Provincias.Where(x => x.ID == detailsDatosEmpresaViewModel.ContratanteSelectProvincia).FirstOrDefault();
+            configuracion.ContrtanteCuit = detailsDatosEmpresaViewModel.ContrtanteCuit;
+            configuracion.CUIT = detailsDatosEmpresaViewModel.CUIT;
+            configuracion.Domicilio.Calle = detailsDatosEmpresaViewModel.Calle;
+            configuracion.Domicilio.Localidad = Localidades.Where(x => x.ID == detailsDatosEmpresaViewModel.SelectLocalidad).FirstOrDefault();
+            configuracion.Domicilio.Numero = detailsDatosEmpresaViewModel.CalleNumero;
+            configuracion.Domicilio.Piso = detailsDatosEmpresaViewModel.CallePiso;
+            configuracion.Domicilio.Provincia = Provincias.Where(x => x.ID == detailsDatosEmpresaViewModel.SelectProvincia).FirstOrDefault();
+            configuracion.RazonSocial = detailsDatosEmpresaViewModel.RazonSocial;
+            configuracion.Telefono = detailsDatosEmpresaViewModel.Telefono;
 
             return configuracion;
         }
