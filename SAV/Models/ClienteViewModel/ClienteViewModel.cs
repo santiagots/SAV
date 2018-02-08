@@ -1,6 +1,7 @@
 ﻿using PagedList;
 using SAV.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
@@ -176,6 +177,8 @@ namespace SAV.Models
 
         public IPagedList Viajes { get; set; }
 
+        public IList<ClienteViaje> ViajesEnElMismoDia { get; set; }
+
         [Display(Name = "Ascenso Domicilio Principal:")]
         public bool AscensoDomicilioPrincipal { get; set; }
 
@@ -199,7 +202,7 @@ namespace SAV.Models
         public ClienteViewModel() : base()
         { }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje) : this(provincias)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, List<FormaPago> formaPagos) : this(provincias)
         {
             if (viaje.Servicio != ViajeTipoServicio.Cerrado)
             {
@@ -224,6 +227,7 @@ namespace SAV.Models
             }
 
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
+            FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
         }
 
         public ClienteViewModel(List<Provincia> provincias)
@@ -303,7 +307,7 @@ namespace SAV.Models
             LocalidadOtros = new List<KeyValuePair<int, string>>();
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, List<FormaPago> formaPagos, String vendedor) : this(provincias, cliente, formaPagos)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, List<ClienteViaje> viajesDelDia, List<FormaPago> formaPagos, String vendedor) : this(provincias, cliente, formaPagos)
         {
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
 
@@ -330,6 +334,8 @@ namespace SAV.Models
                 Origen = viaje.Origen.Nombre;
                 Destino = viaje.Destino.Nombre;
             }
+
+            ViajesEnElMismoDia = viajesDelDia;
 
             if (viaje.ClienteViaje != null && viaje.ClienteViaje.Count > 0)
             {

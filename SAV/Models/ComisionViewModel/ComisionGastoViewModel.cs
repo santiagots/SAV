@@ -15,7 +15,7 @@ namespace SAV.Models
 
         [Required(ErrorMessage = "Debe ingresar una Monto")]
         [Display(Name = "Monto:")]
-        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Monto debe ser un valor numerico entre 0 y 9999 con 2 digitos decimales")]
+        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Monto debe ser un valor numerico entre 0 y 999999 con 2 digitos decimales")]
         public string Monto { get; set; }
 
         [Display(Name = "Descripción:")]

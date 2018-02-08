@@ -93,9 +93,11 @@ namespace SAV.Controllers
 
             if (IdViaje.HasValue)
             {
+                List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
                 ViewBag.IdViaje = IdViaje.Value;
                 Viaje viaje = db.Viajes.Find(IdViaje);
-                clienteViewModel = new ClienteViewModel(provincias, viaje);
+
+                clienteViewModel = new ClienteViewModel(provincias, viaje, formaPagos);
                 ViewBag.Servicio = viaje.Servicio;
             }
             else
@@ -172,7 +174,8 @@ namespace SAV.Controllers
                 ViewBag.IdViaje = idViaje;
                 Viaje viaje = db.Viajes.Find(idViaje);
                 ViewBag.Servicio = viaje.Servicio;
-                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, formaPagos, User.Identity.Name);
+                List<ClienteViaje> viajesDelDia = db.ClienteViajes.Where(x => x.Cliente.ID == cliente.ID && x.Viaje.ID != viaje.ID && EntityFunctions.TruncateTime(x.Viaje.FechaSalida) == EntityFunctions.TruncateTime(viaje.FechaSalida)).ToList();
+                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, viajesDelDia, formaPagos, User.Identity.Name);
             }
             else
                 clienteViewModel = new ClienteViewModel(Provincias, cliente, formaPagos);

@@ -527,6 +527,7 @@
     <Content Include="Views\Usuario\Edit.cshtml" />
     <Content Include="Views\Configuracion\FormaPago.cshtml" />
     <Content Include="Views\Configuracion\_FormaPagoTable.cshtml" />
+    <Content Include="Views\Cliente\_ViajesEnElMismoDia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

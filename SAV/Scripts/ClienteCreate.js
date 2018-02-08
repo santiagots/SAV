@@ -1,5 +1,14 @@
 ﻿$(document).ready(function () {
 
+    $("#ViajesEnElMismoDia").dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: false,
+        height: 'auto',
+        width: '1000px',
+        title: "Viajes Cliente"
+    }).dialog('open');
+
     $("#SelectProvinciaPrincipal").change(function () {
         if ($(this).val() == "") {
             $("#SelectLocalidadPrincipal").html("<option value=''>Elija una opción</option>");
@@ -46,7 +55,9 @@
     });
 
     $("#Guardar").click(function () {
-        if ($("#Pago").attr('checked'))
+        debugger;
+        validarViajesDia()
+        if ($("#Pago").attr('checked') && $("form:first").valid())
             imprimirBoleto();
     });
     
@@ -140,7 +151,7 @@ function CenterWindow(windowWidth, windowHeight, windowOuterHeight, url, wname, 
 function viajeDirectoAscensoDescensoDomicilio()
 {
     
-    $("#DNI").attr("data-val", false);
+    //$("#DNI").attr("data-val", false);
     $("form").removeData("validator");
     $("form").removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse("form");
@@ -203,4 +214,9 @@ function showHideDescensoDomicilioOtros()
         $("#domicilioOtros").slideDown("slow");
     else
         $("#domicilioOtros").slideUp("slow");
+}
+
+function validarViajesDia()
+{
+
 }

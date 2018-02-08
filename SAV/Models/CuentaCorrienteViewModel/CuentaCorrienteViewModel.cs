@@ -60,7 +60,7 @@ namespace SAV.Models.CuentaCorrienteViewModel
 
         [Display(Name = "Monto:")]
         [Required(ErrorMessage = "Debe ingresar un Monto de entrega.")]
-        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "La Entrega debe ser un valor numerico entre 0 y 9999 con 2 digitos decimales")]
+        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "La Entrega debe ser un valor numerico entre 0 y 999999 con 2 digitos decimales")]
         public string MontoEntrega { get; set; }
 
         [Display(Name = "Numero:")]

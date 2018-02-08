@@ -255,6 +255,13 @@
                 </div>
             </div>
             <div class="footerTables"></div>
+
+            if(Model.ViajesEnElMismoDia != null && Model.ViajesEnElMismoDia.Count > 0)
+            { 
+            <div id="ViajesEnElMismoDia">
+                    @Html.Partial("_ViajesEnElMismoDia", Model.ViajesEnElMismoDia)
+            </div>
+            }
         }
 
         <!-- RESULTADO TABLES -->
@@ -310,8 +317,5 @@
     <input type="hidden" id="Servicio" value="@ViewBag.Servicio" />
 }
 
-@section Scripts {
-
-    <script src="/Scripts/ClienteCreate.js"></script>
-}
+@Scripts.Render("~/bundles/ClienteCreate")
 

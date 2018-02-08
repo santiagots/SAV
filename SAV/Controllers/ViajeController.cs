@@ -462,9 +462,10 @@ namespace SAV.Controllers
                 if (clienteViaje != null)
                 {
                     clienteViaje.Presente = Convert.ToBoolean(presente);
-                    clienteViaje.Pago = Convert.ToBoolean(pago);
-                    if (Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
+
+                    if (!clienteViaje.Pago && Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
                     {
+                        clienteViaje.Pago = Convert.ToBoolean(pago);
                         clienteViaje.FechaPago = DateTime.Now;
                         clienteViaje.VendedorCobro = User.Identity.Name;
                     }

@@ -1157,14 +1157,21 @@ input, textarea {
     width: 300px;
 }
 
-textarea {
-    font-family: inherit;
-    width: 500px;
+.text {
+    height: 25px;
+    margin: 10px 0;
 }
 
-    input:focus, textarea:focus {
-        border: 1px solid #7ac0da;
-    }
+.text p {
+    color: #666666;
+    float: left;
+    font-size: 14px;
+    margin: 3px 10px 0;
+}
+
+input:focus, textarea:focus {
+    border: 1px solid #7ac0da;
+}
 
 input[type="checkbox"] {
     background: transparent;

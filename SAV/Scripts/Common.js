@@ -34,4 +34,18 @@
         var tabActivo = $(this).find('a').attr('href');
         $(tabActivo).show();
     })
+
+    function AbrirPopUp(Url, Titulo, height, width, modal) {
+        var $dialog = $('<div style="overflow: hidden"; "></div>')
+                       .html('<iframe style="border: 0px; " src="' + Url + '" width="100%" height="100%" scrolling="no"></iframe>')
+                       .dialog({
+                           autoOpen: false,
+                           modal: modal,
+                           resizable: false,
+                           height: height,
+                           width: width,
+                           title: Titulo
+                       });
+        $dialog.dialog('open');
+    }
 });
