@@ -187,7 +187,7 @@
                         @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
 
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
-                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción")
+                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción", !Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioPuertaAscenso)</p>
@@ -204,7 +204,7 @@
                         @Html.TextBoxFor(model => model.Costo, Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
 
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
-                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción", Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
+                        @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción", !Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
                     </div>
                     <div class="datosInputs">
                         <p class="edicion obligatorio">@Html.LabelFor(model => model.ServicioDirectoAscenso)</p>

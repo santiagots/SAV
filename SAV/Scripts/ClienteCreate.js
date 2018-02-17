@@ -74,6 +74,15 @@
         showHideDescensoDomicilioOtros();
     });
 
+    $("#Pago").click(function () {
+        debugger;
+        if(this.checked)
+            $("#SelectFormaPago").prop("disabled", false);
+        else
+            $("#SelectFormaPago").prop("disabled", true);
+    });
+
+
     showHideDescensoDomicilioOtros();
     viajeDirectoAscensoDescensoDomicilio();
 });

@@ -230,10 +230,10 @@ namespace SAV.Controllers
                         clienteViaje.DescensoDomicilioPrincipal = NewclienteViaje.DescensoDomicilioPrincipal;
                         clienteViaje.DescensoDomicilioOtros = NewclienteViaje.DescensoDomicilioOtros;
                         clienteViaje.Vendedor = User.Identity.Name;
-                        if (!clienteViaje.FechaPago.HasValue)
+                        clienteViaje.Costo = NewclienteViaje.Costo;
+                        clienteViaje.FormaPago = NewclienteViaje.FormaPago;
+                        if (clienteViewModel.Pago && !clienteViaje.FechaPago.HasValue)
                         {
-                            clienteViaje.Costo = NewclienteViaje.Costo;
-                            clienteViaje.FormaPago = NewclienteViaje.FormaPago;
                             clienteViaje.Pago = NewclienteViaje.Pago;
                             clienteViaje.VendedorCobro = User.Identity.Name;
                             clienteViaje.FechaPago = DateTime.Now;
