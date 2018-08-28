@@ -16,7 +16,7 @@ namespace SAV.Models
 
         public IPagedList<Gasto> Gastos { get; set; }
 
-        public GastoViewModel NewGastos { get; set; }
+        public GastoViajeViewModel NewGastos { get; set; }
 
         public ViajeViewModel DatosBasicosViaje { get; set; }
 
@@ -57,7 +57,7 @@ namespace SAV.Models
         public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<TipoGasto> tipoGasto)
             : this(viaje, conductores, localidad, provincia)
         {
-            NewGastos = new GastoViewModel();
+            NewGastos = new GastoViajeViewModel();
             NewGastos.TipoGasto = tipoGasto.Where(x=>x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
 
         }
@@ -90,11 +90,11 @@ namespace SAV.Models
         public int ClienteID { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
-        public long DNI { get; set; }
-        public string Domicilio { get; set; }
+        public string DNI { get; set; }
         public string Ascenso { get; set; }
         public string Descenso { get; set; }
         public string Telefono { get; set; }
+        public string TelefonoAlternativo { get; set; }
         public string Ausencias { get; set; }
         public bool Pago { get; set; }
         public string Costo { get; set; }

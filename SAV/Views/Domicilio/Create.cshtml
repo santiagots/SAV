@@ -1,0 +1,61 @@
+﻿@model SAV.Models.DomicilioViewModel
+
+@{
+    Layout = "";
+}
+
+@using (Ajax.BeginForm(new AjaxOptions() {HttpMethod = "POST",OnSuccess = "CreateDomicilioSuccess", OnFailure = "CreateDomicilioFailure", OnBegin = "validateForm" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.Hidden("ClienteId", (int)ViewBag.ClienteId)
+
+    <div id="contentModal">
+        <div class="headTables selected">
+            <p>Domicilio</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Provincia)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Localidad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), "Elija una opción")
+            </div>
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Calle)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Calle)
+            </div>
+                <div class="datosInputs">
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Numero)<b>(*)</b></p>
+                    @Html.TextBoxFor(model => model.Numero)
+
+                    <p class="edicion obligatorio">@Html.LabelFor(model => model.Piso)</p>
+                    @Html.TextBoxFor(model => model.Piso)
+                </div>
+            <div class="xxl datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Comentario)<b>(*)</b></p>
+                @Html.TextAreaFor(model => model.Comentario)
+            </div>
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="Crear" class="centroBotonGris waiting" type="submit" value="Guardar"></input>
+                <div class="finBotonGris"></div>
+            </div>
+        </div>
+
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.SelectProvincia)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidad)</p>
+            <p>@Html.ValidationMessageFor(model => model.Calle)</p>
+            <p>@Html.ValidationMessageFor(model => model.Numero)</p>
+            <p>@Html.ValidationMessage("Error")</p>
+        </div>
+        <div id="Error" class="contenidoDatosError">
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/Domicilio")

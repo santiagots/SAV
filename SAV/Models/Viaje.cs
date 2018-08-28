@@ -1,6 +1,7 @@
 ﻿using SAV.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -23,7 +24,9 @@ namespace SAV.Models
         public virtual Provincia ProvienciaDestinoCerrado { get; set; }
         public Decimal CostoCerrado { get; set; }
         public int Asientos { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime FechaSalida { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime FechaArribo { get; set; }
         public virtual ViajeEstados Estado { get; set; }
         public virtual ViajeTipoServicio Servicio { get; set; }

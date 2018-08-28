@@ -27,8 +27,6 @@ namespace SAV.Models
         public DbSet<Conductor> Conductores { get; set; }
 
         public DbSet<Comision> Comisiones { get; set; }
-
-        public DbSet<ComisionGasto> ComisionGastos { get; set; }
         
         public DbSet<Domicilio> Domicilios { get; set; }
 

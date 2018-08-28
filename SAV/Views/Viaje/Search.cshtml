@@ -82,8 +82,11 @@
         @Html.Partial("_ViajesAbiertosTable", Model.ViajesActivos)
     </div>
 
+    @if (Roles.IsUserInRole("Administrador"))
+    {
     <!-- VIAJES POR CERRAR TABLES -->
     <div id="ViajesCerrados">
         @Html.Partial("_ViajesCerradosTable", Model.ViajesFinalizados)
     </div>
+    }
 </div>

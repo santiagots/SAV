@@ -1,0 +1,56 @@
+﻿@model SAV.Models.CreateGastoViewModel
+
+@{
+    Layout = "";
+}
+
+
+<div id="contentModal">
+    <div class="headTables selected">
+        <p>Nuevo Gasto</p>
+    </div>
+    @using (Ajax.BeginForm(new AjaxOptions() { HttpMethod = "POST", OnSuccess = "CreateGastoSuccess" }))
+    {
+        @Html.ValidationSummary(true)
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Concepto)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectConcepto, new SelectList(Model.Concepto, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion">@Html.LabelFor(model => model.TipoGasto)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectTipoGasto, new SelectList(Model.TipoGasto, "Key", "Value"), "Elija una opción")
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.Comentario)</p>
+                @Html.TextBoxFor(model => model.Comentario)
+
+                <p class="edicion">@Html.LabelFor(model => model.Monto)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.Monto)
+            </div>
+
+            <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.UsuarioAlta)</p>
+                @Html.TextBoxFor(model => model.UsuarioAlta, new {  @readonly = true })
+
+                <p class="edicion">@Html.LabelFor(model => model.FechaAlta)</p>
+                @Html.TextBoxFor(model => model.FechaAlta, new {  @readonly = true })
+            </div>
+
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="agregar" class="centroBotonGris waiting" type="submit" value="Agregar" />
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        </div>
+            <div class="footerTables"></div>
+
+            <div class="contenidoDatosError">
+                <p>@Html.ValidationMessageFor(model => model.SelectConcepto)</p>
+                <p>@Html.ValidationMessageFor(model => model.SelectTipoGasto)</p>
+                <p>@Html.ValidationMessageFor(model => model.Monto)</p>
+            </div>
+    }
+</div>

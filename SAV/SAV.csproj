@@ -46,9 +46,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -89,7 +93,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -213,6 +216,8 @@
     <Compile Include="Common\ConductorHelper.cs" />
     <Compile Include="Common\ConvertirCVSHelper.cs" />
     <Compile Include="Common\CuentaCorrienteHelper.cs" />
+    <Compile Include="Common\EnumHelper.cs" />
+    <Compile Include="Common\GastoHelper.cs" />
     <Compile Include="Common\UsuarioHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
@@ -224,16 +229,14 @@
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CuentaCorrienteController.cs" />
     <Compile Include="Controllers\DestinosController.cs" />
+    <Compile Include="Controllers\DomicilioController.cs" />
+    <Compile Include="Controllers\GastoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ViajeController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201801240316001_Initial.cs" />
-    <Compile Include="Migrations\201801240316001_Initial.Designer.cs">
-      <DependentUpon>201801240316001_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -248,9 +251,10 @@
     <Compile Include="Models\CNRTPasajero.cs" />
     <Compile Include="Models\CNRTViaje.cs" />
     <Compile Include="Models\Comision.cs" />
-    <Compile Include="Models\ComisionGasto.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
-    <Compile Include="Models\ComisionViewModel\ComisionGastoViewModel.cs" />
+    <Compile Include="Models\Enum\ConceptoGasto.cs" />
+    <Compile Include="Models\GastoViewModel\CreateGastoViewModel.cs" />
+    <Compile Include="Models\GastoViewModel\SearchGastoViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\ComisionViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\ResponsableViewModel.cs" />
     <Compile Include="Models\ComisionViewModel\SearchComisionViewModel.cs" />
@@ -258,6 +262,7 @@
     <Compile Include="Models\ConductorViewModel\ConductorViewModel.cs" />
     <Compile Include="Models\ConductorViewModel\SearchConductorViewModel.cs" />
     <Compile Include="Models\ConfiguracionViewModel\TipoGastoViewModel.cs" />
+    <Compile Include="Models\DomicilioViewModel\DomicilioViewModel.cs" />
     <Compile Include="Models\FormaPago.cs" />
     <Compile Include="Models\UsuarioViewModel\EditViewModel.cs" />
     <Compile Include="Models\UsuarioViewModel\UsuarioViewModel.cs" />
@@ -281,7 +286,7 @@
     <Compile Include="Models\ViajeViewModel\CreateViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\DetailsViajeViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceViajeDiarioViewModel.cs" />
-    <Compile Include="Models\ViajeViewModel\GastoViewModel.cs" />
+    <Compile Include="Models\ViajeViewModel\GastoViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\ProgramacionTuristicaViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\SearchViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\ViajeViewModel.cs" />
@@ -396,10 +401,13 @@
     <Content Include="Scripts\ClienteCreate.js" />
     <Content Include="Scripts\ComisionCreate.js" />
     <Content Include="Scripts\ComisionesResponsable.js" />
+    <Content Include="Scripts\ComisionSearch.js" />
     <Content Include="Scripts\Common.js" />
     <Content Include="Scripts\commonFase2.js" />
     <Content Include="Scripts\CuentaCorrienteCreate.js" />
     <Content Include="Scripts\DestinoCreate.js" />
+    <Content Include="Scripts\Domicilio.js" />
+    <Content Include="Scripts\Gasto.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\Jquery.customFunctions.js" />
@@ -506,8 +514,8 @@
     <Content Include="Template\CuentaCorrienteTemplate.xls" />
     <Content Include="Views\Comision\_EnProgreso.cshtml" />
     <Content Include="Views\Comision\_Finalizadas.cshtml" />
-    <Content Include="Views\Comision\Spending.cshtml" />
-    <Content Include="Views\Comision\_SpendingTable.cshtml" />
+    <Content Include="Views\Gasto\Search.cshtml" />
+    <Content Include="Views\Gasto\_GastosTable.cshtml" />
     <Content Include="Views\Comision\_Envio.cshtml" />
     <Content Include="Views\Balance\Comision.cshtml" />
     <Content Include="Views\Balance\ExportComisiones.cshtml" />
@@ -528,17 +536,15 @@
     <Content Include="Views\Configuracion\FormaPago.cshtml" />
     <Content Include="Views\Configuracion\_FormaPagoTable.cshtml" />
     <Content Include="Views\Cliente\_ViajesEnElMismoDia.cshtml" />
+    <Content Include="Views\Cliente\_DomiciliosTable.cshtml" />
+    <Content Include="Views\Domicilio\Create.cshtml" />
+    <Content Include="Views\Gasto\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201801240316001_Initial.resx">
-      <DependentUpon>201801240316001_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,9 +3,7 @@ using SAV.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Objects;
 using System.Linq;
-using System.Web;
 
 namespace SAV.Common
 {
@@ -77,7 +75,7 @@ namespace SAV.Common
                 Apellido = x.Cliente.Apellido,
                 DNI = x.Cliente.DNI,
                 Telefono = x.Cliente.Telefono,
-                Domicilio = x.Cliente.DomicilioPrincipal.getDomicilio,
+                TelefonoAlternativo = x.Cliente.TelefonoAlternativo,
                 Ascenso = getAscenso(x),
                 Descenso = getDescenso(x),
                 Ausencias = x.Cliente.getClienteViaje,
@@ -99,18 +97,21 @@ namespace SAV.Common
             {
                 if (clienteViaje.DomicilioAscenso != null)
                     return clienteViaje.DomicilioAscenso.getDomicilio;
-                return clienteViaje.Ascenso.Nombre;
+                return clienteViaje.Ascenso?.Nombre;
             }
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo)
             {
                 if (clienteViaje.DomicilioAscenso != null)
                     return clienteViaje.DomicilioAscenso.getDomicilio;
-                return clienteViaje.Ascenso.Nombre;
+                return clienteViaje.Ascenso?.Nombre;
             }
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Cerrado)
-                if (clienteViaje.Cliente.DomicilioPrincipal != null)
-                    return clienteViaje.Cliente.DomicilioPrincipal.getDomicilio;
-                
+            {
+                if (clienteViaje.DomicilioAscenso != null)
+                    return clienteViaje.DomicilioAscenso.getDomicilio;
+                return clienteViaje.Viaje.OrigenCerrado;
+            }
+             
             return string.Empty;
         }
 
@@ -120,18 +121,21 @@ namespace SAV.Common
             {
                 if (clienteViaje.DomicilioDescenso != null)
                     return clienteViaje.DomicilioDescenso.getDomicilio;
-                return clienteViaje.Descenso.Nombre;
+                return clienteViaje.Descenso?.Nombre;
             }
 
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo)
             {
                 if (clienteViaje.DomicilioDescenso != null)
                     return clienteViaje.DomicilioDescenso.getDomicilio;
-                return clienteViaje.Descenso.Nombre;
+                return clienteViaje.Descenso?.Nombre;
             }
             if (clienteViaje.Viaje.Servicio == ViajeTipoServicio.Cerrado)
+            {
+                if (clienteViaje.DomicilioDescenso != null)
+                    return clienteViaje.DomicilioDescenso.getDomicilio;
                 return clienteViaje.Viaje.DestinoCerrado;
-
+            }
             return string.Empty;
         }
     }

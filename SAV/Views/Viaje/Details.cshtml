@@ -127,6 +127,10 @@
             @Html.Partial("_PasajerosTable", Model.Pasajero)
         </div>
 
+        <div id="modal">
+            <embed id="frame" width="970" height="450"></embed>
+        </div>
+
         @if (Model.DatosBasicosViaje.Disponible > 0)
         {
             <div class="botones">
@@ -165,7 +169,14 @@
     </div>
 }
 
-@section Scripts {
+@Scripts.Render("~/bundles/ViajeDetails")
 
-    <script src="/Scripts/ViajeDetails.js"></script>
+@if (ViewBag.IdClienteViajePago != null)
+{
+    <script>
+        $(document).ready(function () {
+            abrirBoleto('@Url.Action("ImprimirBoleto", "Cliente", new { IdClienteViaje = ViewBag.IdClienteViajePago })');
+        });
+    </script>
 }
+

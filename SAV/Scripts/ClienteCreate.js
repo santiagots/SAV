@@ -9,223 +9,196 @@
         title: "Viajes Cliente"
     }).dialog('open');
 
-    $("#SelectProvinciaPrincipal").change(function () {
-        if ($(this).val() == "") {
-            $("#SelectLocalidadPrincipal").html("<option value=''>Elija una opción</option>");
-            return;
-        }
-        $.ajax({
-            url: '/Cliente/GetLocalidades',
-            type: 'POST',
-            data: { "IdProvincia": $("#SelectProvinciaPrincipal > option:selected").attr("value") },
-            dataType: "json",
-            success: function (data) { addLocalidades(data, $("#SelectLocalidadPrincipal")); },
-            error: function (error) { addLocalidadesError(error);}
-        });
-    });
-
-    $("#SelectProvinciaSecundaria").change(function () {
-        if ($(this).val() == "") {
-            $("#SelectLocalidadSecundaria").html("<option value=''>Elija una opción</option>");
-            return;
-        }
-        $.ajax({
-            url: '/Cliente/GetLocalidades',
-            type: 'POST',
-            data: { "IdProvincia": $("#SelectProvinciaSecundaria > option:selected").attr("value") },
-            dataType: "json",
-            success: function (data) { addLocalidades(data, $("#SelectLocalidadSecundaria")); },
-            error: function (error) { addLocalidadesError(error); }
-        });
-    });
-
-    $("#SelectProvinciaOtros").change(function () {
-        if ($(this).val() == "") {
-            $("#SelectLocalidadOtros").html("<option value=''>Elija una opción</option>");
-            return;
-        }
-        $.ajax({
-            url: '/Cliente/GetLocalidades',
-            type: 'POST',
-            data: { "IdProvincia": $("#SelectProvinciaOtros > option:selected").attr("value") },
-            dataType: "json",
-            success: function (data) { addLocalidades(data, $("#SelectLocalidadOtros")); },
-            error: function (error) { addLocalidadesError(error); }
-        });
-    });
-
-    $("#Guardar").click(function () {
-        debugger;
-        validarViajesDia()
-        if ($("#Pago").attr('checked') && $("form:first").valid())
-            imprimirBoleto();
-    });
-    
-    $("#AscensoDomicilioPrincipal").click(function () {
-        viajeDirectoAscensoDescensoDomicilio();
-    });
-
-    $("#DescensoDomicilioPrincipal").click(function () {
-        viajeDirectoAscensoDescensoDomicilio();
-    });
-
-    $("#DescensoDomicilioOtros").click(function () {
-        viajeDirectoAscensoDescensoDomicilio();
-        showHideDescensoDomicilioOtros();
-    });
+    //$("#Guardar").click(function () {
+    //    validarViajesDia()
+    //    if ($("#Pago").attr('checked') && $("form:first").valid())
+    //        imprimirBoleto();
+    //});
 
     $("#Pago").click(function () {
-        debugger;
-        if(this.checked)
+        if (this.checked)
             $("#SelectFormaPago").prop("disabled", false);
         else
             $("#SelectFormaPago").prop("disabled", true);
     });
 
+    $("#SelectParadaAscenso").change(HabilitarDeshabilitarDomicilioAscenso);
+    HabilitarDeshabilitarDomicilioAscenso();
+    $("#SelectParadaDescenso").change(HabilitarDeshabilitarDomicilioDescenso);
+    HabilitarDeshabilitarDomicilioDescenso();
+    $("#SelectDomicilioAscenso").change(HabilitarDeshabilitarParadaAscenso);
+    HabilitarDeshabilitarParadaAscenso();
+    $("#SelectDomicilioDescenso").change(HabilitarDeshabilitarParadaDescenso);
+    HabilitarDeshabilitarParadaDescenso();
 
-    showHideDescensoDomicilioOtros();
-    viajeDirectoAscensoDescensoDomicilio();
+    $('#modal').dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: false,
+        height: 310,
+        width: 'auto',
+        title: 'Domicilio',
+        acept: function (event, ui) {
+            $('#myDialogId').css('overflow', 'hidden');
+        }
+    });
+
+    $("#AgregarDireccion").click(function () {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: '/Domicilio/Create',
+            data: { "ClienteId": $("#Id").val() },
+            datatype: "json",
+            success: function (data) {
+                debugger;
+                var dialogDiv = $('#modal');
+                dialogDiv.html(data)
+                $.validator.unobtrusive.parse($("#modal"));
+                dialogDiv.dialog('open');
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+    });
 });
 
-function addLocalidades(localidades, control) {
-    if ($("#ErrorLocalidades").length)
-        $("#ErrorLocalidades").remove();
+function HabilitarDeshabilitarDomicilioAscenso() {
+    debugger;
+    var select = $("#SelectParadaAscenso")
+    if (select.length == 0)
+        return;
 
-    var item = "<option value=''>Elija una opción</option>";
-    $.each(localidades, function (i, provincia) {
-        item += "<option value='" + provincia.Value + "'>" + provincia.Text + "</option>";
+    if (select[0].selectedIndex == 0) {
+        $("#SelectDomicilioAscenso").prop("disabled", false)
+    }
+    else {
+        $("#SelectDomicilioAscenso").prop("disabled", true)
+    }
+}
+
+function HabilitarDeshabilitarDomicilioDescenso()
+{
+    var select = $("#SelectParadaDescenso")
+    if (select.length == 0)
+        return;
+
+    if ( select[0].selectedIndex == 0) {
+        $("#SelectDomicilioDescenso").prop("disabled", false)
+    }
+    else {
+        $("#SelectDomicilioDescenso").prop("disabled", true)
+    }
+}
+
+function HabilitarDeshabilitarParadaAscenso() {
+    debugger;
+    var select = $("#SelectDomicilioAscenso")
+    if (select.length == 0)
+        return;
+
+    if (select[0].selectedIndex == 0) {
+        $("#SelectParadaAscenso").prop("disabled", false)
+    }
+    else {
+        $("#SelectParadaAscenso").prop("disabled", true)
+    }
+}
+
+function HabilitarDeshabilitarParadaDescenso() {
+    var select = $("#SelectDomicilioDescenso")
+    if (select.length == 0)
+        return;
+
+    if (select[0].selectedIndex == 0) {
+        $("#SelectParadaDescenso").prop("disabled", false)
+    }
+    else {
+        $("#SelectParadaDescenso").prop("disabled", true)
+    }
+}
+
+function CreateDomicilioSuccess() {
+    $.ajax({
+        type: "GET",
+        url: '/Cliente/PagingDomicilios',
+        data: { "id": $("#Id").val(), "pageNumber": "1" },
+        datatype: "json",
+        success: function (data) {
+            $('#partialViewDomicilios').html(data)
+            $('#modal').dialog("close")
+            ActualizarComboDomicilios($("#Id").val())
+        },
+        error: function () {
+            alert("Error al cargar la grilla de domicilios");
+            $('#modal').dialog("close")
+        }
     });
-    $(control).html(item);
 }
 
-function addLocalidadesError(error) {
-    if ($("#ErrorLocalidades").length == 0)
-        $("#Error").append("<span id='ErrorLocalidades' class='field-validation-error'><p>Hubo un error al recuperar las localidades</p></span>");
+function DeleteDomicilio(id, clienteId) {
+    if (confirmSpinner('Esta seguro que desea borrar el domicilio?'))
+    {
+        $.ajax({
+            type: "GET",
+            url: '/Cliente/DeleteDomicilio',
+            data: { "id": id, "ClienteId": clienteId },
+            datatype: "json",
+            success: function (data) {
+                debugger;
+                $('#partialViewDomicilios').html(data)
+                ActualizarComboDomicilios(clienteId)
+                disableSpinner();
+            },
+            error: function () {
+                alert("Error al cargar la grilla de domicilios");
+            }
+        });
+    }
 }
 
-function imprimirBoleto()
-{
-        var apellido = $("#Apellido").val();
-        var nombre = $("#Nombre").val();
-        var dni = $("#DNI").val();
-
-        var origen = $("#Origen").val();
-
-        if ($("#SelectServicioPuertaAscenso").length > 0)
-            if ($("#SelectServicioPuertaAscenso option:selected").val() == 1)
-                origen += " - " + $("#CallePrincipal").val() + " " + $("#CalleNumeroPrincipal").val() + " " + $("#CallePisoPrincipal").val()
-            else
-                origen += " - " + $("#CalleSecundaria").val() + " " + $("#CalleNumeroSecundaria").val() + " " + $("#CallePisoSecundaria").val()
-
-        if ($("#SelectServicioDirectoAscenso").length > 0)
-            origen += " - " + $("#SelectServicioDirectoAscenso option:selected").text();
-
-        var destino = $("#Destino").val();
-
-        if ($("#SelectServicioPuertaDescenso").length > 0)
-            if ($("#SelectServicioPuertaDescenso option:selected").val() == 1)
-                destino += " - " + $("#CallePrincipal").val() + " " + $("#CalleNumeroPrincipal").val() + " " + $("#CallePisoPrincipal").val()
-            else
-                destino += " - " + $("#CalleSecundaria").val() + " " + $("#CalleNumeroSecundaria").val() + " " + $("#CallePisoSecundaria").val()
-
-        if ($("#SelectServicioDirectoDescenso").length > 0)
-            destino += " - " + $("#SelectServicioDirectoDescenso option:selected").text();
-
-        var fecha = $("#FechaSalida").val();
-        var idViaje = $("#IdViaje").val();
-        var servicio = $("#Servicio").val();
-
-        CenterWindow(screen.availWidth * 0.9, screen.availHeight * 0.6, 0, '/Cliente/ImprimirBoleto?Apellido=' + apellido + '&Nombre=' + nombre + '&DNI=' + dni + '&Origen=' + origen + '&Destino=' + destino + '&fecha=' + fecha + '&idViaje=' + idViaje + '&servicio=' + servicio, 'Boleto');
+function UpdateDomicilio(id, clienteId) {
+    $.ajax({
+        type: "GET",
+        url: '/Domicilio/Update',
+        data: { "id": id, "ClienteId": clienteId },
+        datatype: "json",
+        success: function (data) {
+            var dialogDiv = $('#modal');
+            dialogDiv.html(data)
+            $.validator.unobtrusive.parse($("#modal"));
+            dialogDiv.dialog('open');
+        },
+        error: function () {
+            alert("Error al cargar la grilla de domicilios");
+        }
+    });
 }
 
-function CenterWindow(windowWidth, windowHeight, windowOuterHeight, url, wname, features) {
-    var centerLeft = parseInt((window.screen.availWidth - windowWidth) / 2);
-    var centerTop = parseInt(((window.screen.availHeight - windowHeight) / 2) - windowOuterHeight);
+function ActualizarComboDomicilios(clienteId) {
+    $.ajax({
+        type: "GET",
+        url: '/Domicilio/GetDomicilios',
+        data: { "ClienteId": clienteId },
+        datatype: "json",
+        success: function (json) {
+            $('#SelectDomicilioAscenso').find('option').not(':first').remove().end();
+            $('#SelectDomicilioAscensoViajeCerrado').find('option').not(':first').not(':nth-child(2)').remove().end();
+            $('#SelectDomicilioDescenso').find('option').not(':first').remove().end();
 
-    var misc_features;
-    if (features) {
-        misc_features = ', ' + features;
-    }
-    else {
-        misc_features = ', status=no, location=no, scrollbars=yes, resizable=yes';
-    }
-    //var windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + centerLeft + ',top=' + centerTop + misc_features;
-    var windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + misc_features;
-    var win = window.open(url, wname, windowFeatures);
-    win.moveTo(centerLeft, centerTop);
-    win.focus();
-    return win;
-}
-
-function viajeDirectoAscensoDescensoDomicilio()
-{
-    
-    //$("#DNI").attr("data-val", false);
-    $("form").removeData("validator");
-    $("form").removeData("unobtrusiveValidation");
-    $.validator.unobtrusive.parse("form");
-
-
-    var ascensoDomicilioPrincipal = $("#AscensoDomicilioPrincipal");
-    var descensoDomicilioPrincipal = $("#DescensoDomicilioPrincipal");
-    var descensoDomicilioOtros = $("#DescensoDomicilioOtros");
-    var servicioDirectoAscenso = $("#SelectServicioDirectoAscenso");
-    var servicioDirectoDescenso = $("#SelectServicioDirectoDescenso");
-    
-
-    if ($(ascensoDomicilioPrincipal).is(':checked')) {
-        $(servicioDirectoAscenso).prop('disabled', true);
-        $(descensoDomicilioPrincipal).prop('disabled', true);
-        $(descensoDomicilioOtros).prop('disabled', false);
-
-        $("#SelectProvinciaPrincipal").attr("data-val-required", "Debe seleccionar una Provincia al Domicilio Principal");
-        $("#SelectLocalidadPrincipal").attr("data-val-required", "Debe seleccionar una Localidad al Domicilio Principal");
-        $("#DomicilioPrincipal #CallePrincipal").attr("data-val-required", "Debe ingresar una Calle al Domicilio Principal");
-        $("#DomicilioPrincipal #CalleNumeroPrincipal").attr("data-val-required", "Debe ingresar un Numero al Domicilio Principal");
-         
-        $("#DomicilioPrincipal b").show();
-    }
-    else {
-        $(servicioDirectoAscenso).prop('disabled', false);
-
-        $("#DomicilioPrincipal :input").removeAttr("data-val-required");
-        $("#DomicilioPrincipal b").hide();
-    }
-    if ($(descensoDomicilioPrincipal).is(':checked')){
-        $(ascensoDomicilioPrincipal).prop('disabled', true);
-        $(servicioDirectoDescenso).prop('disabled', true);
-        $(descensoDomicilioOtros).prop('disabled', true);
-    }
-    else if (descensoDomicilioOtros.is(':checked')) {
-        $(descensoDomicilioPrincipal).prop('disabled', true);
-        $(servicioDirectoDescenso).prop('disabled', true);
-    }
-    else {
-        $(servicioDirectoDescenso).prop('disabled', false);
-    }
-    if (!$(ascensoDomicilioPrincipal).is(':checked') && !$(descensoDomicilioPrincipal).is(':checked') && !descensoDomicilioOtros.is(':checked')) {
-        $(ascensoDomicilioPrincipal).prop('disabled', false);
-        $(descensoDomicilioPrincipal).prop('disabled', false);
-        $(descensoDomicilioOtros).prop('disabled', false);
-        $(servicioDirectoAscenso).prop('disabled', false);
-        $(servicioDirectoDescenso).prop('disabled', false);
-    }
-
-    $("form").removeData("validator");
-    $("form").removeData("unobtrusiveValidation");
-    $.validator.unobtrusive.parse("form");
-    $('form').resetValidation();
-}
-
-function showHideDescensoDomicilioOtros()
-{
-    if($("#DescensoDomicilioOtros").is(':checked'))
-        $("#domicilioOtros").slideDown("slow");
-    else
-        $("#domicilioOtros").slideUp("slow");
-}
-
-function validarViajesDia()
-{
-
+            $.each(json, function (i, obj) {
+                $('#SelectDomicilioAscenso').append($('<option>').text(obj.Value).attr('value', obj.Key));
+            });
+            $.each(json, function (i, obj) {
+                $('#SelectDomicilioAscensoViajeCerrado').append($('<option>').text(obj.Value).attr('value', obj.Key));
+            });
+            $.each(json, function (i, obj) {
+                $('#SelectDomicilioDescenso').append($('<option>').text(obj.Value).attr('value', obj.Key));
+            });
+        },
+        error: function (json) {
+            alert("Error al actualizar los domicilios");
+        }
+    });
 }

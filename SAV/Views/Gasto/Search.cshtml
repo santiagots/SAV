@@ -1,0 +1,63 @@
+﻿@model SAV.Models.SearchGastoViewModel
+
+@{
+    ViewBag.Title = "gastos";
+}
+
+
+<div id="content">
+@using (Html.BeginForm())
+{
+<div class="headTables selected">
+        <p>Buscar Gastos</p>
+    </div>
+    <div class="contenidoDatos">
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.Concepto)</p>
+            @Html.DropDownListFor(model => model.SelectConcepto, new SelectList(Model.Concepto, "Key", "Value"), "Elija una opción")
+
+            <p class="edicion">@Html.LabelFor(model => model.TipoGasto)</p>
+            @Html.DropDownListFor(model => model.SelectTipoGasto, new SelectList(Model.TipoGasto, "Key", "Value"), "Elija una opción")
+        </div>
+
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.Comentario)</p>
+            @Html.TextBoxFor(model => model.Comentario)
+
+            <p class="edicion">@Html.LabelFor(model => model.Monto)</p>
+            @Html.TextBoxFor(model => model.Monto)
+        </div>
+
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.UsuarioAlta)</p>
+            @Html.DropDownListFor(model => model.SelectUsuarioAlta, new SelectList(Model.UsuarioAlta, "Key", "Value"), "Elija una opción")
+
+            <p class="edicion">@Html.LabelFor(model => model.Fecha)</p>
+            @Html.TextBoxFor(model => model.Fecha, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
+        </div>
+
+        <div class="botones">
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar" />
+                <div class="finBotonGris"></div>
+            </div>
+
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input id="alta" class="centroBotonGris" type="button" value="Alta" />
+                <div class="finBotonGris"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footerTables"></div>
+}
+
+    <div id="gastosTable">
+        @Html.Partial("_GastosTable", Model.Gastos, new ViewDataDictionary { { "descripcion", Model.Comentario }, { "fechaAlta", Model.Fecha }, { "monto", Model.Monto }, { "usuarioAlta", Model.SelectUsuarioAlta }, { "tipoGasto", Model.SelectTipoGasto }, { "concepto", Model.SelectConcepto } })
+    </div>
+
+    <div id="modal"></div>
+</div>
+
+@Scripts.Render("~/bundles/Gasto")

@@ -375,6 +375,10 @@ table tbody tr td {
     text-decoration: none;
 }
 
+.type4 {
+    width: 35px;
+}
+
 .type5 {
     width: 63px;
 }
@@ -433,6 +437,10 @@ table tbody tr td {
     width: 40px;
 }
 
+.type118 {
+    width: 89px;
+}
+
 .type119 {
     width: 99px;
 }
@@ -486,6 +494,10 @@ table tbody tr td {
 
 .type209 {
     width: 180px;
+}
+
+.type380 {
+    width: 380px;
 }
 
 .type2 {
@@ -1367,8 +1379,8 @@ table p {
         font-size: 14px;
     }
 
-    .xxl input, .xxl select {
-        width: 567px;
+    .xxl input, .xxl select, .xxl textarea {
+        width: 564px;
     }
 
 
@@ -1944,6 +1956,12 @@ abbr, acronym {
     height: 600px;
     margin: 0 auto;
 }
+
+#contentModal {
+    width: 1000px;
+    margin: 0 auto;
+}
+
 
 .footer {
     background-color: #666666;

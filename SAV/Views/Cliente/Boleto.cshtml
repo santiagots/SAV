@@ -47,10 +47,11 @@ div{
         <table class="cabecera">
             <tr>
                 <td rowspan="2"><img src="@Server.MapPath("~/img/laestacion.png")" width="120px" height="100px" alt="colectivo"></td>
-                <td>COMPROBANTE DE PAGO</td>
+                <td colspan="2" align="center">COMPROBANTE DE PAGO</td>
             </tr>
             <tr>
                 <td>CODIGÓ - @ViewBag.IdViaje</td>
+                <td>FECHA PAGO - @ViewBag.FechaPago</td>
             </tr>
 
         </table>

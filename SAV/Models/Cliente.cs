@@ -17,7 +17,7 @@ namespace SAV.Models
 
         public string Apellido { get; set; }
 
-        public long DNI { get; set; }
+        public string DNI { get; set; }
 
         public virtual Sexo Sexo { get; set; }
 
@@ -25,12 +25,12 @@ namespace SAV.Models
 
         public string Nacionalidad { get; set; }
 
-        public virtual Domicilio DomicilioPrincipal { get; set; }
-
-        public virtual Domicilio DomicilioSecundario { get; set; }
+        public virtual List<Domicilio> Domicilios { get; set; }
 
         public string Telefono { get; set; }
-        
+
+        public string TelefonoAlternativo { get; set; }
+
         public string Email { get; set; }
 
         public bool Estudiante { get; set; }
@@ -38,5 +38,10 @@ namespace SAV.Models
         public virtual List<ClienteViaje> ClienteViaje { get; set; }
 
         public string getClienteViaje { get { return string.Format("{0} de {1}", ClienteViaje.Count(x => x.Viaje != null && x.Viaje.Estado == ViajeEstados.Cerrado && !x.Presente), ClienteViaje.Count(x => x.Viaje != null && x.Viaje.Estado == ViajeEstados.Cerrado)); } }
+
+        public Cliente()
+        {
+            Domicilios = new List<Domicilio>();
+        }
     }
 }

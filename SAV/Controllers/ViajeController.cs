@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SAV.Models;
 using SAV.Common;
@@ -12,11 +11,8 @@ using System.Configuration;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using System.Text.RegularExpressions;
 using System.Text;
-using System.Web.Security;
 using SAV.Filters;
-using System.Data.Objects;
 
 namespace SAV.Controllers
 {
@@ -26,7 +22,7 @@ namespace SAV.Controllers
     {
         private SAVContext db = new SAVContext();
 
-        public ActionResult Details(int id = 0)
+        public ActionResult Details(int? IdClienteViajePago, int id = 0)
         {
             Viaje viaje = db.Viajes.Find(id);
             if (viaje == null)
@@ -35,6 +31,9 @@ namespace SAV.Controllers
             }
 
             ViewBag.IdViaje = id;
+
+            if(IdClienteViajePago.HasValue)
+                ViewBag.IdClienteViajePago = IdClienteViajePago.Value;
 
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
             List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
@@ -153,7 +152,7 @@ namespace SAV.Controllers
         public ActionResult Search()
         {
             var viajesActivos = db.Viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now) >= 0 && x.Estado == ViajeEstados.Abierto);
-            var viajesFinalizados = db.Viajes.Where(x =>  x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            var viajesFinalizados = db.Viajes.Where(x =>  x.FechaArribo.CompareTo(DbFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
             var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var SearchViaje = new SearchViajeViewModel();
 
@@ -177,7 +176,7 @@ namespace SAV.Controllers
             SearchViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
 
             var viajesActivos = ViajeHelper.filtrarSerchViajesViewModel(db.Viajes, searchViajeViewModel.SelectOrigen, searchViajeViewModel.SelectDestino, searchViajeViewModel.FechaSalida, searchViajeViewModel.Servicio, searchViajeViewModel.Codigo, searchViajeViewModel.Cliente, searchViajeViewModel.Estado);
-            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(DbFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
             SearchViaje.ViajesActivos = viajesActivos.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             SearchViaje.ViajesFinalizados = viajesFinalizados.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -294,7 +293,7 @@ namespace SAV.Controllers
                         pasajerosCell[2].SetCellValue(pasajero.DNI);
                         pasajerosCell[3].SetCellValue(pasajero.Ascenso);
                         pasajerosCell[4].SetCellValue(pasajero.Descenso);
-                        pasajerosCell[5].SetCellValue(pasajero.Telefono);
+                        pasajerosCell[5].SetCellValue(string.IsNullOrEmpty(pasajero.TelefonoAlternativo)? pasajero.Telefono : $"{pasajero.Telefono}\n{pasajero.TelefonoAlternativo}");
                         pasajerosCell[6].SetCellValue(pasajero.Costo);
                         pasajerosCell[7].SetCellValue(pasajero.Pago ? "Si" : "No");
                     }
@@ -306,7 +305,7 @@ namespace SAV.Controllers
                         pasajerosCell[2].SetCellValue(pasajero.DNI);
                         pasajerosCell[3].SetCellValue(pasajero.Ascenso);
                         pasajerosCell[4].SetCellValue(pasajero.Descenso);
-                        pasajerosCell[5].SetCellValue(pasajero.Telefono);
+                        pasajerosCell[5].SetCellValue(string.IsNullOrEmpty(pasajero.TelefonoAlternativo) ? pasajero.Telefono : $"{pasajero.Telefono}\n{pasajero.TelefonoAlternativo}");
                         pasajerosCell[6].SetCellValue(pasajero.Costo);
                         pasajerosCell[7].SetCellValue(pasajero.Pago ? "Si" : "No");
                     }
@@ -489,16 +488,19 @@ namespace SAV.Controllers
             db.SaveChanges();
         }
 
-        public ActionResult AddGasto(int idTipoGasto, string monto, string comentario, int idViaje)
+        public ActionResult AddGasto(int idTipoGasto, decimal monto, string comentario, int idViaje)
         {
 
             TipoGasto tipoGasto = db.TipoGasto.Find(idTipoGasto);
 
             Gasto gasto = new Gasto()
             {
+                Concepto = ConceptoGasto.Viaje,
                 TipoGasto = tipoGasto,
                 Monto = monto,
-                Comentario = comentario
+                Comentario = comentario,
+                FechaAlta = DateTime.Now,
+                UsuarioAlta = User.Identity.Name
             };
 
             ViewBag.IdViaje = idViaje;
@@ -570,7 +572,7 @@ namespace SAV.Controllers
         {
             IPagedList<Viaje> viajesResult;
 
-            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(DbFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
             viajesResult = viajesFinalizados.OrderBy(x => x.FechaSalida).ToPagedList<Viaje>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_ViajesCerradosTable", viajesResult);

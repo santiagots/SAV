@@ -33,6 +33,19 @@ namespace SAV
             bundles.Add(new ScriptBundle("~/bundles/ClienteCreate").Include(
                         "~/Scripts/ClienteCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/ViajeDetails").Include(
+                        "~/Scripts/ViajeDetails.js"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/Domicilio").Include(
+                        "~/Scripts/Domicilio.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Gasto").Include(
+                        "~/Scripts/Gasto.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Comisiones").Include(
+                        "~/Scripts/ComisionSearch.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

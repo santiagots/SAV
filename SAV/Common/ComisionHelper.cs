@@ -2,6 +2,7 @@
 using SAV.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -9,42 +10,42 @@ namespace SAV.Common
 {
     public class ComisionHelper
     {
-        public static List<Comision> searchComisiones(List<Comision> comisiones, string ID, string Contacto, string Servicio, string Accion, DateTime? FechaAlta, DateTime? FechaEnvio, DateTime? FechaEntrega, DateTime? FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        public static List<Comision> searchComisiones(IQueryable<Comision> comisiones, string ID, string Contacto, string Servicio, string Accion, DateTime? FechaAlta, DateTime? FechaEnvio, DateTime? FechaEntrega, DateTime? FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
         {
             if (!String.IsNullOrEmpty(ID))
-                comisiones = comisiones.Where(x => x.ID == int.Parse(ID)).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.ID == int.Parse(ID));
 
             if (!String.IsNullOrEmpty(Contacto))
-                comisiones = comisiones.Where(x => x.Contacto.ToUpper().Contains(Contacto.ToUpper())).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Contacto.ToUpper().Contains(Contacto.ToUpper()));
 
             if (!String.IsNullOrEmpty(Servicio))
-                comisiones = comisiones.Where(x => x.Servicio.ToString() == Servicio).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Servicio.ToString() == Servicio);
 
             if (!String.IsNullOrEmpty(Accion))
-                comisiones = comisiones.Where(x => x.Accion.ToString() == Accion).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Accion.ToString() == Accion);
 
             if (FechaAlta.HasValue)
-                comisiones = comisiones.Where(x => x.FechaAlta.Date == FechaAlta.Value.Date).ToList<Comision>();
+                comisiones = comisiones.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == FechaAlta.Value);
 
             if (FechaEnvio.HasValue)
-                comisiones = comisiones.Where(x => x.FechaEnvio.HasValue && x.FechaEnvio.Value.Date == FechaEnvio.Value.Date).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.FechaEnvio.HasValue && DbFunctions.TruncateTime(x.FechaEnvio.Value) == FechaEnvio.Value);
 
             if (FechaEntrega.HasValue)
-                comisiones = comisiones.Where(x => x.FechaEntrega.HasValue && x.FechaEntrega.Value.Date == FechaEntrega.Value.Date).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.FechaEntrega.HasValue && DbFunctions.TruncateTime(x.FechaEntrega.Value) == FechaEntrega.Value);
 
             if (FechaPago.HasValue)
-                comisiones = comisiones.Where(x => x.FechaPago.HasValue && x.FechaPago.Value.Date == FechaPago.Value.Date).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago.Value) == FechaPago.Value);
 
             if (!String.IsNullOrEmpty(Costo))
-                comisiones = comisiones.Where(x => x.Costo == Decimal.Parse(Costo)).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Costo == Decimal.Parse(Costo));
 
             if (IdResponsable.HasValue)
-                comisiones = comisiones.Where(x => x.Responsable != null && x.Responsable.ID == IdResponsable.Value).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.Responsable != null && x.Responsable.ID == IdResponsable.Value);
 
             if (IdCuentaCorriente.HasValue)
-                comisiones = comisiones.Where(x => x.CuentaCorriente != null && x.CuentaCorriente.ID == IdCuentaCorriente.Value).ToList<Comision>();
+                comisiones = comisiones.Where(x => x.CuentaCorriente != null && x.CuentaCorriente.ID == IdCuentaCorriente.Value);
 
-            return comisiones;
+            return comisiones.ToList();
         }
 
         public static DateTime? getFecha(string fecha)
@@ -64,19 +65,7 @@ namespace SAV.Common
             return decimal.Parse(monto);
         }
 
-        public static List<ComisionGasto> searchComisionGasto(List<ComisionGasto> comisionGasto, string Descripcion, DateTime? FechaAlta, decimal Monto)
-        {
-            if (!String.IsNullOrEmpty(Descripcion))
-                comisionGasto = comisionGasto.Where(x => x.Descripcion.Contains(Descripcion)).ToList<ComisionGasto>();
 
-            if (FechaAlta.HasValue)
-                comisionGasto = comisionGasto.Where(x => x.FechaAlta.Date == FechaAlta.Value.Date).ToList<ComisionGasto>();
-
-            if (Monto > 0)
-                comisionGasto = comisionGasto.Where(x => x.Monto == Monto).ToList<ComisionGasto>();
-
-            return comisionGasto;
-        }
 
         public static List<Comision> getEnvios(List<Comision> comisiones)
         {
@@ -85,7 +74,8 @@ namespace SAV.Common
 
         public static List<Comision> getPendientes(List<Comision> comisiones)
         {
-            return comisiones.Where(x => x.FechaEnvio.HasValue && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)).OrderBy(x => x.FechaAlta).ToList();
+            //return comisiones.Where(x => x.FechaEnvio.HasValue && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)).OrderBy(x => x.FechaAlta).ToList();
+              return comisiones.Where(x => x.FechaEnvio.HasValue && ((x.CuentaCorriente == null && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)) || (x.CuentaCorriente != null && !x.FechaEntrega.HasValue))).OrderBy(x => x.FechaAlta).ToList();
         }
 
         public static List<Comision> getFinalizadas(List<Comision> comisiones)

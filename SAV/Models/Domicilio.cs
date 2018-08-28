@@ -21,6 +21,8 @@ namespace SAV.Models
 
         public String Piso { get; set; }
 
-        public string getDomicilio { get { return string.Format("{0} {1} {2} ({3})", Calle ?? "", Numero ?? "", Piso ?? "", Localidad != null? Localidad.Nombre ?? "" : ""); } }
+        public String Comentario { get; set; }
+
+        public string getDomicilio { get { return string.Format("{0} {1} {2} ({3}) {4}", Calle ?? "", Numero ?? "", Piso ?? "", Localidad != null? Localidad.Nombre ?? "" : "", Comentario != null ? string.Concat("[", Comentario, "]") : ""); } }
     }
 }

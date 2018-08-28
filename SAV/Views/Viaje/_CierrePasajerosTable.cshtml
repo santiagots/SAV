@@ -24,7 +24,7 @@
                             <p>@Html.DisplayNameFor(model => model.First().DNI)</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type235">
-                            <p>Dirección</p>
+                            <p>Acenso</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type140">
                             <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
@@ -55,7 +55,7 @@
                                 <p>@Html.DisplayFor(m => m[i].DNI)</p>
                             </td>
                             <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type235 waitingMenuBar">
-                                <p>@Html.DisplayFor(m => m[i].Domicilio)</p>
+                                <p>@Html.DisplayFor(m => m[i].Ascenso)</p>
                             </td>
                             <td onclick="$('form').resetValidation(); location.href='@Url.Action("Details", "Cliente", new { id = Model[i].ClienteID, idViaje = ViewBag.IdViaje, From = "Close" })'" class="type2 type140 waitingMenuBar">
                                 <p>@Html.DisplayFor(m => m[i].Telefono)</p>

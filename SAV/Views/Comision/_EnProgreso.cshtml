@@ -51,18 +51,18 @@
                             <td style="width: 120px;">
                                 @if (!item.FechaPago.HasValue && string.IsNullOrEmpty(cuentaCorriente))
                                 {
-                                    <a href="@Url.Action("pagar", "comision", new { ID = item.ID, numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"] })"><span class="action pagar" title="Pagar" /></a>
+                                    <a onclick="actualizarEstadoComision('pagar','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action pagar" title="Pagar" /></a>
                                 }
                                 @if (!item.FechaEntrega.HasValue)
                                 {
-                                    <a href="@Url.Action("send", "comision", new {  ID = item.ID, numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"] })"><span class="action send" title="Enviar" /></a>
+                                    <a onclick="actualizarEstadoComision('Send','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action send" title="Enviar" /></a>
                                 }
-                                <a href="@Url.Action("RegresarAEnvio", "comision", new { ID = item.ID, numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"] })"><span class="action volver" title="Regresar" /></a>
+                                <a onclick="actualizarEstadoComision('RegresarAEnvio','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action volver" title="Regresar" /></a>
                                 <a href="@Url.Action("clone", "comision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span class="action clonar" title="Copiar" /></a>
                                 <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", new { id = item.ID })"><span class="action retirar" title="Eliminar" /></a>
                             </td>
                         </tr>
-                                }
+                    }
                 </tbody>
             </table>
         </div>

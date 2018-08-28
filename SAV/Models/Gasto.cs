@@ -10,10 +10,18 @@ namespace SAV.Models
     {
         public int ID { get; set; }
 
+        public ConceptoGasto Concepto { get; set; }
+
         public virtual TipoGasto TipoGasto { get; set; }
 
-        public string Monto { get; set; }
+        public decimal Monto { get; set; }
 
         public string Comentario { get; set; }
+
+        public DateTime FechaAlta { get; set; }
+
+        public string UsuarioAlta { get; set; }
+
+        public virtual Viaje viaje { get; set; }
     }
 }

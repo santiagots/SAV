@@ -30,12 +30,6 @@ namespace SAV.Models
 
         public virtual FormaPago FormaPago { get; set; }
 
-        public bool AscensoDomicilioPrincipal { get; set; }
-
-        public bool DescensoDomicilioPrincipal { get; set; }
-
-        public bool DescensoDomicilioOtros { get; set; }
-
         public bool Presente { get; set; }
 
         public string Vendedor { get; set; }

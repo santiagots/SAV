@@ -44,10 +44,11 @@
                                     {
                                     <li>@Html.ActionLink("Conductor", "Search", "Conductor", null, new { @class = currentController == "Conductor" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                     }
+                                    <li>
+                                    <li>@Html.ActionLink("Gastos", "Search", "Gasto", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                     <li><a href="#">Comisiones</a>
                                         <ul>
                                             <li>@Html.ActionLink("Administración", "Search", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
-                                            <li>@Html.ActionLink("Gastos", "Spending", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                         </ul>
                                     </li>
                                     <li><a href="#">Reportes</a>

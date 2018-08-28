@@ -3,6 +3,18 @@
     $("#DatosBasicosViaje_Servicio").change(function () { ChangeOrigenDestino(); });
 
     ChangeOrigenDestino();
+
+    $('#modal').dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: false,
+        height: '500',
+        width: '1000',
+        title: 'Boleto',
+        acept: function (event, ui) {
+            $('#modal').css('overflow', 'hidden');
+        }
+    });
 });
 
 function ChangeOrigenDestino() {
@@ -39,3 +51,10 @@ function Validate()
         enableSpinner();
     }
 }
+
+function abrirBoleto(src) {
+    var dialogDiv = $('#modal');
+    $("#frame").attr("src", src);
+    dialogDiv.dialog('open');
+}
+

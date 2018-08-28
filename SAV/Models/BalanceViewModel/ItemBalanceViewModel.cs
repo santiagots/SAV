@@ -48,7 +48,7 @@ namespace SAV.Models
         public ItemBalanceViewModel(Gasto gasto)
         {
             Concepto = String.Format("Gasto {0}", gasto.TipoGasto.Descripcion);
-            Importe = -decimal.Parse(gasto.Monto);
+            Importe = -gasto.Monto;
         }
 
         private decimal getImporte(Viaje viaje)

@@ -52,7 +52,7 @@ namespace SAV.Models
 
         [Display(Name = "Costo:")]
         [Required(ErrorMessage = "Debe ingresar un Costo")]
-        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Costo debe ser un valor numerico entre 0 y 99999 con 2 digitos decimales")]
+        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "El Costo debe ser un valor numerico entre 0 y 999999 con 2 digitos decimales")]
         public string CostoCerrado { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una cantidad de Asientos")]

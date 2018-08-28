@@ -88,9 +88,9 @@
     <div id="tabs">
         <div class="headTables medio">
             <ul>
-                <li class="selected tabItem"><a href="#tabs-1">Envio</a></li>
-                <li class="tabItem"><a href="#tabs-2">Pendiente</a></li>
-                <li class="tabItem"><a href="#tabs-3">Finalizada</a></li>
+                <li class="selected tabItem"><a id="envio" href="#tabs-1">Envio</a></li>
+                <li class="tabItem"><a id="pendiente" href="#tabs-2">Pendiente</a></li>
+                <li class="tabItem"><a id="finalizada" href="#tabs-3">Finalizada</a></li>
             </ul>
         </div>
         <div class="contenidoDatos">
@@ -129,49 +129,4 @@
     </div>
  </div>
 
-@section Scripts {
-<script>
-    $(document).ready(function () {
-        addEventToEnvio();
-    });
-
-    function addEventToEnvio()
-    {
-        $("#envioTable [class='check-box']").change(function () {
-            addEnvio();
-        });
-
-        disableSpinner();
-    }
-
-    function addEnvio()
-    {
-        //Tr perteneciente al pasajero a modificar
-        var contexto = $(event.target).closest("tr");
-
-        //Obtengo la informacion del pasajero que se esta actualizando
-        var datos = {
-            "idComision": $("[name*='item.ID']", contexto).val(),
-            "Enviar": $("[name*='item.Enviar']:checked", contexto).length,
-        };
-
-        $.ajax({
-            async: false,
-            url: '/Comision/setEnvio',
-            type: 'POST',
-            data: datos,
-            dataType: "html",
-            success: function (data) { disableSpinner(); },
-            error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al registrar el pago o la asistencia del pasajero."); ErrorClose = true; }
-        });
-        $(this).closest("tr")
-    }
-
-    function Actualizar()
-    {
-        setTimeout(function () {
-            window.location.reload(1);
-            }, 5000);
-    }
-</script>
-}    
+@Scripts.Render("~/bundles/Comisiones")
