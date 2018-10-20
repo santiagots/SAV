@@ -37,20 +37,22 @@ $(document).ready(function () {
         return false;
     });
 
-        $("#dialog").dialog({
-            title: 'Agregar Responsable',
-            autoOpen: false,
-            resizable: false,
-            width: 1000,
-            position: ['center',20] ,
-            show: { effect: 'drop', direction: "up" },
-            modal: true,
-            draggable: true,
-            open: function (event, ui) {
-                $(".ui-dialog-titlebar-close").hide();
-                $(this).load("/Comision/ResponsableAdd?time=" + event.timeStamp);
-            }
-        });
+    $("#dialog").dialog({
+        title: 'Agregar Responsable',
+        autoOpen: false,
+        resizable: false,
+        width: 1000,
+        position: ['center',20] ,
+        show: { effect: 'drop', direction: "up" },
+        modal: true,
+        draggable: true,
+        open: function (event, ui) {
+            $(".ui-dialog-titlebar-close").hide();
+            $(this).load("/Comision/ResponsableAdd?time=" + event.timeStamp);
+        }
+    });
+
+    $(".fechaDesde").datepicker("option", "minDate", 0);
 });
 
 function addLocalidades(localidades, control) {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAV.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace SAV.Models
 
         [Display(Name = "Responsable:")]
         public List<KeyValuePair<int, string>> Responsable { get; set; }
+
+        [Display(Name = "Fecha Envio:")]
+        public string FechaEnvio { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar un Responsable")]
         public int SelectResponsable { get; set; }
@@ -123,6 +127,7 @@ namespace SAV.Models
             Comentario = comision.Comentario;
             Accion = comision.Accion;
             Servicio = comision.Servicio;
+            FechaEnvio = comision.FechaEnvio.HasValue ? comision.FechaEnvio.Value.ToString("dd/MM/yyyy") : string.Empty;
             Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre)).ToList();
 
             if(comision.Responsable != null)
@@ -194,6 +199,9 @@ namespace SAV.Models
             comision.Costo = decimal.Parse(comisionViewModel.Costo);
             comision.Comentario = comisionViewModel.Comentario;
             comision.Pago = comisionViewModel.Pago;
+            comision.FechaEnvio = ComisionHelper.getFecha(comisionViewModel.FechaEnvio);
+            comision.Planificada = comision.FechaEnvio.HasValue;
+            
             if (comisionViewModel.Pago)
                 comision.FechaPago = DateTime.Now;
             else

@@ -396,7 +396,7 @@ namespace SAV.Controllers
                 row.Cells[3].CellStyle = style;
                 row.CreateCell(4).SetCellValue(comision.DomicilioEntregar != null? comision.DomicilioEntregar.getDomicilio: "");
                 row.Cells[4].CellStyle = style;
-                row.CreateCell(5).SetCellValue(comision.FechaEntrega.HasValue? comision.FechaEntrega.Value.ToString("dd/MM/yyyy"): "");
+                row.CreateCell(5).SetCellValue(comision.FechaEnvio.HasValue ? comision.FechaEnvio.Value.ToString("dd/MM/yyyy") : "");
                 row.Cells[5].CellStyle = style;
                 row.CreateCell(6).SetCellValue(comision.Debe > 0? comision.Debe.ToString("c") : comision.Costo.ToString("c"));
                 row.Cells[6].CellStyle = style;

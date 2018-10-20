@@ -34,7 +34,9 @@ namespace SAV.Models
         public string Email { get; set; }
 
         public bool Estudiante { get; set; }
-        
+
+        public DateTime FechaCreacion { get; set; }
+
         public virtual List<ClienteViaje> ClienteViaje { get; set; }
 
         public string getClienteViaje { get { return string.Format("{0} de {1}", ClienteViaje.Count(x => x.Viaje != null && x.Viaje.Estado == ViajeEstados.Cerrado && !x.Presente), ClienteViaje.Count(x => x.Viaje != null && x.Viaje.Estado == ViajeEstados.Cerrado)); } }

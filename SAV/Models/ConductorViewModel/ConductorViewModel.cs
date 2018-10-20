@@ -37,16 +37,16 @@ namespace SAV.Models
         public string ComisionViajeCerrado { get; set; }
 
         [Display(Name = "Provincia:")]
-        public List<KeyValuePair<int, string>> ProvinciaPrincipal { get; set; }
+        public List<KeyValuePair<int, string>> Provincia { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar una Provincia al Domicilio Principal")]
-        public int SelectProvinciaPrincipal { get; set; }
+        public int SelectProvincia { get; set; }
 
         [Display(Name = "Localidad:")]
-        public List<KeyValuePair<int, string>> LocalidadPrincipal { get; set; }
+        public List<KeyValuePair<int, string>> Localidad { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar una Localidad al Domicilio Principal")]
-        public int SelectLocalidadPrincipal { get; set; }
+        public int SelectLocalidad { get; set; }
 
         [Display(Name = "Calle:")]
         [Required(ErrorMessage = "Debe ingresar una Calle al Domicilio Principal")]
@@ -87,27 +87,27 @@ namespace SAV.Models
             ComisionViajeCerrado = conductor.ComisionViajeCerrado.ToString();
             ComisionViaje = conductor.ComisionViaje.ToString();
 
-            ProvinciaPrincipal = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            Provincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
 
             if (conductor.Domicilio != null)
             {
-                SelectProvinciaPrincipal = conductor.Domicilio.Provincia.ID;
+                SelectProvincia = conductor.Domicilio.Provincia.ID;
 
-                LocalidadPrincipal = provincias.Where(x => x.ID == conductor.Domicilio.Provincia.ID).FirstOrDefault().Localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
-                SelectLocalidadPrincipal = conductor.Domicilio.Localidad.ID;
+                Localidad = provincias.Where(x => x.ID == conductor.Domicilio.Provincia.ID).FirstOrDefault().Localidad.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList<KeyValuePair<int, string>>();
+                SelectLocalidad = conductor.Domicilio.Localidad.ID;
 
                 CallePrincipal = conductor.Domicilio.Calle;
                 CalleNumeroPrincipal = conductor.Domicilio.Numero;
                 CallePisoPrincipal = conductor.Domicilio.Piso;
             }
             else
-                LocalidadPrincipal = new List<KeyValuePair<int, string>>();
+                Localidad = new List<KeyValuePair<int, string>>();
         }
 
         public ConductorViewModel( List<Provincia> provincias)
         {
-            ProvinciaPrincipal = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-            LocalidadPrincipal = new List<KeyValuePair<int, string>>();
+            Provincia = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
+            Localidad = new List<KeyValuePair<int, string>>();
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
         }
 
@@ -120,11 +120,11 @@ namespace SAV.Models
             conductor.ComisionViaje = decimal.Parse(conductorViewModel.ComisionViaje);
 
             conductor.Domicilio = new Domicilio();
-            if (conductorViewModel.SelectProvinciaPrincipal > 0)
-                conductor.Domicilio.Provincia = provincias.Where(x => x.ID == conductorViewModel.SelectProvinciaPrincipal).FirstOrDefault();
+            if (conductorViewModel.SelectProvincia > 0)
+                conductor.Domicilio.Provincia = provincias.Where(x => x.ID == conductorViewModel.SelectProvincia).FirstOrDefault();
 
-            if (conductorViewModel.SelectLocalidadPrincipal > 0)
-                conductor.Domicilio.Localidad = localidades.Where(x => x.ID == conductorViewModel.SelectLocalidadPrincipal).FirstOrDefault();
+            if (conductorViewModel.SelectLocalidad > 0)
+                conductor.Domicilio.Localidad = localidades.Where(x => x.ID == conductorViewModel.SelectLocalidad).FirstOrDefault();
 
             conductor.Domicilio.Calle = conductorViewModel.CallePrincipal;
             conductor.Domicilio.Numero = conductorViewModel.CalleNumeroPrincipal;

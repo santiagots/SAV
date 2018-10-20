@@ -10,7 +10,7 @@ namespace SAV.Common
 {
     public class ComisionHelper
     {
-        public static List<Comision> searchComisiones(IQueryable<Comision> comisiones, string ID, string Contacto, string Servicio, string Accion, DateTime? FechaAlta, DateTime? FechaEnvio, DateTime? FechaEntrega, DateTime? FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
+        public static IQueryable<Comision> searchComisiones(IQueryable<Comision> comisiones, string ID, string Contacto, string Servicio, string Accion, DateTime? FechaAlta, DateTime? FechaEnvio, DateTime? FechaEntrega, DateTime? FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente)
         {
             if (!String.IsNullOrEmpty(ID))
                 comisiones = comisiones.Where(x => x.ID == int.Parse(ID));
@@ -45,7 +45,7 @@ namespace SAV.Common
             if (IdCuentaCorriente.HasValue)
                 comisiones = comisiones.Where(x => x.CuentaCorriente != null && x.CuentaCorriente.ID == IdCuentaCorriente.Value);
 
-            return comisiones.ToList();
+            return comisiones;
         }
 
         public static DateTime? getFecha(string fecha)
@@ -67,20 +67,20 @@ namespace SAV.Common
 
 
 
-        public static List<Comision> getEnvios(List<Comision> comisiones)
+        public static IQueryable<Comision> getEnvios(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => !x.FechaEnvio.HasValue).OrderBy(x => x.FechaAlta).ToList();
+            return comisiones.Where(x => !x.FechaEnvio.HasValue || x.Planificada).OrderByDescending(x => x.FechaAlta);
         }
 
-        public static List<Comision> getPendientes(List<Comision> comisiones)
+        public static IQueryable<Comision> getPendientes(IQueryable<Comision> comisiones)
         {
             //return comisiones.Where(x => x.FechaEnvio.HasValue && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)).OrderBy(x => x.FechaAlta).ToList();
-              return comisiones.Where(x => x.FechaEnvio.HasValue && ((x.CuentaCorriente == null && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)) || (x.CuentaCorriente != null && !x.FechaEntrega.HasValue))).OrderBy(x => x.FechaAlta).ToList();
+            return comisiones.Where(x => x.FechaEnvio.HasValue && !x.Planificada && ((x.CuentaCorriente == null && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)) || (x.CuentaCorriente != null && !x.FechaEntrega.HasValue))).OrderByDescending(x => x.FechaAlta);
         }
 
-        public static List<Comision> getFinalizadas(List<Comision> comisiones)
+        public static IQueryable<Comision> getFinalizadas(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => x.FechaEnvio.HasValue && x.Pago && x.Debe == 0 && x.FechaEntrega.HasValue).OrderBy(x => x.FechaAlta).ToList();
+            return comisiones.Where(x => x.FechaEnvio.HasValue && !x.Planificada && x.Pago && x.Debe == 0 && x.FechaEntrega.HasValue).OrderByDescending(x => x.FechaAlta);
         }
 
         public static void SetValueToComisionesCell(ISheet ComisionesSheet, int ComisionesRow, Comision comision, int ComisionIndex)

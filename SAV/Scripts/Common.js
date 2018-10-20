@@ -4,7 +4,7 @@
     {
         $(this).val("");
     })
-
+    debugger;
     $(".fecha").datepicker({
         buttonText: "Seleccione fecha",
         changeMonth: true,

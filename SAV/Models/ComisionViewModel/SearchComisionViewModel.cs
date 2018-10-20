@@ -76,11 +76,11 @@ namespace SAV.Models
             Costo = string.Empty;
         }
 
-        public SearchComisionViewModel(List<Comision> Comisiones)
+        public SearchComisionViewModel(IQueryable<Comision> Comisiones)
         {
-            List<Comision> comisionesEnvio = ComisionHelper.getEnvios(Comisiones);
-            List<Comision> comisionesPendientes = ComisionHelper.getPendientes(Comisiones);
-            List<Comision> comisionesFinalizadas = ComisionHelper.getFinalizadas(Comisiones);
+            IQueryable<Comision> comisionesEnvio = ComisionHelper.getEnvios(Comisiones);
+            IQueryable<Comision> comisionesPendientes = ComisionHelper.getPendientes(Comisiones);
+            IQueryable<Comision> comisionesFinalizadas = ComisionHelper.getFinalizadas(Comisiones);
 
             this.ComisionesEnvio = comisionesEnvio.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             this.ComisionesPendientes = comisionesPendientes.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));

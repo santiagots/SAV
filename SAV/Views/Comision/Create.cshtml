@@ -31,6 +31,13 @@
             </div>
 
             <div class="datosInputs">
+                <p class="edicion">@Html.LabelFor(model => model.FechaEnvio)</p>
+                <div class="divFecha">
+                    @Html.TextBoxFor(model => model.FechaEnvio, new {@class = "fecha fechaDesde", @id = "fecha", @name = "fecha", @readonly = true })
+                </div>
+            </div>
+
+            <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Servicio)<b>(*)</b></p>
                 @Html.DropDownListFor(model => model.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ComisionServicio))
                                                                select new SelectListItem
@@ -190,8 +197,5 @@
     <input type="hidden" id="Servicio" value="@ViewBag.Servicio" />
 }
 
-@section Scripts {
-    <script src="/Scripts/ComisionCreate.js"></script>
-    <script src="/Scripts/ComisionesResponsable.js"></script>
-}
+@Scripts.Render("~/bundles/Comisiones")
 

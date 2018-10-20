@@ -111,7 +111,7 @@ $(document).ready(function () {
             return;
         }
         $.ajax({
-            url: '/Cliente/GetLocalidades',
+            url: '/Domicilio/GetLocalidades',
             type: 'POST',
             data: { "IdProvincia": $("#SelectProvincia > option:selected").attr("value") },
             dataType: "json",
@@ -126,7 +126,7 @@ $(document).ready(function () {
             return;
         }
         $.ajax({
-            url: '/Cliente/GetLocalidades',
+            url: '/Domicilio/GetLocalidades',
             type: 'POST',
             data: { "IdProvincia": $("#ContratanteSelectProvincia > option:selected").attr("value") },
             dataType: "json",

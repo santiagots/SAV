@@ -43,11 +43,11 @@
         </div>
         <div class="contenidoDatos">
             <div class="datosInputs">
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.ProvinciaPrincipal)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.SelectProvinciaPrincipal, new SelectList(Model.ProvinciaPrincipal, "Key", "Value"), "Elija una opción")
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Provincia)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectProvincia, new SelectList(Model.Provincia, "Key", "Value"), "Elija una opción")
 
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.LocalidadPrincipal)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.SelectLocalidadPrincipal, new SelectList(Model.LocalidadPrincipal, "Key", "Value"), "Elija una opción")
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Localidad)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectLocalidad, new SelectList(Model.Localidad, "Key", "Value"), "Elija una opción")
             </div>
 
             <div class="datosInputs">
@@ -98,8 +98,8 @@
             <p>@Html.ValidationMessageFor(model => model.ComisionViaje)</p>
             <p>@Html.ValidationMessageFor(model => model.ComisionViajeCerrado)</p>
             <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
-            <p>@Html.ValidationMessageFor(model => model.SelectLocalidadPrincipal)</p>
-            <p>@Html.ValidationMessageFor(model => model.SelectProvinciaPrincipal)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectLocalidad)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectProvincia)</p>
             <p>@Html.ValidationMessageFor(model => model.CallePrincipal)</p>
             <p>@Html.ValidationMessageFor(model => model.CalleNumeroPrincipal)</p>
             <p>@Html.ValidationMessageFor(model => model.CallePisoPrincipal)</p>
@@ -112,6 +112,6 @@
 
 @section Scripts {
 
-    <script src="/Scripts/ClienteCreate.js"></script>
+    @Scripts.Render("~/bundles/Domicilio")
 }
 

@@ -29,6 +29,8 @@ namespace SAV.Models
 
         public bool Pago { get; set; }
 
+        public bool Planificada { get; set; }
+
         public ComisionAccion Accion { get; set; }
 
         public ComisionServicio Servicio { get; set; }

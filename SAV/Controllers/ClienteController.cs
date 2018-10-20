@@ -84,15 +84,16 @@ namespace SAV.Controllers
             if (!id.HasValue)
             {
                 Cliente cliente = new Cliente();
-                cliente = db.Clientes.FirstOrDefault(x => x.Nombre == null && x.Apellido == null && x.DNI == null);
+                cliente = db.Clientes.FirstOrDefault(x => x.Nombre == null && x.Apellido == null && x.DNI == null && DbFunctions.DiffDays(x.FechaCreacion, DateTime.Now).Value > 5);
                 if (cliente == null)
                 {
-                    cliente = new Cliente();
+                    cliente = new Cliente() { FechaCreacion = DateTime.Now };
                     db.Clientes.Add(cliente);
                     db.SaveChanges();
                 }
                 else
                 {
+                    cliente.FechaCreacion = DateTime.Now;
                     cliente.Domicilios.Clear();
                     db.SaveChanges();
                 }
