@@ -20,7 +20,7 @@ function addEnvio() {
     //Obtengo la informacion del pasajero que se esta actualizando
     var datos = {
         "idComision": $("[name*='item.ID']", contexto).val(),
-        "Enviar": $("[name*='item.Enviar']:checked", contexto).length,
+        "Enviar": $("[name*='item.ParaEnviar']:checked", contexto).length,
     };
 
     $.ajax({

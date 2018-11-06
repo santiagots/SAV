@@ -71,11 +71,21 @@
         </tr>
         foreach (var item in Vendedor.Items)
         {
+            if (item.SubTotal)
+            {
+            <tr>
+                <td class="headTables1" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="headTables1" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
+            </tr>
+            }
+            else
+            {
             <tr>
                 <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
                 <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Monto)</td>
             </tr>
-        }
+            }
+            }
         <tr>
             <td class="headTables1" style="width: 510px">Total</td>
             <td class="headTables1" style="width: 75px">@Vendedor.total</td>

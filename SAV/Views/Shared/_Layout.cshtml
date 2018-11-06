@@ -46,7 +46,7 @@
                                     }
                                     <li>
                                     <li>@Html.ActionLink("Gastos", "Search", "Gasto", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
-                                    <li><a href="#">Comisiones</a>
+                                    <li><a href="#">Comisiones <span class="badge">@Html.Action("ShowPlanned", "Comision")</span></a>
                                         <ul>
                                             <li>@Html.ActionLink("Administración", "Search", "Comision", null, new { @class = currentController == "Comision" ? "selected waitingMenuBar" : "waitingMenuBar" })</li>
                                         </ul>

@@ -19,13 +19,14 @@
             <table id="tablaParts" class="tablesorter">
                 <thead>
                     <tr class="headTitles noBorder">
-                        <th class="type2 type36"><p>Numero</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Acción</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Fecha Alta</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Fecha Envio</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Fecha Pago</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Costo</p><span class="ordenamiento"></span></th>
-                        <th class="type210"><p>Comentario</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type36"><p>Numero</p></th>
+                        <th class="type2 type119"><p>Acción</p></th>
+                        <th class="type2" style="width: 65px;"><p>F.Alta</p></th>
+                        <th class="type2" style="width: 65px;"><p>F.Envio</p></th>
+                        <th class="type2" style="width: 65px;"><p>F.Entrega</p></th>
+                        <th class="type2" style="width: 65px;"><p>F.Pago</p></th>
+                        <th class="type2 type119"><p>Costo</p></th>
+                        <th class="type210"><p>Comentario</p></th>
                         <th class="type5"></th>
                     </tr>
 
@@ -36,12 +37,14 @@
                         <tr>
                             <td class="type2 type36" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.ID)</p></td>
                             <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Accion)</p></td>
-                            @{var fecha = item.FechaAlta.ToString("dd/MM/yyyy");}
-                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
-                            @{fecha = item.FechaEntrega.HasValue ? item.FechaEntrega.Value.Date.ToString("dd/MM/yyyy") : "";}
-                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
-                            @{fecha = item.FechaPago.HasValue ? item.FechaPago.Value.Date.ToString("dd/MM/yyyy") : "";}
-                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{var fecha = item.FechaAlta.ToString("dd/MM");}
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaEnvio.ToString("dd/MM");}
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaEntrega.HasValue ? item.FechaEntrega.Value.Date.ToString("dd/MM") : "";}
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            @{fecha = item.FechaPago.HasValue ? item.FechaPago.Value.Date.ToString("dd/MM") : "";}
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
                             <td class="type2 type119" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Costo)</p></td>
                             <td class="type210" onclick="location.href='@Url.Action("Details", "Comision", new { id = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })'"><p>@Html.DisplayFor(modelItem => item.Comentario)</p></td>
                             <td class="type5">

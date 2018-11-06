@@ -128,7 +128,7 @@ namespace SAV.Controllers
             Comision comision = db.Comisiones.Find(idComision);
 
             ComisionViewModel comisionViewModel = new ComisionViewModel(provincia, comision, comisionResponsable, paradas);
-
+            comisionViewModel.FechaEnvio = DateHelper.getLocal().AddDays(1).ToString("dd/MM/yyyy"); ;
             if (idCuentaCorriente.HasValue)
                 comisionViewModel.idCuentaCorriente = idCuentaCorriente.Value;
 
@@ -140,7 +140,12 @@ namespace SAV.Controllers
             SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel = new SearchCuentaCorrienteViewModel();
 
             Comision comision = db.Comisiones.Find(ID);
-            comision.FechaEnvio = null;
+            comision.FechaEnvio = DateHelper.getLocal().AddDays(1);
+            comision.FechaEntrega = null;
+            comision.FechaPago = null;
+            comision.Pago = false;
+            comision.Enviado = false;
+
             db.SaveChanges();
 
             IQueryable<Comision> IQueryableComisiones = db.Comisiones.AsQueryable();
@@ -169,6 +174,8 @@ namespace SAV.Controllers
 
             Comision comision = db.Comisiones.Find(ID);
             comision.FechaEntrega = null;
+            comision.FechaPago = null;
+            comision.Pago = false;
             db.SaveChanges();
 
             IQueryable<Comision> IQueryableComisiones = db.Comisiones.AsQueryable();
@@ -248,17 +255,27 @@ namespace SAV.Controllers
             return RedirectToAction("Search");
         }
 
+        public ActionResult ShowPlanned()
+        {
+            SearchComisionViewModel searchComisionViewModel = new SearchComisionViewModel();
+            DateTime fecha = DateHelper.getLocal();
+
+            IList<Comision> comisionesCheked = ComisionHelper.AutoCheck(db.Comisiones.AsQueryable<Comision>());
+            comisionesCheked.ToList().ForEach( x => db.Entry(x).State = EntityState.Modified);
+            db.SaveChanges();
+
+            return Content(db.Comisiones.Count(X=>X.ParaEnviar).ToString());
+        }
+
         public ActionResult Search()
         {
             SearchComisionViewModel searchComisionViewModel = new SearchComisionViewModel();
 
-            //marco las comisiones que tiene fecha de entrega cargadas para hoy
-            db.Comisiones.Where(x => x.FechaEnvio.HasValue && x.Planificada && DbFunctions.TruncateTime(x.FechaEnvio.Value) == DbFunctions.TruncateTime(DateTime.Now))
-                         .ToList()
-                         .ForEach(x => x.Enviar = true);
-            db.SaveChanges();
-
             IQueryable<Comision> comisiones = db.Comisiones.AsQueryable<Comision>();
+
+            IList<Comision> comisionesCheked =  ComisionHelper.AutoCheck(comisiones);
+            comisionesCheked.ToList().ForEach(x => db.Entry(x).State = EntityState.Modified);
+            db.SaveChanges();
 
             List<ComisionResponsable> responsables = db.ComisionResponsable.ToList();
             List<CuentaCorriente> cuentaCorriente = db.CuentaCorriente.ToList();
@@ -266,8 +283,8 @@ namespace SAV.Controllers
             searchComisionViewModel.Responsable = responsables.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} {1}", x.Apellido, x.Nombre))).ToList();
             searchComisionViewModel.CuentaCorriente = cuentaCorriente.Select(x => new KeyValuePair<int, string>(x.ID, x.RazonSocial)).ToList();
             searchComisionViewModel.ComisionesEnvio = ComisionHelper.getEnvios(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesPendientes = ComisionHelper.getPendientes(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-            searchComisionViewModel.ComisionesFinalizadas = ComisionHelper.getFinalizadas(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            searchComisionViewModel.ComisionesPendientes = new List<Comision>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])); //ComisionHelper.getPendientes(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            searchComisionViewModel.ComisionesFinalizadas = new List<Comision>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])); //ComisionHelper.getFinalizadas(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(searchComisionViewModel);
         }
@@ -351,14 +368,12 @@ namespace SAV.Controllers
 
         public ActionResult GenerarPlanilla()
         {
-            List<Comision> comisiones = db.Comisiones.Where(x => x.Enviar).ToList();
+            List<Comision> comisiones = db.Comisiones.Where(x => x.ParaEnviar).ToList();
 
             foreach (var item in comisiones)
             {
-                item.FechaEnvio = DateTime.Now;
-                item.Enviar = false;
-                item.Planificada = false;
-                db.Entry(item).State = EntityState.Modified;
+                item.ParaEnviar = false;
+                item.Enviado = true;
             }
 
             db.SaveChanges();
@@ -520,7 +535,7 @@ namespace SAV.Controllers
             if (idComision > 0)
             {
                 Comision comision = db.Comisiones.Find(idComision);
-                comision.Enviar = Convert.ToBoolean(enviar);
+                comision.ParaEnviar = Convert.ToBoolean(enviar);
 
                 db.Entry(comision).State = EntityState.Modified;
                 db.SaveChanges();

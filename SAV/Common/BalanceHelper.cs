@@ -374,6 +374,7 @@ namespace SAV.Common
 
                     foreach (var pagos in Grupospagos)
                     {
+                        
                         foreach (var item in pagos)
                         {
                             balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
@@ -383,16 +384,28 @@ namespace SAV.Common
                             });
                         }
 
-                        balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                        if (pagos.Key.Descripcion == "Efectivo" && gastoPorVendedor != null)
                         {
-                            Concepto = string.Format("Sub Total ({0})", pagos.Key != null ? pagos.Key.Descripcion : string.Empty),
-                            Monto = pagos.Sum(x => x.Costo)
-                        });
-                        balanceVendedor.total += pagos.Sum(x => x.Costo);
+                            foreach (var gasto in gastoPorVendedor)
+                            {
+                                balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                                {
+                                    Concepto = string.Format("Gastos {0} {1} {2}", gasto.Concepto, gasto.TipoGasto.Descripcion, gasto.Comentario),
+                                    Monto = -gasto.Monto
+                                });
+                            }
+                        }
+
+                        balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel() {
+                            Concepto = string.Format("Sub Total {0}", pagos.Key != null ? pagos.Key.Descripcion : string.Empty),
+                            Monto = pagos.Sum(x => x.Costo) - gastoPorVendedor.Sum(x => x.Monto),
+                            SubTotal = true
+                            });
+                        balanceVendedor.total += pagos.Sum(x => x.Costo) - gastoPorVendedor.Sum(x => x.Monto);
                     }
                 }
 
-                if (gastoPorVendedor != null)
+                if (!cobroPorVendedor.Any(x=> x.FormaPago.Descripcion == "Efectivo") && gastoPorVendedor != null)
                 {
                     foreach (var gasto in gastoPorVendedor)
                     {
@@ -406,7 +419,8 @@ namespace SAV.Common
                     balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
                     {
                         Concepto = string.Format("Sub Total Gastos"),
-                        Monto = -gastoPorVendedor.Sum(x => x.Monto)
+                        Monto = -gastoPorVendedor.Sum(x => x.Monto),
+                        SubTotal = true
                     });
                     balanceVendedor.total -= gastoPorVendedor.Sum(x => x.Monto);
                 }

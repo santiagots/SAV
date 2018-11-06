@@ -216,6 +216,7 @@
     <Compile Include="Common\ConductorHelper.cs" />
     <Compile Include="Common\ConvertirCVSHelper.cs" />
     <Compile Include="Common\CuentaCorrienteHelper.cs" />
+    <Compile Include="Common\DateHelper.cs" />
     <Compile Include="Common\EnumHelper.cs" />
     <Compile Include="Common\GastoHelper.cs" />
     <Compile Include="Common\UsuarioHelper.cs" />

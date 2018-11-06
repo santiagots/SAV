@@ -29,17 +29,17 @@ namespace SAV.Models
 
         public bool Pago { get; set; }
 
-        public bool Planificada { get; set; }
-
         public ComisionAccion Accion { get; set; }
 
         public ComisionServicio Servicio { get; set; }
 
+        public bool ParaEnviar { get; set; }
+
+        public bool Enviado { get; set; }
+
         public DateTime FechaAlta { get; set; }
 
-        public bool Enviar { get; set; }
-
-        public DateTime? FechaEnvio { get; set; }
+        public DateTime FechaEnvio { get; set; }
 
         public DateTime? FechaEntrega { get; set; }
 

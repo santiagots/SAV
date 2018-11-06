@@ -20,7 +20,6 @@ $(document).ready(function () {
 });
 
 function enableSpinner() {
-    debugger;
     $("#loading").fadeIn();
     var opts = {
         lines: 12, // The number of lines to draw

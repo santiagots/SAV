@@ -38,6 +38,7 @@ namespace SAV.Models
         [Display(Name = "Responsable:")]
         public List<KeyValuePair<int, string>> Responsable { get; set; }
 
+        [Required(ErrorMessage = "Debe ingresar una Fecha de Envio")]
         [Display(Name = "Fecha Envio:")]
         public string FechaEnvio { get; set; }
 
@@ -127,7 +128,7 @@ namespace SAV.Models
             Comentario = comision.Comentario;
             Accion = comision.Accion;
             Servicio = comision.Servicio;
-            FechaEnvio = comision.FechaEnvio.HasValue ? comision.FechaEnvio.Value.ToString("dd/MM/yyyy") : string.Empty;
+            FechaEnvio = comision.FechaEnvio.ToString("dd/MM/yyyy");
             Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre)).ToList();
 
             if(comision.Responsable != null)
@@ -179,6 +180,7 @@ namespace SAV.Models
             ServicioDirectoEntregar = paradas.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             LocalidadRetirar = new List<KeyValuePair<int, string>>();
             LocalidadEntregar = new List<KeyValuePair<int, string>>();
+            FechaEnvio = DateHelper.getLocal().AddDays(1).ToString("dd/MM/yyyy");
         }
 
         public Comision getComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada)
@@ -186,7 +188,8 @@ namespace SAV.Models
             Comision comision = new Comision();
 
             upDateComision(comisionViewModel, provincias, localidades, parada, ref comision);
-            comision.FechaAlta = DateTime.Now;
+            comision.FechaAlta = DateHelper.getLocal();
+            comision.FechaEnvio = DateTime.ParseExact(comisionViewModel.FechaEnvio, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             return comision;
         }
 
@@ -199,9 +202,8 @@ namespace SAV.Models
             comision.Costo = decimal.Parse(comisionViewModel.Costo);
             comision.Comentario = comisionViewModel.Comentario;
             comision.Pago = comisionViewModel.Pago;
-            comision.FechaEnvio = ComisionHelper.getFecha(comisionViewModel.FechaEnvio);
-            comision.Planificada = comision.FechaEnvio.HasValue;
-            
+            comision.FechaEnvio = ComisionHelper.getFecha(comisionViewModel.FechaEnvio).Value;
+
             if (comisionViewModel.Pago)
                 comision.FechaPago = DateTime.Now;
             else

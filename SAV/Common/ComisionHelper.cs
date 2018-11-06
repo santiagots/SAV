@@ -28,7 +28,7 @@ namespace SAV.Common
                 comisiones = comisiones.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == FechaAlta.Value);
 
             if (FechaEnvio.HasValue)
-                comisiones = comisiones.Where(x => x.FechaEnvio.HasValue && DbFunctions.TruncateTime(x.FechaEnvio.Value) == FechaEnvio.Value);
+                comisiones = comisiones.Where(x => DbFunctions.TruncateTime(x.FechaEnvio) == FechaEnvio.Value);
 
             if (FechaEntrega.HasValue)
                 comisiones = comisiones.Where(x => x.FechaEntrega.HasValue && DbFunctions.TruncateTime(x.FechaEntrega.Value) == FechaEntrega.Value);
@@ -65,22 +65,19 @@ namespace SAV.Common
             return decimal.Parse(monto);
         }
 
-
-
         public static IQueryable<Comision> getEnvios(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => !x.FechaEnvio.HasValue || x.Planificada).OrderByDescending(x => x.FechaAlta);
+            return comisiones.Where(x => !x.Enviado).OrderByDescending(x => x.FechaAlta);
         }
 
         public static IQueryable<Comision> getPendientes(IQueryable<Comision> comisiones)
         {
-            //return comisiones.Where(x => x.FechaEnvio.HasValue && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)).OrderBy(x => x.FechaAlta).ToList();
-            return comisiones.Where(x => x.FechaEnvio.HasValue && !x.Planificada && ((x.CuentaCorriente == null && (!x.Pago || x.Debe > 0 || !x.FechaEntrega.HasValue)) || (x.CuentaCorriente != null && !x.FechaEntrega.HasValue))).OrderByDescending(x => x.FechaAlta);
+            return comisiones.Where(x => x.Enviado && (!x.FechaEntrega.HasValue || !x.FechaPago.HasValue)).OrderByDescending(x => x.FechaAlta);
         }
 
         public static IQueryable<Comision> getFinalizadas(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => x.FechaEnvio.HasValue && !x.Planificada && x.Pago && x.Debe == 0 && x.FechaEntrega.HasValue).OrderByDescending(x => x.FechaAlta);
+            return comisiones.Where(x => x.FechaEntrega.HasValue && x.FechaPago.HasValue).OrderByDescending(x => x.FechaAlta);
         }
 
         public static void SetValueToComisionesCell(ISheet ComisionesSheet, int ComisionesRow, Comision comision, int ComisionIndex)
@@ -111,6 +108,48 @@ namespace SAV.Common
 
             List<ICell> comisionComentarioCell = ComisionesSheet.GetRow(ComisionesRow + 1).Cells;
             comisionComentarioCell[1].SetCellValue(String.Format("Comentario: {0}", comision.Comentario));
+        }
+
+        public static IList<Comision> AutoCheck(IQueryable<Comision> Comisiones)
+        {
+            Comisiones = ComisionHelper.getEnvios(Comisiones);
+            Comisiones = Comisiones.Where(x => !x.ParaEnviar);
+
+            DateTime fecha = DateHelper.getLocal();
+            
+            DateTime proximoLunes = DateHelper.GetNextWeekday(DayOfWeek.Monday, DateTime.Now);
+            DateTime proximoSabado = DateHelper.previoustWeekday(DayOfWeek.Saturday, proximoLunes);
+            List<Comision> comisionesChecked = new List<Comision>();
+
+            foreach (Comision comision in Comisiones)
+            { 
+                bool @checked = false;
+                //si es viernes y la fecha de entrega es entrega Sabado y Lunes marco la comision para enviar
+                if (fecha.DayOfWeek == DayOfWeek.Friday && comision.FechaEnvio.Date >= proximoSabado.Date && comision.FechaEnvio.Date <= proximoLunes.Date)
+                {
+                    @checked = true;
+                    comision.ParaEnviar = true;
+                }
+
+                //si no es viernes y la fecha de entrega es mañana marco la comision para enviar
+                if (fecha.DayOfWeek != DayOfWeek.Friday && comision.FechaEnvio.AddDays(-1).Date == fecha.Date)
+                {
+                    @checked = true;
+                    comision.ParaEnviar = true;
+                }
+
+                //si la fecha es hoy marco la comision para enviar. Esto no deberia pasar!!!
+                if (comision.FechaEnvio == fecha.Date)
+                {
+                    @checked = true;
+                    comision.ParaEnviar = true;
+                }
+
+                if (@checked)
+                    comisionesChecked.Add(comision);
+            }
+
+            return comisionesChecked;
         }
     }
 }

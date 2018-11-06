@@ -52,7 +52,6 @@ $(document).ready(function () {
         }
     });
 
-    $(".fechaDesde").datepicker("option", "minDate", 0);
 });
 
 function addLocalidades(localidades, control) {

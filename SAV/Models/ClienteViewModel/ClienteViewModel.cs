@@ -59,8 +59,11 @@ namespace SAV.Models
 
         public string FechaSalida { get; set; }
 
-        [Display(Name = "Vendedor:")]
-        public string Vendedor { get; set; }
+        [Display(Name = "Vendedor Alta:")]
+        public string VendedorAlta { get; set; }
+
+        [Display(Name = "Vendedor Cobro:")]
+        public string VendedorCobro { get; set; }
 
         [Display(Name = "Origen:")]
         public string Origen { get; set; }
@@ -184,7 +187,7 @@ namespace SAV.Models
             DomicilioDescenso = new List<KeyValuePair<int, string>>();
             DomicilioDescenso.AddRange(cliente.Domicilios.Select(x => new KeyValuePair<int, string>(x.ID, x.getDomicilio)).ToList<KeyValuePair<int, string>>());
 
-            this.Vendedor = vendedor;
+            this.VendedorAlta = vendedor;
 
             if (viaje.Servicio == ViajeTipoServicio.Cerrado)
             {
@@ -214,7 +217,8 @@ namespace SAV.Models
                     Pago = clienteViaje.Pago;
                     Costo = clienteViaje.Costo.ToString();
                     SelectFormaPago = clienteViaje.FormaPago != null? clienteViaje.FormaPago.ID : 0;
-                    Vendedor = clienteViaje.Vendedor;
+                    VendedorAlta = clienteViaje.Vendedor;
+                    VendedorCobro = clienteViaje.VendedorCobro;
                     SelectDomicilioAscenso = clienteViaje.DomicilioAscenso != null ? clienteViaje.DomicilioAscenso.ID : 0;
                     SelectDomicilioDescenso = clienteViaje.DomicilioDescenso != null ? clienteViaje.DomicilioDescenso.ID : 0;
 

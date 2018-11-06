@@ -44,9 +44,8 @@ function cerrar()
     }
 }
 
-    function agregarGasto()
+function agregarGasto()
 {
-        debugger;
         if ($("form").valid()) {
 
             enableSpinner();
@@ -63,7 +62,7 @@ function cerrar()
                         "idViaje": $("#viajeID").val()
                     },
                 dataType: "html",
-                success: function (data) { debugger; $('#partialViewGastos').html(data); $('#dialog').dialog('close'); disableSpinner(); },
+                success: function (data) { $('#partialViewGastos').html(data); $('#dialog').dialog('close'); disableSpinner(); },
                 error: function (error) { alert(error); disableSpinner(); }
             });
         }

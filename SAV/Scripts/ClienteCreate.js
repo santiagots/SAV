@@ -44,14 +44,12 @@
     });
 
     $("#AgregarDireccion").click(function () {
-        debugger;
         $.ajax({
             type: "GET",
             url: '/Domicilio/Create',
             data: { "ClienteId": $("#Id").val() },
             datatype: "json",
             success: function (data) {
-                debugger;
                 var dialogDiv = $('#modal');
                 dialogDiv.html(data)
                 $.validator.unobtrusive.parse($("#modal"));
@@ -65,7 +63,6 @@
 });
 
 function HabilitarDeshabilitarDomicilioAscenso() {
-    debugger;
     var select = $("#SelectParadaAscenso")
     if (select.length == 0)
         return;
@@ -93,7 +90,6 @@ function HabilitarDeshabilitarDomicilioDescenso()
 }
 
 function HabilitarDeshabilitarParadaAscenso() {
-    debugger;
     var select = $("#SelectDomicilioAscenso")
     if (select.length == 0)
         return;
@@ -146,7 +142,6 @@ function DeleteDomicilio(id, clienteId) {
             data: { "id": id, "ClienteId": clienteId },
             datatype: "json",
             success: function (data) {
-                debugger;
                 $('#partialViewDomicilios').html(data)
                 ActualizarComboDomicilios(clienteId)
                 disableSpinner();

@@ -11,13 +11,11 @@
 });
 
 $("#alta").click(function () {
-    debugger;
     $.ajax({
         type: "GET",
         url: '/Gasto/Create',
         datatype: "json",
         success: function (data) {
-            debugger;
             var dialogDiv = $('#modal');
             dialogDiv.html(data)
             $.validator.unobtrusive.parse($("#modal"));
@@ -30,7 +28,6 @@ $("#alta").click(function () {
 });
 
 function CreateGastoSuccess() {
-    debugger;
     $.ajax({
         type: "GET",
         url: '/Gasto/GastosPaging',

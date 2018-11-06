@@ -70,8 +70,8 @@
                     </thead>
                     <tbody>
                         @foreach (var item in vendedor.Items)
-                            {
-                                <tr>
+                        {
+                                <tr style = "@( item.SubTotal ? "font-weight: bold" : "") ">
                                     <td class="type2" style="width: 500px;">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>

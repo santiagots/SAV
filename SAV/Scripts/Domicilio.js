@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
-    debugger;
     $(document).on('change', '#SelectProvincia', function () {
-        debugger;
         if ($(this).val() == "") {
             $("#SelectLocalidad").html("<option value=''>Elija una opción</option>");
             return;

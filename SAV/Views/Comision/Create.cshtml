@@ -33,7 +33,7 @@
             <div class="datosInputs">
                 <p class="edicion">@Html.LabelFor(model => model.FechaEnvio)</p>
                 <div class="divFecha">
-                    @Html.TextBoxFor(model => model.FechaEnvio, new {@class = "fecha fechaDesde", @id = "fecha", @name = "fecha", @readonly = true })
+                    @Html.TextBoxFor(model => model.FechaEnvio, new {@class = "fecha fechaDesde", @id = "fechaAltaEnvio", @name = "fechaEnvio", @readonly = true })
                 </div>
             </div>
 
@@ -173,6 +173,7 @@
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.Contacto)</p>
             <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
+            <p>@Html.ValidationMessageFor(model => model.FechaEnvio)</p>
             <p>@Html.ValidationMessageFor(model => model.SelectResponsable)</p>
             <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoEntregar)</p>
             <p>@Html.ValidationMessageFor(model => model.SelectServicioDirectoRetirar)</p>

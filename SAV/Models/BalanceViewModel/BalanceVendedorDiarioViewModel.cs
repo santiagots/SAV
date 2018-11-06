@@ -27,6 +27,7 @@ namespace SAV.Models
     {
         public string Concepto { get; set; }
         public decimal Monto { get; set; }
+        public bool SubTotal { get; set; }
     }
 
     public class BalanceVendedorViewModel

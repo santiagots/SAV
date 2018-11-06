@@ -151,8 +151,9 @@ namespace SAV.Controllers
 
         public ActionResult Search()
         {
-            var viajesActivos = db.Viajes.Where(x => x.FechaArribo.CompareTo(DateTime.Now) >= 0 && x.Estado == ViajeEstados.Abierto);
-            var viajesFinalizados = db.Viajes.Where(x =>  x.FechaArribo.CompareTo(DbFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+            DateTime horaLocal = DateHelper.getLocal();
+            var viajesActivos = db.Viajes.Where(x => x.FechaArribo.CompareTo(horaLocal) >= 0 && x.Estado == ViajeEstados.Abierto);
+            var viajesFinalizados = db.Viajes.Where(x =>  x.FechaArribo.CompareTo(horaLocal) < 0 && x.Estado == ViajeEstados.Abierto);
             var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var SearchViaje = new SearchViajeViewModel();
 
