@@ -42,6 +42,7 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Create(CuentaCorrienteViewModel cuentaCorrienteViewModel)
         {
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
 
@@ -50,18 +51,19 @@ namespace SAV.Controllers
             db.CuentaCorriente.Add(cuentaCorriente);
             db.SaveChanges();
 
-            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             return View("Edit", cuentaCorrienteViewModel);
         }
 
         public ActionResult Edit(int id)
         {
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(id);
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
 
-            CuentaCorrienteViewModel cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            CuentaCorrienteViewModel cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             return View("Edit", cuentaCorrienteViewModel);
         }
@@ -69,6 +71,7 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Edit(CuentaCorrienteViewModel cuentaCorrienteViewModel)
         {
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
             CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(cuentaCorrienteViewModel.ID);
@@ -78,7 +81,7 @@ namespace SAV.Controllers
             db.Entry(cuentaCorriente).State = EntityState.Modified;
             db.SaveChanges();
 
-            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             return View("Edit", cuentaCorrienteViewModel);
         }
@@ -142,7 +145,7 @@ namespace SAV.Controllers
         {
             //elimino los errores de carga del formulario 
             ModelState.Clear();
-
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(id);
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
@@ -155,7 +158,7 @@ namespace SAV.Controllers
 
             cuentaCorriente.Comisiones = CuentaCorrienteHelper.searchComisiones(cuentaCorriente.Comisiones, numero, CuentaCorrienteHelper.getFecha(fechaAlta), CuentaCorrienteHelper.getFecha(fechaEnvio), CuentaCorrienteHelper.getFecha(fechaPago));
 
-            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             cuentaCorrienteViewModel.TotalDeuda = CuentaCorrienteHelper.getTotalDeuda(deuda);
             cuentaCorrienteViewModel.FechaAlta = fechaAlta;
@@ -174,11 +177,12 @@ namespace SAV.Controllers
             comision.FechaEntrega = DateTime.Now.Date;
             db.SaveChanges();
 
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(idCuentaCorriente);
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
 
-            CuentaCorrienteViewModel cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            CuentaCorrienteViewModel cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             return View("Edit", cuentaCorrienteViewModel);
         }
@@ -189,6 +193,7 @@ namespace SAV.Controllers
             //elimino los errores de carga del formulario 
             ModelState.Clear();
 
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             CuentaCorriente cuentaCorriente = db.CuentaCorriente.Find(id);
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
@@ -196,11 +201,12 @@ namespace SAV.Controllers
             List<Comision> deudas = CuentaCorrienteHelper.getDeudas(cuentaCorriente.Comisiones).OrderBy(x => x.FechaAlta).ToList();
 
             decimal monto = decimal.Parse(cuentaCorrienteViewModel.MontoEntrega);
+            FormaPago formaPago = formaPagos.FirstOrDefault(x => x.ID == cuentaCorrienteViewModel.SelectFormaPago);
 
             TimeZoneInfo tst = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
             DateTime tstTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, tst);
 
-            cuentaCorriente.Pagos.Add(new Pago(monto));
+            cuentaCorriente.Pagos.Add(new Pago(monto, formaPago));
 
             foreach (Comision comision in deudas)
             {
@@ -242,7 +248,7 @@ namespace SAV.Controllers
 
             db.SaveChanges();
 
-            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades);
+            cuentaCorrienteViewModel = new CuentaCorrienteViewModel(cuentaCorriente, provincias, localidades, formaPagos);
 
             return View("Edit", cuentaCorrienteViewModel);
         }

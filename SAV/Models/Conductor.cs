@@ -26,5 +26,7 @@ namespace SAV.Models
         public decimal ComisionViaje { get; set; }
 
         public decimal ComisionViajeCerrado { get; set; }
+
+        public virtual List<AdicionalConductor> Adicional { get; set; }
     }
 }

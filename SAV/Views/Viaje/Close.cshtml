@@ -92,50 +92,100 @@
                 </div>
                 @if (Model.DatosBasicosViaje.Estado == SAV.Models.ViajeEstados.Abierto)
                 {
-                <div class="boton">
-                    <div class="inicioBotonGris"></div>
-                    <input id="cerrar" class="centroBotonGris" type="submit" value="Cerrar Viaje" />
-                    <div class="finBotonGris"></div>
-                </div>
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
+                        <input id="cerrar" class="centroBotonGris" type="submit" value="Cerrar Viaje" />
+                        <div class="finBotonGris"></div>
+                    </div>
                 }
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
-                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search")    '" ></input>
+                    <input id="volver" class="centroBotonGris waiting disableValidation" type="button" value="Volver" onclick="location.href='@Url.Action("Search")    '"></input>
                     <div class="finBotonGris"></div>
                 </div>
             </div>
         </div>
         <div class="footerTables"></div>
 
-
-        <!-- PASAJEROS TABLES -->
-            <div id="partialViewPasajeros">
-                @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
-            </div>
-           
-            @if (Model.DatosBasicosViaje.Disponible > 0)
-            {
-                <div class="botones">
-                    <div class="boton">
-                        <div class="inicioBotonGris"></div>
-                        <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Pasajero" onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, From = "Cierre" })    '"></input>
-                        <div class="finBotonGris"></div>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="botones">
-                    <div class="boton">
-                    </div>
-                </div>
-            }
-
-        <!-- GASTOS TABLES -->
-        <div id="partialViewGastos" style="float: right">
-            @Html.Partial("_CierreGastosTable", Model.Gastos)
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
+        </div>
+        <div id="Error" class="contenidoDatosError">
         </div>
 
+        <!-- PASAJEROS TABLES -->
+        <div id="partialViewPasajeros">
+            @Html.Partial("_CierrePasajerosTable", Model.Pasajero)
+        </div>
+
+        @if (Model.DatosBasicosViaje.Disponible > 0)
+        {
+            <div class="botones">
+                <div class="boton">
+                    <div class="inicioBotonGris"></div>
+                    <input id="agregarComision" class="centroBotonGris waiting" type="button" value="Agregar Pasajero" onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, From = "Cierre" })    '"></input>
+                    <div class="finBotonGris"></div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="botones">
+                <div class="boton">
+                </div>
+            </div>
+        }
+    </div>
+}
+<div id="content">
+    <!--ESTE FORM ESTA PORQUE SINO LOS SIGUIENTES NO SE MUESTRAN-->
+    <form></form>
+
+    <!-- ADICIONALES CONDUCTOR TABLES -->
+    <div id="partialViewAdicionalConductor" style="float: right">
+        @Html.Partial("_CierreAdicionalConductor", Model.AdicionalesCoductor)
+    </div>
+    <form id="FormAdicionalesConductor">
+        <div class="alertTablesExtended" id="alertTablesExtended">
+            <div class="seccion">
+
+                <div id="tablaComisiones" class="desplegableTablaCamp" style="display: block;">
+                    <table id="newGasto" class="tablesorter" style="height: 23px; margin-top: -10px">
+                        <tbody>
+                            <tr style="float: left; width: 965px">
+                                <td class="type2 type39">
+                                    <p>@Html.DropDownListFor(model => model.AdicionalCoductor.TipoAdicional, new SelectList(Model.AdicionalCoductor.TipoAdicional, "Key", "Value"), "Elija una opción", new { @class = "type203" })</p>
+                                </td>
+                                <td class="type2 type57">
+                                    <p>@Html.TextBoxFor(model => model.AdicionalCoductor.Monto, new { id = "MontoAdicionalesConductor" })</p>
+                                </td>
+                                <td class="type2 type39">
+                                    <p>@Html.TextBoxFor(model => model.AdicionalCoductor.Comentario, new { id = "ComentarioAdicionalesConductor" })</p>
+                                </td>
+                                <td class="type22">
+                                    <div class="inicioBotonGris"></div>
+                                    <input id="agregarAdicionalConductor" class="centroBotonGris" type="button" value="Agregar" onclick="$('#Patente, #Interno').prop('disabled', true);"></input>
+                                    <div class="finBotonGris"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.AdicionalCoductor.TipoAdicional)</p>
+            <p>@Html.ValidationMessageFor(model => model.AdicionalCoductor.Monto)</p>
+        </div>
+    </form>
+
+    <!-- GASTOS TABLES -->
+    <div id="partialViewGastos" style="float: right">
+        @Html.Partial("_CierreGastosTable", Model.Gastos)
+    </div>
+    <form id="FormNewGasto">
         <div class="alertTablesExtended" id="alertTablesExtended">
             <div class="seccion">
 
@@ -154,7 +204,7 @@
                                 </td>
                                 <td class="type22">
                                     <div class="inicioBotonGris"></div>
-                                    <input id="agregarGasto" class="centroBotonGris" type="button" value="Agregar Gasto" onclick="$('#Patente, #Interno').prop('disabled', true);"></input>
+                                    <input id="agregarGasto" class="centroBotonGris" type="button" value="Agregar" onclick="$('#Patente, #Interno').prop('disabled', true);"></input>
                                     <div class="finBotonGris"></div>
                                 </td>
                             </tr>
@@ -163,26 +213,20 @@
                 </div>
             </div>
         </div>
-        <div class="botones">
-        </div>
-
-        @Html.HiddenFor(model => model.DatosBasicosViaje.viajeID, new { id = "viajeID" })
-
-
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.NewGastos.TipoGasto)</p>
             <p>@Html.ValidationMessageFor(model => model.NewGastos.Monto)</p>
-            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
-            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
-            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
         </div>
-        <div id="Error" class="contenidoDatosError">
-        </div>
+    </form>
+    <div class="botones">
     </div>
-}
 
-@section Scripts {
+    @Html.HiddenFor(model => model.DatosBasicosViaje.viajeID, new { id = "viajeID" })
 
-    <script src="/Scripts/ViajeClose.js"></script>
-}
+</div>
+
+    @section Scripts {
+
+        <script src="/Scripts/ViajeClose.js"></script>
+    }
 

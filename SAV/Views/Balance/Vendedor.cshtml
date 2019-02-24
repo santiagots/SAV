@@ -57,11 +57,11 @@
                 <table class="tablesorter">
                     <thead>
                         <tr class="headTitles noBorder">
-                            <th class="type2" style="width: 500px;">
+                            <th class="type2" style="width: 700px">
                                 <p>Concepto</p>
                                 <span class="ordenamiento"></span>
                             </th>
-                            <th style="width: 400px;">
+                            <th style="width: 200px;">
                                 <p>Monto</p>
                                 <span class="ordenamiento"></span>
                             </th>
@@ -72,19 +72,19 @@
                         @foreach (var item in vendedor.Items)
                         {
                                 <tr style = "@( item.SubTotal ? "font-weight: bold" : "") ">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Html.DisplayFor(modelItem => item.Monto)</p>
                                     </td>
                                 </tr>
                             }
                                 <tr class="headTitles noBorder" style="font-weight: bold">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px">
                                         <p>Total:</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@vendedor.total</p>
                                     </td>
                                 </tr>

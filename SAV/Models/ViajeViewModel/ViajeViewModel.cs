@@ -97,5 +97,11 @@ namespace SAV.Models
 
         [Display(Name = "Estado:")]
         public ViajeEstados Estado { get; set; }
+
+        [Display(Name = "Modalidad de Prestación:")]
+        public List<KeyValuePair<string, string>> ModalidadPrestacion { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar una Modalidad de Prestación")]
+        public string SelectModalidadPrestacion { get; set; }
     }
 }

@@ -1,0 +1,38 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<SAV.Models.RegistroViaje>
+
+<div class="alertTablesExtended" id="alertTablesExtended">
+    <div class="seccion">
+
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("PagingRegistro", new { pageNumber = page, idClienteViaje = ViewBag.idClienteViaje })
+                                                                    , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
+                                                                    , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "ViajesAbiertos" }))
+
+        <div class="headAlertTablesExtended selected">
+            <p>Registros</p>
+        </div>
+        <div id="tablaBusqueda" class="desplegableTablaCamp" style="display: block;">
+            <table id="tablaParts" class="tablesorter">
+                <thead>
+                    <tr class="headTitles noBorder">
+                        <th class="type2" style="width: 200px"><p>Fecha</p></th>
+                        <th class="type2" style="width: 90px"><p>Usuario</p></th>
+                        <th style="width: 650px"><p>Accion</p></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="type2" style="width: 200px"><p>@Html.DisplayFor(modelItem => item.Fecha)</p></td>
+                            <td class="type2" style="width: 90px"><p>@Html.DisplayFor(modelItem => item.Usuario)</p></td>
+                            <td style="width: 650px"><p>@Html.Raw(HttpUtility.HtmlDecode(item.Accion))</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

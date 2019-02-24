@@ -15,10 +15,10 @@
         <div class="contenidoDatos">
             <div class="datosInputs">
                 <p class="edicion">@Html.LabelFor(model => model.Concepto)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.SelectConcepto, new SelectList(Model.Concepto, "Key", "Value"), "Elija una opción")
+                @Html.DropDownListFor(model => model.SelectConcepto, new SelectList(Model.Concepto, "Key", "Value"), "Elija una opción", new { @id= "SelectConceptoCreate" })
 
                 <p class="edicion">@Html.LabelFor(model => model.TipoGasto)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.SelectTipoGasto, new SelectList(Model.TipoGasto, "Key", "Value"), "Elija una opción")
+                @Html.DropDownListFor(model => model.SelectTipoGasto, new SelectList(Model.TipoGasto, "Key", "Value"), "Elija una opción", new { @id = "SelectTipoGastoCreate" })
             </div>
 
             <div class="datosInputs">
@@ -54,3 +54,5 @@
             </div>
     }
 </div>
+
+@Scripts.Render("~/bundles/Gasto")

@@ -15,7 +15,7 @@
         <div class="contenidoDatos">
 
              <div class="datosInputs">
-                            <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Servicio)<b>(*)</b></p>
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.Servicio)<b>(*)</b></p>
                 @Html.DropDownListFor(model => model.DatosBasicosViaje.Servicio, from c in Enum.GetNames(typeof(SAV.Models.ViajeTipoServicio))
                                                                select new SelectListItem
                                                                {
@@ -23,6 +23,8 @@
                                                                    Value = c
                                                                }, "Elija una opción")
 
+                 <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ModalidadPrestacion)<b>(*)</b></p>
+                 @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectModalidadPrestacion, new SelectList(Model.DatosBasicosViaje.ModalidadPrestacion, "Key", "Value"), "Elija una opción")
             </div>
 
             <div id="ServicioAbierto">
@@ -128,6 +130,8 @@
                     <p class="anchoFijo edicion">@Html.LabelFor(model => model.FechaRepeticionFin)</p>
                     @Html.TextBoxFor(model => model.FechaRepeticionFin, new { @class = "fecha", @id = "fechaRepeticion", @name = "fecha", @readonly = true })
                 </div>
+
+
             </div>
             <div class="botones">
                 <div class="boton">
@@ -159,6 +163,7 @@
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.PatenteSuplente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectModalidadPrestacion)</p>
         </div>
         <div id="Error" class="contenidoDatosError">
         </div>

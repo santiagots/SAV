@@ -123,7 +123,7 @@ namespace SAV.Models
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, List<FormaPago> formaPagos)
+        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, List<FormaPago> formaPagos, string vendedor)
         {
             DomicilioAscenso = new List<KeyValuePair<int, string>>();
             DomicilioDescenso = new List<KeyValuePair<int, string>>();
@@ -153,6 +153,7 @@ namespace SAV.Models
             Domicilios = new List<Domicilio>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
+            VendedorAlta = vendedor;
         }
 
         public ClienteViewModel(List<Provincia> provincias, Cliente cliente, List<FormaPago> formaPagos)
@@ -236,10 +237,27 @@ namespace SAV.Models
             }
         }
 
-        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<FormaPago> formaPagos, String Vendedor)
+        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<FormaPago> formaPagos, String Vendedor, int? NumeroAsiento)
         {
             ClienteViaje clienteViaje = new ClienteViaje();
+            
 
+            if (NumeroAsiento.HasValue)
+            {
+                clienteViaje.NumeroAsiento = NumeroAsiento.Value;
+            }
+            else
+            {
+                for (int i = 1; i <= viaje.Asientos; i++)
+                {
+                    if (!viaje.ClienteViaje.Any(x => x.NumeroAsiento == i))
+                    {
+                        clienteViaje.NumeroAsiento = i;
+                        break;
+                    }
+                }
+            }
+            
             clienteViaje.Cliente = cliente;
             clienteViaje.Viaje = viaje;
             clienteViaje.Pago = clienteViewModel.Pago;
@@ -258,6 +276,7 @@ namespace SAV.Models
             clienteViaje.DomicilioDescenso = cliente.Domicilios.FirstOrDefault(x => x.ID == clienteViewModel.SelectDomicilioDescenso);
             clienteViaje.Ascenso = Paradas.FirstOrDefault(x => x.ID == clienteViewModel.SelectParadaAscenso);
             clienteViaje.Descenso = Paradas.FirstOrDefault(x => x.ID == clienteViewModel.SelectParadaDescenso);
+            clienteViaje.Registro = new List<RegistroViaje>();
 
             return clienteViaje;
         }

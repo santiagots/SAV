@@ -10,7 +10,7 @@
 	</div>
     @using (Html.BeginForm())
     {
-           @Html.ValidationSummary(false)
+    @Html.ValidationSummary(false)
 	<div class="contenidoDatos">
 		<div class="datosInputs">
 			<p class="edicion">@Html.LabelFor(model => model.ID)</p>
@@ -112,6 +112,7 @@
         </div>
         <div class="footerTables"></div>
     </div>
+    <div id="modal"></div>
     <div class="contenidoDatosError">
         <p>@Html.ValidationMessageFor(model => model.ID)</p>
         <p>@Html.ValidationMessageFor(model => model.Contacto)</p>

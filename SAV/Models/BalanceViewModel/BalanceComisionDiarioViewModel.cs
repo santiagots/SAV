@@ -15,16 +15,12 @@ namespace SAV.Models
         [Display(Name = "Fecha Hasta:")]
         public string FechaHasta { get; set; }
 
-        public List<ItemBalanceComisionViewModel> Comisiones { get; set; }
-        public List<ItemBalanceComisionViewModel> Gastos { get; set; }
-        public decimal totalComision { get; set; }
-        public decimal totalGasto { get; set; }
+        public List<ItemBalanceComisionViewModel> Items { get; set; }
         public decimal total { get; set; }
 
         public BalanceComisionDiarioViewModel()
         {
-            Comisiones = new List<ItemBalanceComisionViewModel>();
-            Gastos = new List<ItemBalanceComisionViewModel>();
+            Items = new List<ItemBalanceComisionViewModel>();
         }
     }
 
@@ -35,5 +31,7 @@ namespace SAV.Models
 
         [Display(Name = "Monto")]
         public decimal Monto { get; set; }
+
+        public bool SubTotal { get; set; }
     }
 }

@@ -38,8 +38,9 @@ namespace SAV.Controllers
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
             List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
+            List<ModalidadPrestacion> modalidadPrestacion = db.ModalidadPrestacion.ToList<ModalidadPrestacion>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia, modalidadPrestacion);
 
             return View(detailsViajeViewModel);
         }
@@ -58,9 +59,11 @@ namespace SAV.Controllers
             List<Conductor> conductor = db.Conductores.ToList<Conductor>();
             List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
-            List<TipoGasto> TipoGasto = db.TipoGasto.ToList<TipoGasto>();
+            List<TipoGasto> TipoGasto = db.TipoGasto.Where(x => x.Concepto == ConceptoGasto.Viaje).ToList<TipoGasto>();
+            List<TipoAdicionalConductor> TipoAdicional = db.TipoAdicionalConductor.ToList<TipoAdicionalConductor>();
+            List<ModalidadPrestacion> modalidadPrestacion = db.ModalidadPrestacion.ToList<ModalidadPrestacion>();
 
-            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia, TipoGasto);
+            DetailsViajeViewModel detailsViajeViewModel = new DetailsViajeViewModel(viaje, conductor, destinos, provincia, TipoGasto, TipoAdicional, modalidadPrestacion, true);
 
             return View(detailsViajeViewModel);
         }
@@ -91,8 +94,9 @@ namespace SAV.Controllers
             List<Conductor> conductores = db.Conductores.ToList<Conductor>();
             List<Localidad> destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
+            List<ModalidadPrestacion> modalidadPrestacion = db.ModalidadPrestacion.ToList<ModalidadPrestacion>();
 
-            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, destinos, provincias);
+            viaje.UpDate(detailsViajeViewModel.DatosBasicosViaje, conductores, destinos, provincias, modalidadPrestacion);
 
             db.Entry(viaje).State = EntityState.Modified;
             db.SaveChanges();
@@ -104,8 +108,9 @@ namespace SAV.Controllers
             var conductores = db.Conductores.ToList<Conductor>();
             var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var provincias = db.Provincias.ToList<Provincia>();
+            var modalidadPrestacion = db.ModalidadPrestacion.ToList<ModalidadPrestacion>();
 
-            var CreateViajeViewModel = new CreateViajeViewModel(conductores, destinos, provincias);
+            var CreateViajeViewModel = new CreateViajeViewModel(conductores, destinos, provincias, modalidadPrestacion);
 
             return View(CreateViajeViewModel);
         }
@@ -116,8 +121,9 @@ namespace SAV.Controllers
             var destinos = db.Localidades.Where(x => x.Parada.Any()).ToList<Localidad>();
             var conductores = db.Conductores.ToList<Conductor>();
             var provincias = db.Provincias.ToList<Provincia>();
+            var modalidadPrestacion = db.ModalidadPrestacion.ToList<ModalidadPrestacion>();
 
-            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, destinos, provincias);
+            var viaje = new Viaje().CreateViajes(createViajeViewModel, conductores, destinos, provincias, modalidadPrestacion);
 
             foreach (Viaje v in viaje)
                 db.Viajes.Add(v);
@@ -256,9 +262,7 @@ namespace SAV.Controllers
             string salida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
             string arribo = viaje.FechaArribo.ToString("dd/MM/yyyy HH:mm");
 
-            List<Pasajeros> pasajeros = ViajeHelper.getPasajeros(viaje.ClienteViaje);
-
-            //List<Comisiones> comisiones = ViajeHelper.getComisiones(viaje.ComisionesViaje);
+            List<Pasajeros> pasajeros = ViajeHelper.getPasajerosViajeAbierto(viaje.ClienteViaje, viaje.Asientos);
 
             if (viaje == null)
             {
@@ -362,13 +366,13 @@ namespace SAV.Controllers
                 contratante_denominacion = configuracion.ContratanteDenominacion,
                 contenido_programacion_turistica = viaje.ProgramacionTuristica,
                 contratante_cuit = configuracion.ContrtanteCuit != null ? configuracion.ContrtanteCuit.Replace("-", "") : null,
-                contratante_domicilio = (configuracion.ContratanteDomicilio != null) ? string.Format("{0} {1}", configuracion.ContratanteDomicilio.Calle, configuracion.ContratanteDomicilio.Numero) : ""
+                contratante_domicilio = (configuracion.ContratanteDomicilio != null) ? string.Format("{0} {1}", configuracion.ContratanteDomicilio.Calle, configuracion.ContratanteDomicilio.Numero) : "",
+                modalidad_prestacion = viaje.ModalidadPrestacion?.Codigo
             };
 
             List<CNRTPasajero> cnrtPasajeros = new List<CNRTPasajero>();
 
-            int butaca = 1;
-            foreach (ClienteViaje clienteViaje in viaje.ClienteViaje)
+            foreach (ClienteViaje clienteViaje in viaje.ClienteViaje.OrderBy(x => x.NumeroAsiento))
             {
                 cnrtPasajeros.Add(new CNRTPasajero()
                 {
@@ -383,11 +387,9 @@ namespace SAV.Controllers
                     destino = destino,
                     provincia_destino = provinciaDestino,
                     nacionalidad = clienteViaje.Cliente.Nacionalidad,
-                    numero_butaca = butaca,
+                    numero_butaca = clienteViaje.NumeroAsiento,
                     numero_boleto = clienteViaje.ID
                 });
-
-                butaca++;
             }
 
             StringBuilder archivoCVS = new StringBuilder();
@@ -429,8 +431,7 @@ namespace SAV.Controllers
             {
                 return HttpNotFound();
             }
-
-            db.ClienteViajes.Where(x => x.Viaje.ID == id).ToList().ForEach(x => db.ClienteViajes.Remove(x));
+            viaje.ClienteViaje.Clear();
             db.Viajes.Remove(viaje);
             db.SaveChanges();
 
@@ -453,6 +454,22 @@ namespace SAV.Controllers
             return PartialView("_CierreGastosTable", viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
+        public ActionResult DeleteAdicionalConductor(int id, int idViaje)
+        {
+            ViewBag.IdViaje = idViaje;
+            Viaje viaje = db.Viajes.Find(idViaje);
+            AdicionalConductor adicionalConductor = db.AdicionalConductor.Find(id);
+            if (adicionalConductor == null)
+            {
+                return HttpNotFound();
+            }
+
+            db.AdicionalConductor.Remove(adicionalConductor);
+            db.SaveChanges();
+
+            return PartialView("_CierreGastosTable", viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
+        }
+
         public void setAsistenciaPasajeros(int clienteViajeID, int pago, int presente)
         {
             if (clienteViajeID > 0)
@@ -461,13 +478,22 @@ namespace SAV.Controllers
 
                 if (clienteViaje != null)
                 {
+                    RegistroViaje registroPrensente = RegistroViajeHelper.GetRegistroPresente(User.Identity.Name.ToUpper(), clienteViaje, clienteViaje.Presente, Convert.ToBoolean(presente));
+                    if(registroPrensente != null)
+                        db.RegistroViaje.Add(registroPrensente);
+
                     clienteViaje.Presente = Convert.ToBoolean(presente);
 
-                    if (!clienteViaje.Pago && Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
+                    if (clienteViaje.Pago != Convert.ToBoolean(pago) && clienteViaje.Viaje.Estado == ViajeEstados.Abierto)
                     {
+                        RegistroViaje registroPago = RegistroViajeHelper.GetRegistroPago(User.Identity.Name.ToUpper(), clienteViaje, clienteViaje.Pago, Convert.ToBoolean(pago));
+                        if (registroPago != null)
+                            db.RegistroViaje.Add(registroPago);
+
+                        clienteViaje.FormaPago = Convert.ToBoolean(pago)? db.FormaPago.Where(x => x.Descripcion.ToUpper() == "EFECTIVO").FirstOrDefault() : null;
                         clienteViaje.Pago = Convert.ToBoolean(pago);
-                        clienteViaje.FechaPago = DateTime.Now;
-                        clienteViaje.VendedorCobro = User.Identity.Name;
+                        clienteViaje.FechaPago = Convert.ToBoolean(pago) ? DateHelper.getLocal() : (DateTime?) null;
+                        clienteViaje.VendedorCobro = Convert.ToBoolean(pago) ? User.Identity.Name.ToUpper() : "";
                     }
                     db.Entry(clienteViaje).State = EntityState.Modified;
                 }
@@ -489,6 +515,29 @@ namespace SAV.Controllers
             db.SaveChanges();
         }
 
+        public ActionResult AddAdicionalConductor(int idTipoAdicional, decimal monto, string comentario, int idViaje)
+        {
+            Viaje viaje = db.Viajes.Find(idViaje);
+
+            AdicionalConductor adicionalConductor = new AdicionalConductor()
+            {
+                Conductor = viaje.Conductor,
+                Viaje = viaje,
+                Monto = monto,
+                Comentario = comentario,
+                FechaAlta = DateHelper.getLocal(),
+                UsuarioAlta = User.Identity.Name.ToUpper(),
+                TipoAdicionalConductor = db.TipoAdicionalConductor.Find(idTipoAdicional)
+            };
+
+            ViewBag.IdViaje = idViaje;
+
+            db.AdicionalConductor.Add(adicionalConductor);
+            db.SaveChanges();
+
+            return PartialView("_CierreAdicionalConductor", viaje.AdicionalConductor.ToPagedList<AdicionalConductor>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
+        }
+
         public ActionResult AddGasto(int idTipoGasto, decimal monto, string comentario, int idViaje)
         {
 
@@ -500,8 +549,8 @@ namespace SAV.Controllers
                 TipoGasto = tipoGasto,
                 Monto = monto,
                 Comentario = comentario,
-                FechaAlta = DateTime.Now,
-                UsuarioAlta = User.Identity.Name
+                FechaAlta = DateHelper.getLocal(),
+                UsuarioAlta = User.Identity.Name.ToUpper()
             };
 
             ViewBag.IdViaje = idViaje;
@@ -519,8 +568,9 @@ namespace SAV.Controllers
         public ActionResult DetailsPagingPasajeros(int? IdViaje, int? pageNumber)
         {
             ViewBag.IdViaje = IdViaje;
+            Viaje viaje = db.Viajes.Find(IdViaje);
 
-            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajeros(db.Viajes.Find(IdViaje).ClienteViaje, pageNumber.Value);
+            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajerosViajeAbierto(viaje.ClienteViaje, viaje.Asientos, pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_PasajerosTable", pasajeros);
         }
@@ -528,8 +578,9 @@ namespace SAV.Controllers
         public ActionResult CierrePagingPasajeros(int? IdViaje, int? pageNumber, DateTime time)
         {
             ViewBag.IdViaje = IdViaje;
+            Viaje viaje = db.Viajes.Find(IdViaje);
 
-            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajeros(db.Viajes.Find(IdViaje).ClienteViaje, pageNumber.Value);
+            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajerosViajeCerrado(viaje.ClienteViaje, viaje.Asientos, pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_CierrePasajerosTable", pasajeros);
         }
@@ -537,10 +588,20 @@ namespace SAV.Controllers
         public ActionResult CierrePagingPasajerosViajeCerrado(int? IdViaje, int? pageNumber, DateTime time)
         {
             ViewBag.IdViaje = IdViaje;
+            Viaje viaje = db.Viajes.Find(IdViaje);
 
-            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajeros(db.Viajes.Find(IdViaje).ClienteViaje, pageNumber.Value);
+            IPagedList<Pasajeros> pasajeros = ViajeHelper.getPasajerosViajeCerrado(viaje.ClienteViaje, viaje.Asientos, pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_CierrePasajerosViajeCerradoTable", pasajeros);
+        }
+
+        public ActionResult CierrePagingAdicionalConductor(int? IdViaje, int? pageNumber)
+        {
+            ViewBag.IdViaje = IdViaje;
+
+            Viaje viaje = db.Viajes.Find(IdViaje);
+
+            return PartialView("_CierreGastosTable", db.AdicionalConductor.Where(x => x.Viaje.ID == viaje.ID && x.Conductor.ID == viaje.Conductor.ID).ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
         public ActionResult CierrePagingGastos(int? IdViaje, int? pageNumber)

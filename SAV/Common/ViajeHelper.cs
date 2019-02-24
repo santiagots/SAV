@@ -65,10 +65,11 @@ namespace SAV.Common
             return viajes;
         }
 
-        public static List<Pasajeros> getPasajeros(List<ClienteViaje> ClienteViaje)
+        private static List<Pasajeros> getPasajeros(List<ClienteViaje> ClienteViaje)
         {
             return ClienteViaje.Select(x => new Pasajeros()
             {
+                NumeroAsiento = x.NumeroAsiento,
                 ClienteViajeID = x.ID,
                 ClienteID = x.Cliente.ID,
                 Nombre = x.Cliente.Nombre,
@@ -86,9 +87,43 @@ namespace SAV.Common
             }).ToList<Pasajeros>();
         }
 
-        public static IPagedList<Pasajeros> getPasajeros(List<ClienteViaje> ClienteViaje, int pageNumber)
+        public static IPagedList<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, int cantidadAsientos, int pagina, int tamanioPagina)
         {
-            return getPasajeros(ClienteViaje).ToPagedList<Pasajeros>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            Pasajeros[] aux = new Pasajeros[cantidadAsientos];
+            List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
+
+            for (int i = 0; i < cantidadAsientos; i++)
+            {
+                Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
+                if (pasajero != null)
+                    aux[i] = pasajero;
+                else
+                    aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
+            }
+
+            return aux.ToList().ToPagedList<Pasajeros>(pagina, tamanioPagina); ;
+        }
+
+        public static List<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, int cantidadAsientos)
+        {
+            Pasajeros[] aux = new Pasajeros[cantidadAsientos];
+            List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
+
+            for (int i = 0; i < cantidadAsientos; i++)
+            {
+                Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
+                if (pasajero != null)
+                    aux[i] = pasajero;
+                else
+                    aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
+            }
+
+            return aux.ToList();
+        }
+
+        public static IPagedList<Pasajeros> getPasajerosViajeCerrado(List<ClienteViaje> ClienteViaje, int cantidadAsientos, int pagina, int tamanioPagina)
+        {
+            return getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToPagedList<Pasajeros>(pagina, tamanioPagina); ;
         }
 
         private static string getAscenso(ClienteViaje clienteViaje)

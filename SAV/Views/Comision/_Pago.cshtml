@@ -1,0 +1,60 @@
+﻿@model SAV.Models.PagoComisionViewModel
+
+@{
+    Layout = "";
+}
+
+@using (Html.BeginForm())
+    {
+        <div id = "contentModal">
+             <div class="headTables selected">
+            <p>Pago</p>
+        </div>
+        <div class="contenidoDatos">
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)<b>(*)</b></p>
+                @Html.TextBoxFor(m => m.Pago)
+            </div>
+
+            <div class="boton">
+                <div class="inicioBotonGris"></div>
+                <input onclick="actualizarPago('pagar',
+                                                'pendienteTable',
+                                                $( '#SelectFormaPago' ).val(),
+                                                $( '#Pago' ).val(),
+                                                @this.ViewData["Id"],
+                                               '@this.ViewData["Numero"]',
+                                               '@this.ViewData["Contacto"]',
+                                               '@this.ViewData["Servicio"]',
+                                               '@this.ViewData["Accion"]',
+                                               '@this.ViewData["FechaAlta"]',
+                                               '@this.ViewData["FechaEnvio"]',
+                                               '@this.ViewData["FechaEntrega"]',
+                                               '@this.ViewData["FechaPago"]',
+                                               '@this.ViewData["Costo"]',
+                                               '@this.ViewData["IdResponsable"]',
+                                               '@this.ViewData["IdCuentaCorriente"]',
+                                                @this.ViewData["pageNumber"])"
+                        class="centroBotonGris" type="button" value="Aceptar"></input>
+                <div class="finBotonGris"></div>
+            </div>
+        </div>
+
+        <div class="footerTables"></div>
+
+        <div class="contenidoDatosError">
+            <p>@Html.ValidationMessageFor(model => model.SelectFormaPago)</p>
+            <p>@Html.ValidationMessageFor(model => model.Pago)</p>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        function a()
+        {
+        }
+    </script>
+}

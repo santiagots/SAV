@@ -62,6 +62,24 @@
     });
 });
 
+function verRegistro(idCliente, idViaje)
+{
+    $.ajax({
+        type: "GET",
+        url: '/Cliente/PagingRegistro',
+        data: { "pageNumber": "1", "idCliente": idCliente, "idViaje": idViaje },
+        datatype: "json",
+        success: function (data) {
+            var dialogDiv = $('#modal');
+            dialogDiv.html(data)
+            dialogDiv.dialog('open');
+        },
+        error: function (error) {
+            alert("Dynamic content load failed.");
+        }
+    });
+}
+
 function HabilitarDeshabilitarDomicilioAscenso() {
     var select = $("#SelectParadaAscenso")
     if (select.length == 0)

@@ -1,8 +1,20 @@
 ﻿$(document).ready(function () {
     addEventToEnvio();
     $("#envio").click(function () { refrescarTab('SearchPagingComisionEnvios', 'envioTable') });
-    $("#pendiente").click(function () { refrescarTab('SearchPagingComisionEnProgreso', 'pendienteTable') });
+    $("#pendiente").click(function () { refrescarTab('SearchPagingComisionEnProgreso', 'pendienteTable'); });
     $("#finalizada").click(function () { refrescarTab('SearchPagingComisionFinalizadas', 'finalizadaTable') });
+
+    $('#modal').dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: false,
+        height: 'auto',
+        width: 'auto',
+        title: 'Comisiones',
+        acept: function (event, ui) {
+            $('#myDialogId').css('overflow', 'hidden');
+        },
+    });
 });
 
 function addEventToEnvio() {
@@ -11,6 +23,52 @@ function addEventToEnvio() {
     });
 
     disableSpinner();
+}
+
+function addEventToEnProgreso() {
+    $(".pagar").click(function () {
+        pagar();
+    });
+
+    disableSpinner();
+}
+function ConfigurarPago(ID, numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente, numeroPagina)
+{
+    enableSpinner();
+
+    var datos = {
+        "ID":ID,
+        "numero": numero,
+        "Contacto": Contacto,
+        "Servicio": Servicio,
+        "Accion": Accion,
+        "FechaAlta": FechaAlta,
+        "FechaEnvio":FechaEnvio,
+        "FechaEntrega":FechaEntrega,
+        "FechaPago":FechaPago,
+        "Costo":Costo,
+        "IdResponsable":IdResponsable,
+        "IdCuentaCorriente": IdCuentaCorriente,
+        "pageNumber": numeroPagina
+    };
+
+    $.ajax({
+        type: "GET",
+        url: '/Comision/ConfigurarPago',
+        data: datos,
+        datatype: "json",
+        success: function (data) {
+            debugger;
+            var dialogDiv = $('#modal');
+            dialogDiv.html(data)
+            $.validator.unobtrusive.parse($("#modal"));
+            dialogDiv.dialog('open');
+        },
+        error: function (error) {
+            debugger;
+            alert("Dynamic content load failed.");
+        }
+    });
 }
 
 function addEnvio() {
@@ -35,10 +93,41 @@ function addEnvio() {
     $(this).closest("tr")
 }
 
+function actualizarPago(accion, seccionActualizacion,IDFormaPago, MontoPago, ID, numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente, numeroPagina) {
+    enableSpinner();
+    var datos = {
+        "ID": ID,
+        "IdFormaPago": IDFormaPago,
+        "MontoPago" : MontoPago,
+        "numero": numero,
+        "Contacto": Contacto,
+        "Servicio": Servicio,
+        "Accion": Accion,
+        "FechaAlta": FechaAlta,
+        "FechaEnvio": FechaEnvio,
+        "FechaEntrega": FechaEntrega,
+        "FechaPago": FechaPago,
+        "Costo": Costo,
+        "IdResponsable": IdResponsable,
+        "IdCuentaCorriente": IdCuentaCorriente,
+        "pageNumber": numeroPagina
+    };
+    
+    $.ajax({
+        async: true,
+        url: '/Comision/pagar',
+        type: 'POST',
+        data: datos,
+        dataType: "html",
+        success: function (data) { $("#" + seccionActualizacion).html(data); disableSpinner(); $('#modal').dialog("close") },
+        error: function (error) { disableSpinner(); $('#modal').dialog("close"); alert("Hubo un error al actualizar el estado de la comisión. Vuelva a intentar más tarde."); ErrorClose = true; }
+    });
+}
+
 function actualizarEstadoComision(accion,seccionActualizacion,ID, numero, Contacto, Servicio, Accion, FechaAlta, FechaEnvio, FechaEntrega, FechaPago, Costo, IdResponsable, IdCuentaCorriente, numeroPagina)
 {
     enableSpinner();
-
+    debugger;
     var datos = {
         "ID":ID,
         "numero": numero,
@@ -62,7 +151,7 @@ function actualizarEstadoComision(accion,seccionActualizacion,ID, numero, Contac
         data: datos,
         dataType: "html",
         success: function (data) { $("#" + seccionActualizacion).html(data); disableSpinner(); },
-        error: function (error) { disableSpinner(); alert("Hubo un error al actualizar el estado de la comisión. Vuelva a intentar más tarde."); ErrorClose = true; }
+        error: function (error) { debugger; disableSpinner(); alert("Hubo un error al actualizar el estado de la comisión. Vuelva a intentar más tarde."); ErrorClose = true; }
     });
 }
 
@@ -91,7 +180,10 @@ function refrescarTab(accion, seccionActualizacion)
         type: 'POST',
         data: datos,
         dataType: "html",
-        success: function (data) { $("#" + seccionActualizacion).html(data); disableSpinner(); },
+        success: function (data) {
+            $("#" + seccionActualizacion).html(data);
+            disableSpinner();
+        },
         error: function (error) { disableSpinner(); alert("Hubo un error al obtener los datos. Vuelva a intentar más tarde."); ErrorClose = true; }
     });
 }

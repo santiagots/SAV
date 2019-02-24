@@ -39,14 +39,20 @@
 @section Scripts {
     <script>
     $(document).ready(function () {
+        agregarEventos()
+    })
+
+    function agregarEventos()
+    {
         $("#TableFormaPago [type='checkbox']").change(function () {
             actualizarHabilitado();
         });
 
         disableSpinner();
-    })
+    }
 
     function actualizarHabilitado() {
+        debugger;
         //Tr perteneciente al tipoGasto a modificar
         var contexto = $(event.target).closest("tr");
         var datos = {

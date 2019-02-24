@@ -63,6 +63,12 @@ namespace SAV.Models.CuentaCorrienteViewModel
         [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "La Entrega debe ser un valor numerico entre 0 y 999999 con 2 digitos decimales")]
         public string MontoEntrega { get; set; }
 
+        [Display(Name = "Forma de Pago:")]
+        public List<KeyValuePair<int, string>> FormaPago { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar una Forma de Pago")]
+        public int SelectFormaPago { get; set; }
+
         [Display(Name = "Numero:")]
         public string Numero { get; set; }
 
@@ -139,7 +145,7 @@ namespace SAV.Models.CuentaCorrienteViewModel
             return cuentaCorriente;
         }
 
-        internal CuentaCorrienteViewModel(CuentaCorriente cuentaCorriente, List<Provincia> provincias, List<Localidad> localidades):this (provincias, localidades)
+        internal CuentaCorrienteViewModel(CuentaCorriente cuentaCorriente, List<Provincia> provincias, List<Localidad> localidades, List<FormaPago> formaPagos) :this (provincias, localidades)
         {
             this.ID = cuentaCorriente.ID;
             this.Calle = cuentaCorriente.Domicilio.Calle;
@@ -161,6 +167,7 @@ namespace SAV.Models.CuentaCorrienteViewModel
             this.TotalDeuda = CuentaCorrienteHelper.getTotalDeuda(comisionesDebe);
             this.ComisionesDebe = comisionesDebe.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             this.ComisionesPagas = comisionesPagas.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            this.FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
         }
     }
 }

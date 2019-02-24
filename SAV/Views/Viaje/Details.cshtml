@@ -23,6 +23,8 @@
                                                                                      Text = c,
                                                                                      Value = c
                                                                                  }, "Elija una opción")
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.DatosBasicosViaje.ModalidadPrestacion)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.DatosBasicosViaje.SelectModalidadPrestacion, new SelectList(Model.DatosBasicosViaje.ModalidadPrestacion, "Key", "Value"), "Elija una opción")
             </div>
 
             <div id="ServicioAbierto" class="datosInputs">
@@ -109,7 +111,7 @@
                 </div>
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
-                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar CNRT" onclick="location.href='@Url.Action("ExportViajeCNRT", new { id = Model.DatosBasicosViaje.viajeID })'"></input>
+                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar CNRT" onclick="abrirModal('@Url.Action("ProgramacionTuristica", new { id = Model.DatosBasicosViaje.viajeID })')"></input>
                     <div class="finBotonGris"></div>
                 </div>
                 <div class="boton">
@@ -123,7 +125,7 @@
 
 
         <!-- PASAJEROS TABLES -->
-        <div id="partialViewPasajeros" style="float: right">
+        <div id="partialViewPasajeros">
             @Html.Partial("_PasajerosTable", Model.Pasajero)
         </div>
 

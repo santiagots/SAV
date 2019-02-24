@@ -10,6 +10,37 @@
     }
 });
 
+$("#SelectConcepto").change(function () {
+    debugger;
+    if ($(this).val() == "") {
+        $("#SelectTipoGasto").html("<option value=''>Elija una opción</option>");
+        return;
+    }
+    $.ajax({
+        url: '/Gasto/GetGastosPorConcepto',
+        type: 'POST',
+        data: { "Concepto": $("#SelectConcepto > option:selected").attr("value") },
+        dataType: "json",
+        success: function (data) { addOptions(data, $("#SelectTipoGasto")); },
+    });
+});
+
+$("#SelectConceptoCreate").change(function () {
+    debugger;
+    if ($(this).val() == "") {
+        $("#SelectTipoGastoCreate").html("<option value=''>Elija una opción</option>");
+        return;
+    }
+    $.ajax({
+        url: '/Gasto/GetGastosPorConcepto',
+        type: 'POST',
+        data: { "Concepto": $("#SelectConceptoCreate > option:selected").attr("value") },
+        dataType: "json",
+        success: function (data) { addOptions(data, $("#SelectTipoGastoCreate")); },
+    });
+});
+
+
 $("#alta").click(function () {
     $.ajax({
         type: "GET",
@@ -42,4 +73,12 @@ function CreateGastoSuccess() {
             $('#modal').dialog("close")
         }
     });
+}
+
+function addOptions(options, control) {
+    var item = "<option value=''>Elija una opción</option>";
+    $.each(options, function (i, option) {
+        item += "<option value='" + option.Value + "'>" + option.Text + "</option>";
+    });
+    $(control).html(item);
 }

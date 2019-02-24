@@ -28,7 +28,7 @@ namespace SAV.Models
 
         [Display(Name = "Comision viaje:")]
         [Required(ErrorMessage = "Debe ingresar una Comision viaje")]
-        [RegularExpression("[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "La Comision viaje debe ser un valor numerico entre 0 y 999 con 2 digitos decimales")]
+        [RegularExpression("[0-9]?[0-9]?[0-9]?[0-9]?[0-9](\\,[0-9][0-9])", ErrorMessage = "La Comision viaje debe ser un valor numerico entre 0 y 99999 con 2 digitos decimales")]
         public string ComisionViaje { get; set; }
 
         [Display(Name = "Comision viaje cerrado:")]

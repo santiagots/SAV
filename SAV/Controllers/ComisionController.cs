@@ -306,7 +306,7 @@ namespace SAV.Controllers
             searchComisionViewModel.ComisionesFinalizadas = ComisionHelper.getFinalizadas(comisiones).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(searchComisionViewModel);
-        }      
+        }
 
         public ActionResult Send(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente, int pageNumber)
         {
@@ -334,15 +334,40 @@ namespace SAV.Controllers
             ViewData.Add(new KeyValuePair<string, object>("IdCuentaCorriente", IdCuentaCorriente));
 
             return PartialView("_EnProgreso", comisionesDebe);
-        }    
+        }
 
-        public ActionResult pagar(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente, int pageNumber)
+        public ActionResult ConfigurarPago(int ID, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente, int pageNumber)
+        {
+            Comision comision = db.Comisiones.Find(ID);
+            List<FormaPago> formasPago = db.FormaPago.Where(x => x.Habilitado).ToList();
+            PagoComisionViewModel pagoComisionViewModel = new PagoComisionViewModel(comision, formasPago);
+
+            ViewData.Add(new KeyValuePair<string, object>("Id", ID));
+            ViewData.Add(new KeyValuePair<string, object>("Numero", Numero));
+            ViewData.Add(new KeyValuePair<string, object>("Contacto", Contacto));
+            ViewData.Add(new KeyValuePair<string, object>("Servicio", Servicio));
+            ViewData.Add(new KeyValuePair<string, object>("Accion", Accion));
+            ViewData.Add(new KeyValuePair<string, object>("FechaAlta", FechaAlta));
+            ViewData.Add(new KeyValuePair<string, object>("FechaEnvio", FechaEnvio));
+            ViewData.Add(new KeyValuePair<string, object>("FechaEntrega", FechaEntrega));
+            ViewData.Add(new KeyValuePair<string, object>("FechaPago", FechaPago));
+            ViewData.Add(new KeyValuePair<string, object>("Costo", Costo));
+            ViewData.Add(new KeyValuePair<string, object>("IdResponsable", IdResponsable));
+            ViewData.Add(new KeyValuePair<string, object>("IdCuentaCorriente", IdCuentaCorriente));
+            ViewData.Add(new KeyValuePair<string, object>("pageNumber", pageNumber));
+
+            return PartialView("_Pago", pagoComisionViewModel);
+        }
+
+        public ActionResult pagar(int ID, int IdFormaPago, decimal MontoPago, string Numero, string Contacto, string Servicio, string Accion, string FechaAlta, string FechaEnvio, string FechaEntrega, string FechaPago, string Costo, int? IdResponsable, int? IdCuentaCorriente, int pageNumber)
         {
             SearchCuentaCorrienteViewModel searchCuentaCorrienteViewModel = new SearchCuentaCorrienteViewModel();
 
             Comision comision = db.Comisiones.Find(ID);
             comision.Pago = true;
-            comision.FechaPago = DateTime.Now.Date;
+            comision.FechaPago = DateHelper.getLocal();
+            comision.Costo = MontoPago;
+            comision.FormaPago = db.FormaPago.Find(IdFormaPago);
             db.SaveChanges();
 
             IQueryable<Comision> IQueryableComisiones = db.Comisiones.AsQueryable();

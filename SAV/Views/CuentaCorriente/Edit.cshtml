@@ -153,6 +153,9 @@
             <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.MontoEntrega)<b>(*)</b></p>
                 @Html.TextBoxFor(model => model.MontoEntrega)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción")
             </div>
 
             <div class="botones">
@@ -169,6 +172,7 @@
 
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.MontoEntrega)</p>
+            <p>@Html.ValidationMessageFor(model => model.SelectFormaPago)</p>
         </div>
 }
     @Html.ValidationSummary(true)

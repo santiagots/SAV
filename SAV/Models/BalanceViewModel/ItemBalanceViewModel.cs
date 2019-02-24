@@ -40,7 +40,7 @@ namespace SAV.Models
             Concepto = String.Format("Conductor {0} {1} ({2})", conductor.Apellido, conductor.Nombre, conductor.CUIL);
 
             if (viaje.Servicio == ViajeTipoServicio.Cerrado)
-                Importe = Math.Round(viaje.CostoCerrado * (conductor.ComisionViajeCerrado / 100), 2, MidpointRounding.ToEven);
+                Importe = Math.Round(-viaje.CostoCerrado * (conductor.ComisionViajeCerrado / 100), 2, MidpointRounding.ToEven);
             else
                 Importe = Math.Round(-conductor.ComisionViaje, 2, MidpointRounding.ToEven); ;
         }

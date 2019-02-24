@@ -38,7 +38,8 @@ namespace SAV.Models
         [Display(Name = "Fecha Fin Repetición:")]
         public string FechaRepeticionFin { get; set; }
 
-
+        public CreateViajeViewModel() : base()
+        { }
 
         public CreateViajeViewModel(List<Conductor> conductores)
         {
@@ -47,26 +48,15 @@ namespace SAV.Models
             DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
         }
 
-        public CreateViajeViewModel(List<Conductor> conductores, List<Localidad> destinos, List<Provincia> provincias) : this(conductores)
+        public CreateViajeViewModel(List<Conductor> conductores, List<Localidad> destinos, List<Provincia> provincias, List<ModalidadPrestacion> modalidadPrestacion) : this(conductores)
         {
+            DatosBasicosViaje.ModalidadPrestacion = modalidadPrestacion.Select(x => new KeyValuePair<string, string>(x.Codigo, x.Descripcion)).ToList();
+
             DatosBasicosViaje.Destino = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.Origen = destinos.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
 
             DatosBasicosViaje.ProvinciaOrigenCerrado = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
             DatosBasicosViaje.ProvinciaDestinoCerrado = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-        }
-
-        public CreateViajeViewModel(): base()
-        { }
-
-        public CreateViajeViewModel set(CreateViajeViewModel createViajeViewModel, List<Conductor> conductores, List<Localidad> localidad)
-        {
-            createViajeViewModel.DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
-
-            createViajeViewModel.DatosBasicosViaje.Destino = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-            createViajeViewModel.DatosBasicosViaje.Origen = localidad.Where(x => x.Parada != null && x.Parada.Count > 0).Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
-
-            return createViajeViewModel;
         }
     }
 }

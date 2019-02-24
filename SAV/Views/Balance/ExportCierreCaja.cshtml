@@ -61,81 +61,81 @@
     @if (Model.Pasajeros.Count > 0)
     {
         <tr>
-            <td class="headTables1" style="width: 510px">Concepto Pasajero</td>
+            <td class="headTables1" style="width: 710px">Concepto Pasajero</td>
             <td class="headTables1" style="width: 85px">Importe</td>
         </tr>
         foreach (var item in Model.Pasajeros)
         {
             <tr>
-                <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="datosInputs" style="width: 710px">@Html.DisplayFor(modelItem => item.Concepto)</td>
                 <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
             </tr>
         }
 
         <tr>
-            <td class="headTables1" style="width: 510px">Total Pasajeros</td>
+            <td class="headTables1" style="width: 710px">Total Pasajeros</td>
             <td class="headTables1" style="width: 75px">@Model.totalPasajeros</td>
         </tr>
     }
     @if (Model.Conductores.Count > 0)
     {
         <tr>
-            <td class="headTables1" style="width: 510px">Concepto Conductor</td>
+            <td class="headTables1" style="width: 710px">Concepto Conductor</td>
             <td class="headTables1" style="width: 85px">Importe</td>
         </tr>
         foreach (var item in Model.Conductores)
         {
             <tr>
-                <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="datosInputs" style="width: 710px">@Html.DisplayFor(modelItem => item.Concepto)</td>
                 <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
             </tr>
         }
 
         <tr>
-            <td class="headTables1" style="width: 510px">Total Conductor</td>
+            <td class="headTables1" style="width: 710px">Total Conductor</td>
             <td class="headTables1" style="width: 75px">@Model.totalConductores</td>
         </tr>
     }
     @if (Model.Comisiones.Count > 0)
     {
         <tr>
-            <td class="headTables1" style="width: 510px">Concepto Comisión</td>
+            <td class="headTables1" style="width: 710px">Concepto Comisión</td>
             <td class="headTables1" style="width: 85px">Importe</td>
         </tr>
         foreach (var item in Model.Comisiones)
         {
             <tr>
-                <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="datosInputs" style="width: 710px">@Html.DisplayFor(modelItem => item.Concepto)</td>
                 <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
             </tr>
         }
 
         <tr>
-            <td class="headTables1" style="width: 510px">Total Comision</td>
+            <td class="headTables1" style="width: 710px">Total Comision</td>
             <td class="headTables1" style="width: 75px">@Model.totalComision</td>
         </tr>
     }
     @if (Model.Gastos.Count > 0)
     {
         <tr>
-            <td class="headTables1" style="width: 510px">Concepto Gasto</td>
+            <td class="headTables1" style="width: 710px">Concepto Gasto</td>
             <td class="headTables1" style="width: 85px">Importe</td>
         </tr>
         foreach (var item in Model.Gastos)
         {
             <tr>
-                <td class="datosInputs" style="width: 510px">@Html.DisplayFor(modelItem => item.Concepto)</td>
+                <td class="datosInputs" style="width: 710px">@Html.DisplayFor(modelItem => item.Concepto)</td>
                 <td class="datosInputs" style="width: 75px">@Html.DisplayFor(modelItem => item.Importe)</td>
             </tr>
         }
         <tr>
-            <td class="headTables1" style="width: 510px">Total Gastos</td>
+            <td class="headTables1" style="width: 710px">Total Gastos</td>
             <td class="headTables1" style="width: 75px">@Model.totalGasto</td>
         </tr>
     }
 
     <tr>
-        <td class="headTables1" style="width: 510px">Total</td>
+        <td class="headTables1" style="width: 710px">Total</td>
         <td class="headTables1" style="width: 75px">@Model.total</td>
     </tr>
 

@@ -32,5 +32,6 @@ namespace SAV.Models
         public string contratante_domicilio { get; set; }
         public string contenido_programacion_turistica { get; set; }
         public string observaciones { get; set; }
+        public string modalidad_prestacion { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SAV.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -119,109 +120,100 @@ namespace SAV.Common
             return balance;
         }
 
-        internal static CierreCajaViewModel getBalanceCierreCaja(List<ClienteViaje> clienteViaje, List<Viaje> viajes, List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<Gasto> comisionGastos, DateTime fecha, DateTime? fechaHasta)
+        internal static CierreCajaViewModel getBalanceCierreCaja(List<ClienteViaje> clienteViaje, List<Viaje> viajes, List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<Gasto> Gastos, List<AdicionalConductor> adiocionales, DateTime fecha, DateTime? fechaHasta)
         {
             CierreCajaViewModel balance = new CierreCajaViewModel();
 
-            var grupoConductores = viajes.GroupBy(x => x.Conductor != null ? x.Conductor.ID : -1).ToList();
-            var grupoGastos = viajes.SelectMany(x => x.Gastos).Where(x => x.TipoGasto != null).GroupBy(y => y.TipoGasto.Descripcion);
+            //PASAJEROS
+            List<IGrouping<Tuple<ViajeTipoServicio, string>, Viaje>> GruposPasajeros = viajes.GroupBy(x => new Tuple<ViajeTipoServicio, string>(x.Servicio, x.Patente)).ToList();
 
-            List<Viaje> viajesAuxiliar = new List<Viaje>();
-
-            foreach (ClienteViaje item in clienteViaje)
-            {
-                Viaje viaje = viajesAuxiliar.FirstOrDefault(x => x.ID == item.Viaje.ID);
-
-                if (viaje != null)
-                    viaje.ClienteViaje.Add(item);
-                else
-                    viajesAuxiliar.Add(
-                        new Viaje() {
-                            ID = item.Viaje.ID,
-                            Servicio = item.Viaje.Servicio,
-                            Patente = item.Viaje.Patente,
-                            ClienteViaje = new List<ClienteViaje>() }
-                        );
-            }
-
-            foreach (var viaje in viajesAuxiliar)
+            foreach (IGrouping<Tuple<ViajeTipoServicio, string>, Viaje> grupo in GruposPasajeros)
             {
                 balance.Pasajeros.Add(new ItemBalanceViewModel()
                 {
-                    Concepto = string.Format("Servicio {0} Patente {1} (Total pasajeros {2})", viaje.Servicio.ToString(), viaje.Patente.ToString(), viaje.ClienteViaje.Count),
-                    Importe = viaje.ClienteViaje.Sum(x => x.Costo)
+                    Concepto = string.Format("Servicio Patente {1} Tipo {0} ", grupo.Key.Item1, grupo.Key.Item2),
+                    Importe = grupo.Sum(x =>x.ClienteViaje.Sum(y => y.Costo))
                 });
             }
 
-            foreach (var item in grupoConductores)
-            {
-                if (item.FirstOrDefault().Conductor == null)
-                    continue;
+            //CONDUCTORES
+            List<IGrouping<Conductor, Viaje>> GrupoCondictores = viajes.GroupBy(x => x.Conductor).ToList();
 
-                Conductor conductor = item.FirstOrDefault().Conductor;
+            foreach (IGrouping<Conductor, Viaje> grupo in GrupoCondictores)
+            {
+                decimal totalConductor = 0;
+                foreach (Viaje viaje in grupo)
+                {
+                    if (viaje.Servicio == ViajeTipoServicio.Cerrado)
+                        totalConductor -= grupo.Key.ComisionViajeCerrado * viaje.ClienteViaje.Sum(x => x.Costo);
+                    else
+                        totalConductor -= grupo.Key.ComisionViaje;
+
+                    totalConductor -= viaje.AdicionalConductor.Sum(x => x.Monto);
+                }
 
                 balance.Conductores.Add(new ItemBalanceViewModel()
                 {
-                    Concepto = string.Format("Conductor {0} {1} {2} ({3})", conductor.Apellido, conductor.Nombre, conductor.CUIL, item.Count()),
-                    Importe = item.Sum(x => -x.Conductor.ComisionViaje)
-                });
+                    Concepto = string.Format("Conductor {0} {1} {2}", grupo.Key.Apellido, grupo.Key.Nombre, grupo.Key.CUIL),
+                    Importe = totalConductor
+                });                
             }
 
-            foreach (var item in grupoGastos)
+            //COMISIONES
+            //Comisiones que no tiene cuenta corriente
+            balance.Comisiones.Add(new ItemBalanceViewModel()
             {
-                Gasto gasto = item.FirstOrDefault();
+                Concepto = "Comisiones sin cuenta corriente",
+                Importe = comisiones.Sum(x => x.Costo)
+            });
 
-                balance.Gastos.Add(new ItemBalanceViewModel()
-                {
-                    Concepto = string.Format("Gastos {0} ({1})", gasto.TipoGasto.Descripcion, item.Count()),
-                    Importe = item.Sum(x => -x.Monto)
-                });
-            }
-
-            foreach (Comision item in comisiones)
+            //Comisiones con cuenta corriente
+            foreach (CuentaCorriente cuentasCorriente in cuentasCorrientes)
             {
-                balance.Comisiones.Add(new ItemBalanceViewModel()
-                {
-                    Concepto = string.Format("Pago comisión {0}", item.Contacto),
-                    Importe = item.Costo
-                });
-                balance.totalComision += item.Costo;
-            }
+                List<Pago> pagos = new List<Pago>();
+                if (fechaHasta.HasValue)
+                    pagos = cuentasCorriente.Pagos.Where(x => x.Fecha.CompareTo(fecha) >= 0 && x.Fecha.CompareTo(fechaHasta.Value) <= 0).ToList();
+                    //pagos = cuentasCorriente.Pagos.Where(x => DbFunctions.TruncateTime(x.Fecha).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.Fecha).Value.CompareTo(fechaHasta.Value) <= 0).ToList();
+                else
+                    pagos = cuentasCorriente.Pagos.Where(x => x.Fecha.Date == fecha.Date).ToList();
+                    //pagos = cuentasCorriente.Pagos.Where(x => DbFunctions.TruncateTime(x.Fecha).Value == fecha.Date).ToList();
 
-            foreach (CuentaCorriente item in cuentasCorrientes)
-            {
-                List<Pago> Pagos = new List<Pago>();
-                    if(fechaHasta.HasValue)
-                        Pagos = item.Pagos.Where(x => x.Fecha.Date.CompareTo(fecha.Date) >= 0 && x.Fecha.Date.CompareTo(fechaHasta.Value.Date) <= 0).ToList();
-                    else
-                        Pagos = item.Pagos.Where(x => x.Fecha.Date == fecha.Date).ToList();
-
-                foreach (Pago pago in Pagos)
+                if (pagos.Any())
                 {
                     balance.Comisiones.Add(new ItemBalanceViewModel()
                     {
-                        Concepto = string.Format("Pago en cuenta {0}", item.RazonSocial),
-                        Importe = pago.Monto
+                        Concepto = string.Format("Pago en cuenta {0}", cuentasCorriente.RazonSocial),
+                        Importe = pagos.Sum(x => x.Monto)
                     });
                 }
-                balance.totalComision += Pagos.Sum(x => x.Monto);
             }
 
-            foreach (Gasto item in comisionGastos)
+            //GASTOS
+            List<IGrouping<ConceptoGasto, Gasto>> gastos = Gastos.GroupBy(x => x.Concepto).ToList();
+
+            foreach (IGrouping<ConceptoGasto, Gasto> gasto in gastos)
             {
                 balance.Gastos.Add(new ItemBalanceViewModel()
                 {
-                    Concepto = item.Comentario,
-                    Importe = -item.Monto
+                    Concepto = string.Format("Gastos {0}", gasto.Key),
+                    Importe = gasto.Sum(x => -x.Monto)
                 });
             }
 
+            balance.Pasajeros = balance.Pasajeros.OrderBy(x => x.Concepto).ToList();
+            balance.Pasajeros.RemoveAll(x => x.Importe == 0);
             balance.totalPasajeros = balance.Pasajeros.Sum(x => x.Importe);
 
+            balance.Conductores = balance.Conductores.OrderBy(x => x.Concepto).ToList();
+            balance.Conductores.RemoveAll(x => x.Importe == 0);
             balance.totalConductores = balance.Conductores.Sum(x => x.Importe);
 
+            balance.Comisiones = balance.Comisiones.OrderBy(x => x.Concepto).ToList();
+            balance.Comisiones.RemoveAll(x => x.Importe == 0);
             balance.totalComision = balance.Comisiones.Sum(x => x.Importe);
 
+            balance.Gastos = balance.Gastos.OrderBy(x => x.Concepto).ToList();
+            balance.Gastos.RemoveAll(x => x.Importe == 0);
             balance.totalGasto = balance.Gastos.Sum(x => x.Importe);
 
             balance.total = balance.totalPasajeros + balance.totalConductores + balance.totalComision + balance.totalGasto;
@@ -229,112 +221,135 @@ namespace SAV.Common
             return balance;
         }
 
-        internal static CierreCajaViewModel getBalanceCierreCaja(List<Viaje> viajes, List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<Gasto> comisionGastos, DateTime fecha, DateTime fechaHasta)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static BalanceComisionDiarioViewModel getBalanceComision(List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<Gasto> comisionGasto, DateTime fecha)
+        public static BalanceComisionDiarioViewModel getBalanceComision(List<FormaPago> FormasPago, List<Comision> comisiones, List<CuentaCorriente> CuentasCorriente, List<Gasto> comisionGasto)
         {
 
             BalanceComisionDiarioViewModel balance = new BalanceComisionDiarioViewModel();
 
-            foreach (Comision item in comisiones)
-            {
-                    balance.Comisiones.Add(new ItemBalanceComisionViewModel()
-                    {
-                        Concepto = string.Format("Pago comisión {0}", item.Contacto),
-                        Monto = item.Costo
-                    });
-                balance.totalComision += item.Costo;
-            }
+            List<IGrouping<string, Comision>> comisionesPorContacto = comisiones.GroupBy(x => x.Contacto).ToList();
+            List<IGrouping<string, CuentaCorriente>> cuentasCorrientePorRazonSocial = CuentasCorriente.GroupBy(x => x.RazonSocial).ToList();
+            List<IGrouping<string, Gasto>> gastosPorTipo = comisionGasto.GroupBy(x => x.TipoGasto.Descripcion).ToList();
 
-            foreach (CuentaCorriente item in cuentasCorrientes)
+            decimal Total = 0;
+            foreach (FormaPago formaPago in FormasPago)
             {
-                List<Pago> Pagos = item.Pagos.Where(x => x.Fecha.Date == fecha.Date).ToList();
-
-                foreach (Pago pago in Pagos)
+                decimal Subtotal = 0;
+                List<IGrouping<string, Comision>> comisionesPorFechaPorFormaPago = comisionesPorContacto.Where(x => x.Any(y => y.FormaPago?.Descripcion.ToUpper() == formaPago.Descripcion.ToUpper())).ToList();
+                foreach (IGrouping<string, Comision> comisionePorFechaPorFormaPago in comisionesPorFechaPorFormaPago)
                 {
-                    balance.Comisiones.Add(new ItemBalanceComisionViewModel()
+                    balance.Items.Add(new ItemBalanceComisionViewModel()
                     {
-                        Concepto = string.Format("Pago en cuenta {0}", item.RazonSocial),
-                        Monto = pago.Monto
+                        Concepto = $"Comisiones {comisionePorFechaPorFormaPago.Key} ({comisionePorFechaPorFormaPago.Count()})",
+                        Monto = comisionePorFechaPorFormaPago.Sum(x => x.Costo)
                     });
+
+                    Subtotal += comisionePorFechaPorFormaPago.Sum(x => x.Costo);
                 }
-                balance.totalComision += Pagos.Sum(x => x.Monto);
-            }
 
-            foreach (Gasto item in comisionGasto)
-            {
-                balance.Gastos.Add(new ItemBalanceComisionViewModel()
+                foreach (IGrouping<string, CuentaCorriente> cuentaCorrientePorRazonSocial in cuentasCorrientePorRazonSocial)
                 {
-                    Concepto = string.Format("Gasto {0} {1} {2}", item.Concepto, item.TipoGasto.Descripcion, item.Comentario),
-                    Monto = -item.Monto
-                });
+                    List<Pago> pagos = cuentaCorrientePorRazonSocial.SelectMany(x => x.Pagos).Where(y => y.FormaPago.Descripcion.ToUpper() == formaPago.Descripcion.ToUpper()).ToList();
+                    if (pagos.Count > 0)
+                    {
+                        balance.Items.Add(new ItemBalanceComisionViewModel()
+                        {
+                            Concepto = $"CuentaCorriente {cuentaCorrientePorRazonSocial.Key} ({cuentaCorrientePorRazonSocial.Count()})",
+                            Monto = pagos.Sum(x => x.Monto)
+                        });
+
+                        Subtotal += pagos.Sum(x => x.Monto);
+                    }
+                }
+
+                if (formaPago.Descripcion.ToUpper() == "Efectivo".ToUpper())
+                {
+                    foreach (IGrouping<string, Gasto> gastoPorTipo in gastosPorTipo)
+                    {
+                        balance.Items.Add(new ItemBalanceComisionViewModel()
+                        {
+                            Concepto = $"Gastos {gastoPorTipo.Key} ({gastoPorTipo.Count()})",
+                            Monto = -gastoPorTipo.Sum(x => x.Monto)
+                        });
+
+                        Subtotal -= gastoPorTipo.Sum(x => x.Monto);
+                    }
+                }
+
+                if (Subtotal != 0)
+                {
+                    balance.Items.Add(new ItemBalanceComisionViewModel()
+                    {
+                        Concepto = string.Format("Sub Total {0}", formaPago.Descripcion),
+                        Monto = Subtotal,
+                        SubTotal = true
+                    });
+
+                    Total += Subtotal;
+                }
             }
 
-            balance.totalGasto = -comisionGasto.Sum(x => x.Monto);
-
-            balance.total = balance.totalComision + balance.totalGasto;
+            if (balance.Items.Count != 0)
+            {
+                balance.total = Total;
+            }
 
             return balance;
         }
 
-        public static BalanceComisionDiarioViewModel getBalanceComision(List<Comision> comisiones, List<CuentaCorriente> cuentasCorrientes, List<Gasto> gastos, DateTime fecha, DateTime fechaHasta)
-        {
+        //public static BalanceComisionDiarioViewModel getBalanceComision(List<FormaPago> FormasPago, List<Comision> comisiones, List<Pago> CuentasCorrientePagos, List<Gasto> comisionGasto)
+        //{
 
-            BalanceComisionDiarioViewModel balance = new BalanceComisionDiarioViewModel();
-            var grupoGastos = gastos.Where(x => x.TipoGasto != null).GroupBy(y => y.TipoGasto.Descripcion);
+        //    BalanceComisionDiarioViewModel balance = new BalanceComisionDiarioViewModel();
 
-            foreach (Comision item in comisiones)
-            {
-                balance.Comisiones.Add(new ItemBalanceComisionViewModel()
-                {
-                    Concepto = string.Format("Pago comisión {0}", item.Contacto),
-                    Monto = item.Costo
-                });
-                balance.totalComision += item.Costo;
-            }
+        //    List<IGrouping<FormaPago, Comision>> comisionesPorFormaPago = comisiones.GroupBy(x => x.FormaPago).ToList();
+        //    List<IGrouping<FormaPago, Pago>> cuentasCorrientePagosPorFormaPago = CuentasCorrientePagos.GroupBy(x => x.FormaPago).ToList();
+        //    List<IGrouping<TipoGasto, Gasto>> gastosPorTipo = comisionGasto.GroupBy(x => x.TipoGasto).ToList();
 
-            foreach (CuentaCorriente item in cuentasCorrientes)
-            {
-                List<Pago> Pagos = item.Pagos.Where(x => x.Fecha.Date.CompareTo(fecha.Date) >= 0 && x.Fecha.Date.CompareTo(fechaHasta.Date) <= 0).ToList();
+        //    foreach (FormaPago formaPago in FormasPago)
+        //    {
+        //        decimal montoTotal = 0;
+        //        IGrouping<FormaPago, Comision> comisionesGoup = comisionesPorFormaPago.FirstOrDefault(x => x.Key.ID == formaPago.ID);
+        //        if(comisionesGoup != null)
+        //            montoTotal += comisionesGoup.Sum(x => x.Costo);
 
-                foreach (Pago pago in Pagos)
-                {
-                    balance.Comisiones.Add(new ItemBalanceComisionViewModel()
-                    {
-                        Concepto = string.Format("Pago en cuenta {0}", item.RazonSocial),
-                        Monto = pago.Monto
-                    });
-                }
-                balance.totalComision += Pagos.Sum(x => x.Monto);
-            }
+        //        IGrouping<FormaPago, Pago> PagoGoup = cuentasCorrientePagosPorFormaPago.FirstOrDefault(x => x.Key.ID == formaPago.ID);
+        //        if (PagoGoup != null)
+        //            montoTotal += PagoGoup.Sum(x => x.Monto);
 
-            foreach (var item in grupoGastos)
-            {
-                Gasto gasto = item.FirstOrDefault();
+        //        if (montoTotal > 0)
+        //        {
+        //            balance.Comisiones.Add(new ItemBalanceComisionViewModel()
+        //            {
+        //                Concepto = $"Total {formaPago.Descripcion} {montoTotal}",
+        //                Monto = montoTotal
+        //            });
+        //        }
+        //    }
 
-                balance.Comisiones.Add(new ItemBalanceComisionViewModel()
-                {
-                    Concepto = string.Format("Gastos {0} ({1})", gasto.TipoGasto.Descripcion, item.Count()),
-                    Monto = item.Sum(x => -x.Monto)
-                });
+        //    balance.totalComision = balance.Comisiones.Sum(x => x.Monto);
 
-                balance.totalGasto = -item.Sum(x => x.Monto);
-            }
+        //    foreach (IGrouping<TipoGasto, Gasto> gastoPorTipo in gastosPorTipo)
+        //    {
+        //        balance.Gastos.Add(new ItemBalanceComisionViewModel()
+        //        {
+        //            Concepto = $"Total Gasto {gastoPorTipo.Key.Descripcion}",
+        //            Monto = -gastoPorTipo.Sum(x => x.Monto)
+        //        });
+        //    }
 
-            balance.total = balance.totalComision + balance.totalGasto;
+        //    balance.totalGasto = -comisionGasto.Sum(x => x.Monto);
 
-            return balance;
-        }
+        //    balance.total = balance.totalComision + balance.totalGasto;
+
+        //    return balance;
+        //}
 
         public static List<Viaje> getViajes(List<Viaje> viajes, DateTime fecha)
         {
             return viajes.Where(x => x.FechaArribo.Day == fecha.Day && x.FechaArribo.Month == fecha.Month && x.FechaArribo.Year == fecha.Year && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
         }
 
-        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<ClienteViaje> clienteViaje, List<Gasto> Gastos, String[] Rol, String Usuario)
+        public static BalanceVendedorDiarioViewModel getBalanceVendedor(List<FormaPago> formasPago, List<ClienteViaje> clienteViaje, List<Gasto> Gastos, String[] Rol, String Usuario)
         {
             BalanceVendedorDiarioViewModel balance = new BalanceVendedorDiarioViewModel();
             List<IGrouping<string, ClienteViaje>> gruposCobrosPorVendedor;
@@ -343,14 +358,105 @@ namespace SAV.Common
 
             if (Rol.Contains("Administrador"))
             {
-                gruposCobrosPorVendedor = clienteViaje.GroupBy(x => x.VendedorCobro).ToList();
-                gruposGastosPorVendedor = Gastos.GroupBy(x => x.UsuarioAlta).ToList();
+                gruposCobrosPorVendedor = clienteViaje.GroupBy(x => x.VendedorCobro.ToUpper()).ToList();
+                gruposGastosPorVendedor = Gastos.GroupBy(x => x.UsuarioAlta.ToUpper()).ToList();
                 usuarios = UsuarioHelper.getUsuarios();
             }
             else
             {
-                gruposCobrosPorVendedor = clienteViaje.Where(x => x.VendedorCobro == Usuario).GroupBy(x => x.VendedorCobro).ToList();
-                gruposGastosPorVendedor = Gastos.Where(x => x.UsuarioAlta == Usuario).GroupBy(x => x.UsuarioAlta).ToList();
+                gruposCobrosPorVendedor = clienteViaje.Where(x => x.VendedorCobro.ToUpper() == Usuario).GroupBy(x => x.VendedorCobro.ToUpper()).ToList();
+                gruposGastosPorVendedor = Gastos.Where(x => x.UsuarioAlta.ToUpper() == Usuario).GroupBy(x => x.UsuarioAlta.ToUpper()).ToList();
+                usuarios.Add(new UsuarioViewModel() { Usuario = Usuario });
+            }
+
+            foreach (UsuarioViewModel vendedor in usuarios)
+            {
+                decimal Total = 0;
+                BalanceVendedorViewModel balanceVendedor = new BalanceVendedorViewModel()
+                {
+                    Concepto = string.Format("Usuario: {0}", vendedor.Usuario.ToUpper()),
+                    Items = new List<ItemBalanceVendedorViewModel>()
+                };
+
+                foreach (FormaPago formaPago in formasPago)
+                {
+                    decimal Subtotal = 0;
+                    List<IGrouping<string, Gasto>> gastosPorVendedor = new List<IGrouping<string, Gasto>>();
+                    if (formaPago.Descripcion.ToUpper() == "Efectivo".ToUpper())
+                        gastosPorVendedor = gruposGastosPorVendedor.Where(x => x.Key.ToUpper() == vendedor.Usuario.ToUpper()).ToList();
+
+                    List<IGrouping<string, ClienteViaje>> cobrosPorVendedor = gruposCobrosPorVendedor.Where(x => x.Key.ToUpper() == vendedor.Usuario.ToUpper()).ToList();
+
+                    foreach (IGrouping<string, ClienteViaje> cobroPorVendedor in cobrosPorVendedor)
+                    {
+                        List<ClienteViaje> cobrosPorFormaPago = cobroPorVendedor.Where(x => x.FormaPago?.Descripcion.ToUpper() == formaPago?.Descripcion.ToUpper()).ToList();
+
+                        foreach (ClienteViaje cobro in cobrosPorFormaPago)
+                        {
+                            balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                            {
+                                Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", cobro.Cliente.Apellido, cobro.Cliente.Nombre, cobro.Viaje.ID, cobro.Viaje.FechaSalida, cobro.Viaje.Servicio),
+                                Monto = cobro.Costo
+                            });
+                        }
+
+                        Subtotal += cobrosPorFormaPago.Sum(x => x.Costo);
+                    }
+
+                    foreach (IGrouping<string, Gasto> gastoPorVendedor in gastosPorVendedor)
+                    {
+                        foreach (Gasto gasto in gastoPorVendedor)
+                        {
+                            balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                            {
+                                Concepto = string.Format("Gastos {0} {1} {2}", gasto.Concepto, gasto.TipoGasto.Descripcion, gasto.Comentario),
+                                Monto = -gasto.Monto
+                            });
+                        }
+
+                        Subtotal -= gastoPorVendedor.Sum(x => x.Monto);
+                    }
+
+                    if (Subtotal != 0)
+                    {
+                        balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                        {
+                            Concepto = string.Format("Sub Total {0}", formaPago.Descripcion),
+                            Monto = Subtotal,
+                            SubTotal = true
+                        });
+                    }
+
+                    Total += Subtotal;
+                }
+
+                if (balanceVendedor.Items.Count != 0)
+                {
+                    balanceVendedor.total = Total;
+                    balance.BalanceVendedor.Add(balanceVendedor);
+                }
+            }
+
+            return balance;
+        }
+
+        public static BalanceVendedorDiarioViewModel getBalanceVendedor2(List<ClienteViaje> clienteViaje, List<Gasto> Gastos, String[] Rol, String Usuario)
+        {
+            BalanceVendedorDiarioViewModel balance = new BalanceVendedorDiarioViewModel();
+            List<IGrouping<string, ClienteViaje>> gruposCobrosPorVendedor;
+            List<IGrouping<string, Gasto>> gruposGastosPorVendedor;
+            List<UsuarioViewModel> usuarios = new List<UsuarioViewModel>();
+
+            if (Rol.Contains("Administrador"))
+            {
+                gruposCobrosPorVendedor = clienteViaje.GroupBy(x => x.VendedorCobro.ToUpper()).ToList();
+                gruposGastosPorVendedor = Gastos.GroupBy(x => x.UsuarioAlta.ToUpper()).ToList();
+                usuarios = UsuarioHelper.getUsuarios();
+            }
+            else
+            {
+                gruposCobrosPorVendedor = clienteViaje.Where(x => x.VendedorCobro.ToUpper() == Usuario).GroupBy(x => x.VendedorCobro.ToUpper()).ToList();
+                gruposGastosPorVendedor = Gastos.Where(x => x.UsuarioAlta.ToUpper() == Usuario).GroupBy(x => x.UsuarioAlta.ToUpper()).ToList();
                 usuarios.Add(new UsuarioViewModel() { Usuario = Usuario });
             }
 
@@ -364,7 +470,7 @@ namespace SAV.Common
 
                 BalanceVendedorViewModel balanceVendedor = new BalanceVendedorViewModel()
                 {
-                    Concepto = string.Format("Usuario: {0}", vendedor.Usuario),
+                    Concepto = string.Format("Usuario: {0}", vendedor.Usuario.ToUpper()),
                     Items = new List<ItemBalanceVendedorViewModel>()
                 };
 
@@ -384,7 +490,7 @@ namespace SAV.Common
                             });
                         }
 
-                        if (pagos.Key.Descripcion == "Efectivo" && gastoPorVendedor != null)
+                        if (pagos.Key?.Descripcion == "Efectivo" && gastoPorVendedor != null)
                         {
                             foreach (var gasto in gastoPorVendedor)
                             {
@@ -394,18 +500,31 @@ namespace SAV.Common
                                     Monto = -gasto.Monto
                                 });
                             }
-                        }
 
-                        balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel() {
-                            Concepto = string.Format("Sub Total {0}", pagos.Key != null ? pagos.Key.Descripcion : string.Empty),
-                            Monto = pagos.Sum(x => x.Costo) - gastoPorVendedor.Sum(x => x.Monto),
-                            SubTotal = true
+                            decimal monto = (pagos != null ? pagos.Sum(x => x.Costo) : 0) - (gastoPorVendedor != null ? gastoPorVendedor.Sum(x => x.Monto) : 0);
+                            balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                            {
+                                Concepto = string.Format("Sub Total {0}", pagos.Key != null ? pagos.Key.Descripcion : string.Empty),
+                                Monto = monto,
+                                SubTotal = true
                             });
-                        balanceVendedor.total += pagos.Sum(x => x.Costo) - gastoPorVendedor.Sum(x => x.Monto);
+                            balanceVendedor.total += monto;
+                        }
+                        else
+                        {
+                            decimal monto = (pagos != null ? pagos.Sum(x => x.Costo) : 0);
+                            balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
+                            {
+                                Concepto = string.Format("Sub Total {0}", pagos.Key != null ? pagos.Key.Descripcion : string.Empty),
+                                Monto = monto,
+                                SubTotal = true
+                            });
+                            balanceVendedor.total += monto;
+                        }
                     }
                 }
 
-                if (!cobroPorVendedor.Any(x=> x.FormaPago.Descripcion == "Efectivo") && gastoPorVendedor != null)
+                if (cobroPorVendedor == null  && gastoPorVendedor != null)
                 {
                     foreach (var gasto in gastoPorVendedor)
                     {
@@ -428,6 +547,24 @@ namespace SAV.Common
             }
 
             return balance;
+        }
+
+        public static List<CuentaCorriente> ObtenerPago(List<CuentaCorriente> cuentasCorrientes, DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<CuentaCorriente> resultado = new List<CuentaCorriente>();
+
+            foreach (CuentaCorriente cuenta in cuentasCorrientes)
+            {
+                List<Pago> pagos = cuenta.Pagos.Where(y => y.Fecha.Date.CompareTo(fechaDesde.Date) >= 0 && y.Fecha.Date.CompareTo(fechaHasta.Date) <= 0).ToList();
+                if (pagos.Count > 0)
+                    resultado.Add(new CuentaCorriente()
+                    {
+                        RazonSocial = cuenta.RazonSocial,
+                        Pagos = pagos
+                    });
+            }
+
+            return resultado;
         }
     }
 }

@@ -1,16 +1,13 @@
-﻿@model SAV.Models.TipoGastoViewModel
+﻿@model SAV.Models.TipoAdicionalConductorViewModel
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
     <div id="content">
         <div class="headTables selected">
-            <p>Tipos de Gastos</p>
+            <p>Tipos de Adicionales</p>
         </div>
         <div class="contenidoDatos">
             <div class="datosInputs">
-                <p class="edicion">@Html.LabelFor(model => model.Concepto)<b>(*)</b></p>
-                @Html.DropDownListFor(model => model.SelectConcepto, new SelectList(Model.Concepto, "Key", "Value"), "Elija una opción")
-
                 <p class="edicion">@Html.LabelFor(model => model.Descripcion)<b>(*)</b></p>
                 @Html.TextBoxFor(model => model.Descripcion)
             </div>
@@ -25,8 +22,8 @@
         <div class="footerTables"></div>
 
         <!-- RESULTADO TABLES -->
-        <div id="TableTipoGasto">
-            @Html.Partial("_TipoGastosTable", Model.TiposGastos)
+        <div id="TableTipoAdicionalConductor">
+            @Html.Partial("_TipoAdicionalesConductorTable", Model.TipoAdicionalConductor)
         </div>
 
         <div id="ErrorResponsable" class="contenidoDatosError">
@@ -34,7 +31,6 @@
     </div>
 }
 <div class="contenidoDatosError">
-    <p>@Html.ValidationMessageFor(model => model.SelectConcepto)</p>
     <p>@Html.ValidationMessageFor(model => model.Descripcion)</p>
 </div>
 <div id="Error" class="contenidoDatosError">
@@ -48,7 +44,8 @@
 
     function agregarEventos()
     {
-        $("#TableTipoGasto [type='checkbox']").change(function () {
+        debugger;
+        $("#TableTipoAdicionalConductor [type='checkbox']").change(function () {
             actualizarHabilitado();
         });
 
@@ -59,18 +56,18 @@
         //Tr perteneciente al tipoGasto a modificar
         var contexto = $(event.target).closest("tr");
         var datos = {
-            "TipoGastoID": $("[name*='ID']", contexto).val(),
+            "TipoAdicionalConductorID": $("[name*='ID']", contexto).val(),
             "Habilitado": $("[name*='Habilitado']:checked", contexto).length,
         };
 
         $.ajax({
             async: false,
-            url: '/Configuracion/setHabilitadoTipoGasto',
+            url: '/Configuracion/setHabilitadoTipoAdicionalConductor',
             type: 'POST',
             data: datos,
             dataType: "html",
             success: function (data) { disableSpinner(); },
-            error: function (error) { addError(error, "setHabilitadoTipoGasto", "Hubo un error al modificar el tipo de gasto."); ErrorClose = true; }
+            error: function (error) { addError(error, "setHabilitadoTipoGasto", "Hubo un error al modificar el tipo de adicional."); ErrorClose = true; }
         });
         $(this).closest("tr")
     }

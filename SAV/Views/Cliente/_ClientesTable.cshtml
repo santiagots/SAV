@@ -4,7 +4,7 @@
 
     <div class="alertTablesExtended" id="alertTablesExtended">
 		<div class="seccion">
-             @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingClientes", new { IdViaje = ViewBag.IdViaje, pageNumber = page, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, dni =  ViewBag.dni, telefono =  ViewBag.telefono })
+             @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingClientes", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = ViewBag.NumeroAsiento, pageNumber = page, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, dni =  ViewBag.dni, telefono =  ViewBag.telefono })
                                                                                                     , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
                                                                                                     , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "partialViewClientes" }))
 
@@ -29,12 +29,12 @@
                         @foreach (var item in Model)
                         {
 						<tr>
-							<td class="type2 type209 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Apellido)</p></td>
-							<td class="type2 type209 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Nombre)</p></td>
-							<td class="type2 type106 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type203"><p>@Html.DisplayFor(modelItem => item.DNI)</p></td>
-							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type203"><p>@Html.DisplayFor(modelItem => item.Domicilios.FirstOrDefault().getDomicilio)</p></td>
-							<td class="type2 type166 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.Telefono)</p></td>
-                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", new { id = item.ID })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.getClienteViaje)</p></td>
+							<td class="type2 type209 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Apellido)</p></td>
+							<td class="type2 type209 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type106"><p>@Html.DisplayFor(modelItem => item.Nombre)</p></td>
+							<td class="type2 type106 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type203"><p>@Html.DisplayFor(modelItem => item.DNI)</p></td>
+							<td class="type2 type203 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type203"><p>@Html.DisplayFor(modelItem => item.Domicilios.FirstOrDefault().getDomicilio)</p></td>
+							<td class="type2 type166 waiting" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.Telefono)</p></td>
+                            <td class="type2 type119" onclick="location.href='@Url.Action("Details", new { id = item.ID, idViaje = ViewBag.idViaje, NumeroAsiento = ViewBag.NumeroAsiento })'" class="type2 type204"><p>@Html.DisplayFor(modelItem => item.getClienteViaje)</p></td>
                             <td class="type112">
                                 <a onclick = "return confirmSpinner('Esta seguro que desea borrar el cliente?');" href="@Url.Action("DeleteCliente", new { id = item.ID, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, dni =  ViewBag.dni, telefono =  ViewBag.telefono, IdViaje = ViewBag.IdViaje})" ><span id="Span43" class="action retirar" title="Eliminar"/></a>                                
                             </td>

@@ -46,8 +46,11 @@ div{
     <div> <img src="@Server.MapPath("~/img/laestacionfondo.png")" id="bg" />
         <table class="cabecera">
             <tr>
-                <td rowspan="2"><img src="@Server.MapPath("~/img/laestacion.png")" width="120px" height="100px" alt="colectivo"></td>
+                <td rowspan="3"><img src="@Server.MapPath("~/img/laestacion.png")" width="120px" height="100px" alt="colectivo"></td>
                 <td colspan="2" align="center">COMPROBANTE DE PAGO</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">NO VALIDO COMO FACTURA</td>
             </tr>
             <tr>
                 <td>CODIGÓ - @ViewBag.IdViaje</td>

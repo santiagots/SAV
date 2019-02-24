@@ -1,5 +1,6 @@
 ﻿@using PagedList
 @using PagedList.Mvc
+@using SAV.Common
 @model IPagedList<SAV.Models.Viaje>
 
 <div class="alertTablesExtended" id="alertTablesExtended">
@@ -31,7 +32,7 @@
                         @foreach (var item in Model)
                         {
                             
-                            if (item.Estado == SAV.Models.ViajeEstados.Abierto && item.FechaArribo.CompareTo(DateTime.Now.AddHours(4)) > 0)
+                            if (item.Estado == SAV.Models.ViajeEstados.Abierto && item.FechaArribo.CompareTo(DateHelper.getLocal()) > 0)
                             {
 						        <tr>
                                     @if(item.Origen != null){
@@ -55,7 +56,6 @@
                                         <a onclick = "return confirmSpinner('Esta seguro que desea borrar el viaje?');" href="@Url.Action("Delete", new { id = item.ID })" ><span id="Span43" class="action retirar" title="Eliminar"/></a>
                                         <a href="@Url.Action("ExportViaje", new { id = item.ID })" ><span id="Span44" class="action exportar" title="Exportar"/></a>
                                         <a onclick="Abrir('@Url.Action("ProgramacionTuristica", new { id = item.ID })')"><span id="Span44" class="action exportarCNRT" title="Exportar para CNRT" /></a>
-                                        @*<a href="@Url.Action("ExportViajeCNRT", new { id = item.ID })"><span id="Span44" class="action exportarCNRT" title="Exportar para CNRT" /></a>*@
                                     </td>
 						        </tr>
                             }

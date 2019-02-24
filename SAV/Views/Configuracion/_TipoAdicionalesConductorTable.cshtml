@@ -1,13 +1,13 @@
 ﻿@using PagedList
 @using PagedList.Mvc
-@model IPagedList<SAV.Models.TipoGasto>
+@model IPagedList<SAV.Models.TipoAdicionalConductor>
 
 <div class="alertTablesExtended" id="alertTablesExtended">
     <div class="seccion">
 
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingTipoGasto", new { pageNumber = page })
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingTipoAdicionalConductor", new { pageNumber = page })
 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
-                                                                                                             , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "agregarEventos", UpdateTargetId = "TableTipoGasto" }))
+                                                                                                             , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "agregarEventos", UpdateTargetId = "TableTipoAdicionalConductor" }))
 
         <div class="headAlertTablesExtended selected">
             <p>Resultado</p>
@@ -17,8 +17,7 @@
             <table id="tablaParts" class="tablesorter">
                 <thead>
                     <tr class="headTitles noBorder">
-                        <th class="type2 type39"><p>Concepto</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type40"><p>Descripcion</p><span class="ordenamiento"></span></th>
+                        <th class="type2 type41"><p>Descripcion</p><span class="ordenamiento"></span></th>
                         <th class="type6"><p>Habilitado</p><span class="ordenamiento"></span></th>
                     </tr>
 
@@ -28,8 +27,7 @@
                     {
                         <tr class="Responsables">
                             @Html.HiddenFor((modelItem => item.ID))
-                            <td class="type2 type39"><p>@Html.DisplayFor(modelItem => item.Concepto)</p></td>
-                            <td class="type2 type40"><p>@Html.DisplayFor(modelItem => item.Descripcion)</p></td>
+                            <td class="type2 type41"><p>@Html.DisplayFor(modelItem => item.Descripcion)</p></td>
                             <td class="type6"><p>@Html.CheckBoxFor(modelItem => item.Habilitado)</p></td>
                         </tr>
                     }

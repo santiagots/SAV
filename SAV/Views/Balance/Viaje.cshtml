@@ -58,11 +58,11 @@
                 <table id="tablaParts" class="tablesorter">
                     <thead>
                         <tr class="headTitles noBorder">
-                            <th class="type2" style="width: 500px;">
+                            <th class="type2" style="width: 700px;">
                                 <p>@Html.DisplayNameFor(model => veiculos.Items.First().Concepto)</p>
                                 <span class="ordenamiento"></span>
                             </th>
-                            <th style="width: 400px;">
+                            <th style="width: 200px;;">
                                 <p>@Html.DisplayNameFor(model => veiculos.Items.First().Importe)</p>
                                 <span class="ordenamiento"></span></th>
                         </tr>
@@ -72,10 +72,10 @@
                         @foreach (var item in veiculos.Items)
                         {
                             <tr>
-                                <td class="type2" style="width: 500px;">
+                                <td class="type2" style="width: 700px;">
                                     <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td style="width: 200px;;">
                                     <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                 </td>
                             </tr>
@@ -83,10 +83,10 @@
                         @if (veiculos.Items.Count > 0)
                         {
                             <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
+                                <td class="type2" style="width: 700px;">
                                     <p>Total:</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td style="width: 200px;;">
                                     <p>@veiculos.total</p>
                                 </td>
                             </tr>

@@ -72,12 +72,17 @@ namespace SAV.Common
 
         public static IQueryable<Comision> getPendientes(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => x.Enviado && (!x.FechaEntrega.HasValue || !x.FechaPago.HasValue)).OrderByDescending(x => x.FechaAlta);
+            return comisiones.Where(x => x.Enviado &&
+                                    (x.CuentaCorriente == null && (!x.FechaEntrega.HasValue || !x.FechaPago.HasValue)) ||
+                                    (x.CuentaCorriente != null && !x.FechaEntrega.HasValue)
+                                    ).OrderByDescending(x => x.FechaAlta);
         }
 
         public static IQueryable<Comision> getFinalizadas(IQueryable<Comision> comisiones)
         {
-            return comisiones.Where(x => x.FechaEntrega.HasValue && x.FechaPago.HasValue).OrderByDescending(x => x.FechaAlta);
+            return comisiones.Where(x => (x.CuentaCorriente == null && x.FechaEntrega.HasValue && x.FechaPago.HasValue) ||
+                                         (x.CuentaCorriente != null && x.FechaEntrega.HasValue)
+            ).OrderByDescending(x => x.FechaAlta);
         }
 
         public static void SetValueToComisionesCell(ISheet ComisionesSheet, int ComisionesRow, Comision comision, int ComisionIndex)
@@ -113,7 +118,6 @@ namespace SAV.Common
         public static IList<Comision> AutoCheck(IQueryable<Comision> Comisiones)
         {
             Comisiones = ComisionHelper.getEnvios(Comisiones);
-            Comisiones = Comisiones.Where(x => !x.ParaEnviar);
 
             DateTime fecha = DateHelper.getLocal();
             
@@ -143,6 +147,11 @@ namespace SAV.Common
                 {
                     @checked = true;
                     comision.ParaEnviar = true;
+                }
+
+                if (!@checked && comision.FechaEnvio > fecha.Date)
+                {
+                    comision.ParaEnviar = false;
                 }
 
                 if (@checked)

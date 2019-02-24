@@ -23,9 +23,9 @@ namespace SAV.Controllers
 
             CreateGastoViewModel searchGastoViewModel = new CreateGastoViewModel();
 
-            searchGastoViewModel.TipoGasto = tipoGastos.Where(x => x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
+            searchGastoViewModel.TipoGasto = new List<KeyValuePair<int, string>>();
             searchGastoViewModel.Concepto = EnumHelper.GetEnumList<ConceptoGasto>();
-            searchGastoViewModel.UsuarioAlta = User.Identity.Name;
+            searchGastoViewModel.UsuarioAlta = User.Identity.Name.ToUpper();
             searchGastoViewModel.FechaAlta = DateTime.Now.ToString("dd/MM/yyyy");
 
             return View(searchGastoViewModel);
@@ -60,15 +60,14 @@ namespace SAV.Controllers
 
         public ActionResult Search()
         {
-
             List<TipoGasto> tipoGastos = db.TipoGasto.ToList();
             List<Gasto> comisionGasto = db.Gastos.ToList<Gasto>();
 
             SearchGastoViewModel searchGastoViewModel = new SearchGastoViewModel();
 
             searchGastoViewModel.Concepto = EnumHelper.GetEnumList<ConceptoGasto>();
-            searchGastoViewModel.TipoGasto = tipoGastos.Where(x => x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
-            searchGastoViewModel.UsuarioAlta = UsuarioHelper.getUsuarios().Select(x => new KeyValuePair<string, string>(x.Usuario, x.Usuario)).ToList();
+            searchGastoViewModel.TipoGasto = new List<KeyValuePair<int, string>>();
+            searchGastoViewModel.UsuarioAlta = UsuarioHelper.getUsuarios().Select(x => new KeyValuePair<string, string>(x.Usuario.ToUpper(), x.Usuario.ToUpper())).ToList();
             searchGastoViewModel.Gastos = comisionGasto.OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(searchGastoViewModel);
@@ -86,8 +85,8 @@ namespace SAV.Controllers
             List<Gasto> comisionGasto = db.Gastos.ToList<Gasto>();
 
             searchGastoViewModel.Concepto = EnumHelper.GetEnumList<ConceptoGasto>();
-            searchGastoViewModel.TipoGasto = tipoGastos.Where(x => x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
-            searchGastoViewModel.UsuarioAlta = UsuarioHelper.getUsuarios().Select(x => new KeyValuePair<string, string>(x.Usuario, x.Usuario)).ToList();
+            searchGastoViewModel.TipoGasto = tipoGastos.Where(x => x.Habilitado && x.Concepto == (ConceptoGasto)searchGastoViewModel.SelectConcepto).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
+            searchGastoViewModel.UsuarioAlta = UsuarioHelper.getUsuarios().Select(x => new KeyValuePair<string, string>(x.Usuario.ToUpper(), x.Usuario.ToUpper())).ToList();
             searchGastoViewModel.Gastos = gasto.OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(searchGastoViewModel);
@@ -109,18 +108,28 @@ namespace SAV.Controllers
         {
             IQueryable<Gasto> gastoQueryable = db.Gastos.AsQueryable<Gasto>();
 
-            List<Gasto> gasto = GastoHelper.searchComisionGasto(gastoQueryable, comentario, ComisionHelper.getFecha(fechaAlta), ComisionHelper.getMonto(monto), tipoGasto, usuarioAlta, concepto);
+            List<Gasto> gasto = GastoHelper.searchComisionGasto(gastoQueryable, comentario, ComisionHelper.getFecha(fechaAlta), ComisionHelper.getMonto(monto), tipoGasto, usuarioAlta.ToUpper(), concepto);
 
             IPagedList<Gasto> comisionesPagos = gasto.OrderByDescending(x => x.ID).ToPagedList<Gasto>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             this.ViewData["descripcion"] = comentario;
             this.ViewData["fechaAlta"] = fechaAlta;
             this.ViewData["monto"] = monto;
-            this.ViewData["usuarioAlta"] = usuarioAlta;
+            this.ViewData["usuarioAlta"] = usuarioAlta.ToUpper();
             this.ViewData["tipoGasto"] = tipoGasto;
             this.ViewData["concepto"] = concepto;
 
             return PartialView("_GastosTable", comisionesPagos);
+        }
+
+        public ActionResult GetGastosPorConcepto(int concepto)
+        {
+            List<TipoGasto> tipoGasto = db.TipoGasto.Where(x => x.Habilitado && x.Concepto == (ConceptoGasto) concepto).ToList();
+
+            if (HttpContext.Request.IsAjaxRequest())
+                return Json(new SelectList(tipoGasto.OrderBy(x => x.Descripcion), "ID", "Descripcion"), JsonRequestBehavior.AllowGet);
+
+            return View(tipoGasto);
         }
 
     }

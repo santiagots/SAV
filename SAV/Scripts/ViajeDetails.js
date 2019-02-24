@@ -58,3 +58,16 @@ function abrirBoleto(src) {
     dialogDiv.dialog('open');
 }
 
+function abrirModal(Url) {
+    var $dialog = $('<div style="overflow: hidden"; "></div>')
+                   .html('<iframe style="border: 0px; " src="' + Url + '" width="100%" height="100%" scrolling="no"></iframe>')
+                   .dialog({
+                       autoOpen: false,
+                       modal: true,
+                       resizable: false,
+                       height: 200,
+                       width: 1010,
+                       title: "Datos programación turística"
+                   });
+    $dialog.dialog('open');
+}

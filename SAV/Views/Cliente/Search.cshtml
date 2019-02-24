@@ -32,12 +32,12 @@
 		<div class="botones">
 			<div class="boton">
 				<div class="inicioBotonGris"></div>
-				<input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar" formaction="@Url.Action("Search", new { IdViaje = ViewBag.IdViaje })"/>
+				<input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar" formaction="@Url.Action("Search", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = ViewBag.NumeroAsiento })"/>
 				<div class="finBotonGris"></div>
 			</div>
 			<div class="boton">
 				<div class="inicioBotonGris"></div>
-                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create", new { IdViaje = ViewBag.IdViaje })'"></input>
+                <input type="button" class="centroBotonGris waiting" value="Nuevo" onclick="location.href='@Url.Action("Create", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = ViewBag.NumeroAsiento })'"></input>
 				<div class="finBotonGris"></div>
 			</div>
             @if (ViewBag.IdViaje !=null )

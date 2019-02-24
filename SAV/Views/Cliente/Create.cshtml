@@ -4,7 +4,7 @@
     ViewBag.Title = "Create";
 }
 
-@using (Html.BeginForm((string)ViewBag.Action, "Cliente", new { @idViaje = ViewBag.IdViaje }))
+@using (Html.BeginForm((string)ViewBag.Action, "Cliente", new { @idViaje = ViewBag.IdViaje, @NumeroAsiento = ViewBag.NumeroAsiento }))
 {
     @Html.HiddenFor(model => model.Id)
     @Html.ValidationSummary(true)
@@ -195,6 +195,11 @@
                 <div class="botones">
                     <div class="boton">
                         <div class="inicioBotonGris"></div>
+                        <input id="Guardar" class="centroBotonGris" type="button" onclick="verRegistro(@Model.Id, @ViewBag.IdViaje)" value="Registro" />
+                        <div class="finBotonGris"></div>
+                    </div>
+                    <div class="boton">
+                        <div class="inicioBotonGris"></div>
                         <input id="Guardar" class="centroBotonGris waiting" type="submit" value="Guardar" />
                         <div class="finBotonGris"></div>
                     </div>
@@ -221,6 +226,10 @@
                     @Html.Partial("_ViajesEnElMismoDia", Model.ViajesEnElMismoDia)
             </div>
             }
+
+            <div id="partialViewRegistro">
+                
+            </div>
         }
 
         <!-- RESULTADO TABLES -->

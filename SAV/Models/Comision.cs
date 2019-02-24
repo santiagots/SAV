@@ -29,6 +29,8 @@ namespace SAV.Models
 
         public bool Pago { get; set; }
 
+        public virtual FormaPago FormaPago { get; set; }
+
         public ComisionAccion Accion { get; set; }
 
         public ComisionServicio Servicio { get; set; }

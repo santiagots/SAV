@@ -9,7 +9,7 @@
 
         @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingComisionEnProgreso", new { Numero = this.ViewData["Numero"], Contacto = this.ViewData["Contacto"], Servicio = this.ViewData["Servicio"], Accion = this.ViewData["Accion"], FechaAlta = this.ViewData["FechaAlta"], FechaEnvio = this.ViewData["FechaEnvio"], FechaEntrega = this.ViewData["FechaEntrega"], FechaPago = this.ViewData["FechaPago"], Costo = this.ViewData["Costo"], IdResponsable = this.ViewData["IdResponsable"], IdCuentaCorriente = this.ViewData["IdCuentaCorriente"], pageNumber = page })
                                                                                                     , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
-                                                                                                    , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "pendienteTable" }))
+                                                                                                    , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "addEventToEnProgreso", UpdateTargetId = "pendienteTable" }))
 
         <div class="headAlertTablesExtended selected">
             <p>Comisiones Pendientes</p>
@@ -51,7 +51,8 @@
                             <td style="width: 150px;">
                                 @if (!item.FechaPago.HasValue && string.IsNullOrEmpty(cuentaCorriente))
                                 {
-                                    <a onclick="actualizarEstadoComision('pagar','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action pagar" title="Pagar" /></a>
+                                    @*<a onclick="actualizarEstadoComision('pagar','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action pagar" title="Pagar" /></a>*@
+                                    <a onclick="ConfigurarPago(@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action pagar" title="Pagar" /></a>
                                 }
                                 @if (!item.FechaEntrega.HasValue)
                                 {

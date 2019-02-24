@@ -29,7 +29,7 @@
                     <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
                     <div class="finBotonGris"></div>
                 </div>
-                @if (Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
+                @if (Model.Items.Count > 0)
                 {
                     <div class="boton">
                         <div class="inicioBotonGris"></div>
@@ -45,8 +45,7 @@
             <p>@Html.ValidationSummary(true)</p>
         </div>
     }
-
-@if (Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
+@if (Model.Items.Count > 0)
 {
     <div class="alertTablesExtended" id="alertTablesExtended">
         <div class="seccion">
@@ -58,69 +57,36 @@
                 <table id="tablaParts" class="tablesorter">
                     <thead>
                         <tr class="headTitles noBorder">
-                            <th class="type2" style="width: 500px;">
-                                <p>@Html.DisplayNameFor(model => model.Comisiones.First().Concepto)</p>
+                            <th class="type2" style="width: 700px">
+                                <p>@Html.DisplayNameFor(model => model.Items.First().Concepto)</p>
                                 <span class="ordenamiento"></span>
                             </th>
-                            <th style="width: 400px;">
-                                <p>@Html.DisplayNameFor(model => model.Comisiones.First().Monto)</p>
+                            <th style="width: 200px">
+                                <p>@Html.DisplayNameFor(model => model.Items.First().Monto)</p>
                                 <span class="ordenamiento"></span></th>
                         </tr>
 
                     </thead>
-                    <tbody id="tablaPasajeros">
-                        @foreach (var item in Model.Comisiones)
+                    <tbody>
+                        @foreach (var item in Model.Items)
                         {
-                            <tr>
-                                <td class="type2" style="width: 500px;">
+                            <tr style="@( item.SubTotal ? "font-weight: bold" : "") ">
+                                <td class="type2" style="width: 700px">
                                     <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td style="width: 200px;">
                                     <p>@Html.DisplayFor(modelItem => item.Monto)</p>
                                 </td>
                             </tr>
                         }
-                        @if (Model.Comisiones.Count > 0)
-                        {
-                            <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
-                                    <p>Total Comisiones:</p>
-                                </td>
-                                <td style="width: 400px;">
-                                    <p>@Model.totalComision</p>
-                                </td>
-                            </tr>
-                        }
-                        @foreach (var item in Model.Gastos)
-                        {
-                            <tr>
-                                <td class="type2" style="width: 500px;">
-                                    <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
-                                </td>
-                                <td style="width: 400px;">
-                                    <p>@Html.DisplayFor(modelItem => item.Monto)</p>
-                                </td>
-                            </tr>
-                        }
-                        @if (Model.Gastos.Count > 0)
-                        {
-                            <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
-                                    <p>Total Gasto:</p>
-                                </td>
-                                <td style="width: 400px;">
-                                    <p>@Model.totalGasto</p>
-                                </td>
-                            </tr>
-                        }
-                            <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
-                                    <p>Total:</p>
-                                </td>
-                                <td style="width: 400px;">
-                                    <p>@Model.total</p>
-                                </td>
-                            </tr>
+                        <tr class="headTitles noBorder" style="font-weight: bold">
+                            <td class="type2" style="width: 700px">
+                                <p>Total:</p>
+                            </td>
+                            <td style="width: 200px;">
+                                <p>@Model.total</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>     
             </div>

@@ -7,18 +7,12 @@ using System.Web;
 
 namespace SAV.Models
 {
-    public class TipoGastoViewModel
+    public class TipoAdicionalConductorViewModel
     {
-        [Display(Name = "Concepto:")]
-        public List<KeyValuePair<int, string>> Concepto { get; set; }
-
-        [Required(ErrorMessage = "Debe ingresar una Concepto")]
-        public int? SelectConcepto { get; set; }
-
         [Display(Name = "Descripción:")]
         [Required(ErrorMessage = "Debe ingresar una Descripción")]
         public string Descripcion { get; set; }
 
-        public IPagedList<TipoGasto> TiposGastos { get; set; }
+        public IPagedList<TipoAdicionalConductor> TipoAdicionalConductor { get; set; }
     }
 }

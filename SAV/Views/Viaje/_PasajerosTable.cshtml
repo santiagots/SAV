@@ -17,7 +17,10 @@
             <table id="tablaParts" class="tablesorter">
                 <thead>
                     <tr class="headTitles noBorder">
-                        <th class="type2 type106">
+                        <th class="type2" style="width: 25px;">
+                            <p>Nro</p>
+                            <span class="ordenamiento"></span></th>
+                        <th class="type2" style="width: 160px;">
                             <p>@Html.DisplayNameFor(model => model.First().Apellido) , @Html.DisplayNameFor(model => model.First().Nombre) </p>
                             <span class="ordenamiento"></span></th>
                          <th class="type2 type13">
@@ -26,23 +29,20 @@
                          <th class="type2 type119">
                             <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type2 type63">
+                        <th class="type2" style="width: 185px;">
                             <p>Acenso</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type2 type63">
+                        <th class="type2" style="width: 185px;">
                             <p>Descenso</p>
                             <span class="ordenamiento"></span></th>
                         <th class="type2 type4">
                             <p>Pago</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type2 type118">
-                            <p>Ausentes</p>
-                            <span class="ordenamiento"></span></th>
-                        <th class="type2 type118">
+                        <th class="type2" style="width: 130px;">
                             <p>Vendedor</p>
                             <span class="ordenamiento"></span></th>
-                        <th class="type5">
-                            <p>&nbsp;&nbsp;&nbsp;</p>
+                        <th style="width: 61px;">
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
                         </th>
                     </tr>
 
@@ -50,8 +50,29 @@
                 <tbody id="tablaPasajeros">
                     @foreach (var item in Model)
                     {
+                        if (item.ClienteViajeID == 0)
+                        {
+                            <tr>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 waiting" style="width: 25px;">
+                                    <p>@Html.DisplayFor(modelItem => item.NumeroAsiento)</p>
+                                </td>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 waiting" style="width: 160px;"></td>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 type13 waiting"></td>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 type119 waiting"></td>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 waiting"  style="width: 185px;">
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 waiting"  style="width: 185px;">
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 type4 waiting"></td>
+                                <td onclick="location.href='@Url.Action("Search", "Cliente", new { IdViaje = ViewBag.IdViaje, NumeroAsiento = item.NumeroAsiento })'" class="type2 waiting" style="width: 130px;"></td>
+                                <td style="width: 61px;"></td>
+                            </tr>
+                        }
+                        else
+                        {
                         <tr>
-                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type106 waiting">
+                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 waiting" style="width: 25px;">
+                                <p>@Html.DisplayFor(modelItem => item.NumeroAsiento)</p>
+                            </td>
+                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 waiting" style="width: 160px;">
                                 <p>@Html.DisplayFor(modelItem => item.Apellido) , @Html.DisplayFor(modelItem => item.Nombre)</p>
                             </td>
                             <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type13 waiting">
@@ -60,22 +81,19 @@
                             <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type119 waiting">
                                 <p>@Html.DisplayFor(modelItem => item.Telefono) @Html.DisplayFor(modelItem => item.TelefonoAlternativo)</p>
                             </td>
-                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type63 waiting">
+                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 waiting"  style="width: 185px;">
                                 <p>@Html.DisplayFor(modelItem => item.Ascenso)</p>
                             </td>
-                           <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type63 waiting">
+                           <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 waiting"  style="width: 185px;">
                                 <p>@Html.DisplayFor(modelItem => item.Descenso)</p>
                             </td>
                             <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type4 waiting">
                                 <p>@Html.DisplayFor(modelItem => item.Pago)</p>
                             </td>
-                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type118 waiting">
-                                <p>@Html.DisplayFor(modelItem => item.Ausencias)</p>
-                            </td>
-                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type118 waiting">
+                            <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 waiting" style="width: 130px;">
                                 <p>@Html.DisplayFor(modelItem => item.Vendedor)</p>
                             </td>
-                            <td class="type5">
+                            <td style="width: 61px;">
                                 <a onclick = "return confirmSpinner('Esta seguro que desea borrar el pasajero?');" href="@Url.Action("Delete", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje })" >
                                     <span id="Span43" class="action retirar" title="Eliminar"/>
                                 </a>
@@ -87,6 +105,7 @@
                                 }
                             </td>
                         </tr>
+                        }
                     }
                 </tbody>
             </table>

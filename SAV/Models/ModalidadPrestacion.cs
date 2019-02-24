@@ -5,11 +5,10 @@ using System.Web;
 
 namespace SAV.Models
 {
-    public class TipoGasto
+    public class ModalidadPrestacion
     {
         public int ID { get; set; }
-        public ConceptoGasto Concepto { get; set; }
+        public string Codigo { get; set; }
         public string Descripcion { get; set; }
-        public bool Habilitado { get; set; }
     }
 }

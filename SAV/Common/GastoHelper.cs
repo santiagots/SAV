@@ -27,7 +27,7 @@ namespace SAV.Common
                 comisionGasto = comisionGasto.Where(x => x.Concepto == (ConceptoGasto)Concepto.Value);
 
             if (!String.IsNullOrEmpty(UsuarioAlta))
-                comisionGasto = comisionGasto.Where(x => x.UsuarioAlta == UsuarioAlta);
+                comisionGasto = comisionGasto.Where(x => x.UsuarioAlta.ToUpper() == UsuarioAlta.ToUpper());
 
             return comisionGasto.ToList();
         }

@@ -50,6 +50,14 @@ namespace SAV.Models
 
         public DbSet<FormaPago> FormaPago { get; set; }
 
+        public DbSet<RegistroViaje> RegistroViaje { get; set; }
+
+        public DbSet<ModalidadPrestacion> ModalidadPrestacion { get; set; }
+
+        public DbSet<TipoAdicionalConductor> TipoAdicionalConductor { get; set; }
+
+        public DbSet<AdicionalConductor> AdicionalConductor { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }

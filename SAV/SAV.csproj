@@ -219,6 +219,7 @@
     <Compile Include="Common\DateHelper.cs" />
     <Compile Include="Common\EnumHelper.cs" />
     <Compile Include="Common\GastoHelper.cs" />
+    <Compile Include="Common\RegistroViajeHelper.cs" />
     <Compile Include="Common\UsuarioHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
@@ -241,6 +242,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AdicionalConductor.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceComisionDiarioViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceVendedorDiarioViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\CierreCajaViewModel.cs" />
@@ -253,6 +255,9 @@
     <Compile Include="Models\CNRTViaje.cs" />
     <Compile Include="Models\Comision.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
+    <Compile Include="Models\ComisionViewModel\PagoComisionViewModel.cs" />
+    <Compile Include="Models\ConfiguracionViewModel\TipoAdicionalConductorViewModel.cs" />
+    <Compile Include="Models\ModalidadPrestacion.cs" />
     <Compile Include="Models\Enum\ConceptoGasto.cs" />
     <Compile Include="Models\GastoViewModel\CreateGastoViewModel.cs" />
     <Compile Include="Models\GastoViewModel\SearchGastoViewModel.cs" />
@@ -265,6 +270,8 @@
     <Compile Include="Models\ConfiguracionViewModel\TipoGastoViewModel.cs" />
     <Compile Include="Models\DomicilioViewModel\DomicilioViewModel.cs" />
     <Compile Include="Models\FormaPago.cs" />
+    <Compile Include="Models\RegistroViaje.cs" />
+    <Compile Include="Models\TipoAdicionalConductor.cs" />
     <Compile Include="Models\UsuarioViewModel\EditViewModel.cs" />
     <Compile Include="Models\UsuarioViewModel\UsuarioViewModel.cs" />
     <Compile Include="Models\UsuarioViewModel\CreateViewModel.cs" />
@@ -284,6 +291,7 @@
     <Compile Include="Models\SAVContext.cs" />
     <Compile Include="Models\TipoGasto.cs" />
     <Compile Include="Models\Viaje.cs" />
+    <Compile Include="Models\ViajeViewModel\AdicionalConductorViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\CreateViajeViewModel.cs" />
     <Compile Include="Models\ViajeViewModel\DetailsViajeViewModel.cs" />
     <Compile Include="Models\BalanceViewModel\BalanceViajeDiarioViewModel.cs" />
@@ -540,6 +548,11 @@
     <Content Include="Views\Cliente\_DomiciliosTable.cshtml" />
     <Content Include="Views\Domicilio\Create.cshtml" />
     <Content Include="Views\Gasto\Create.cshtml" />
+    <Content Include="Views\Cliente\_Registro.cshtml" />
+    <Content Include="Views\Comision\_Pago.cshtml" />
+    <Content Include="Views\Viaje\_CierreAdicionalConductor.cshtml" />
+    <Content Include="Views\Configuracion\TipoAdicionalesConductor.cshtml" />
+    <Content Include="Views\Configuracion\_TipoAdicionalesConductorTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

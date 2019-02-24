@@ -26,6 +26,8 @@ namespace SAV.Models
 
         public virtual Domicilio DomicilioDescenso { get; set; }
 
+        public int NumeroAsiento { get; set; }
+
         public decimal Costo { get; set; }
 
         public virtual FormaPago FormaPago { get; set; }
@@ -35,5 +37,7 @@ namespace SAV.Models
         public string Vendedor { get; set; }
 
         public string VendedorCobro { get; set; }
+
+        public virtual List<RegistroViaje> Registro { get; set; }
     }
 }

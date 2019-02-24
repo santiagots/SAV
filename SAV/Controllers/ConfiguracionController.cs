@@ -1,4 +1,5 @@
 ﻿using PagedList;
+using SAV.Common;
 using SAV.Models;
 using System;
 using System.Collections.Generic;
@@ -62,88 +63,10 @@ namespace SAV.Controllers
             return View(detailsDatosEmpresaViewModel);
         }
 
-        //public ActionResult Usuarios(int? idUsuario)
-        //{
-            
-        //    CreateViewModel usuarioViewModel = new CreateViewModel();
-
-        //    if (idUsuario.HasValue)
-        //    {
-        //        using (UsersContext usersContexta = new UsersContext())
-        //        {
-        //            UserProfile userProfile = usersContexta.UserProfiles.FirstOrDefault(x => x.UserId == idUsuario.Value);
-        //            if (userProfile != null)
-        //                usuarioViewModel.NewUsuario = userProfile.UserName;
-        //        }
-
-        //        string[] rolesUsuario = Roles.GetRolesForUser(usuarioViewModel.NewUsuario);
-        //        if (rolesUsuario.Length > 0)
-        //            usuarioViewModel.SelectRol = rolesUsuario[0];
-        //    }
-        //    return View("Usuarios", usuarioViewModel);
-        //}
-
-        //[HttpPost]
-        //public ActionResult AltaUsuarios(CreateViewModel usuarioViewModel)
-        //{
-        //    bool usuariosExistente = false;
-        //    using (UsersContext usersContexta = new UsersContext())
-        //    {
-        //        usuariosExistente = usersContexta.UserProfiles.Any(x => x.UserName == usuarioViewModel.NewUsuario);
-        //    }
-
-        //    if (!usuariosExistente)
-        //    {
-        //        WebSecurity.CreateUserAndAccount(usuarioViewModel.NewUsuario, usuarioViewModel.NewClave);
-        //        Roles.AddUserToRole(usuarioViewModel.NewUsuario, usuarioViewModel.SelectRol);
-        //    }
-        //    else
-        //    { 
-        //        ModelState.AddModelError("Error", string.Format("El usuario {0} ya existe, por favor ingrese un nuevo usuario.", usuarioViewModel.NewUsuario));
-        //        CreateViewModel newUsuarioViewModel = new CreateViewModel();
-        //        usuarioViewModel.Roles = newUsuarioViewModel.Roles;
-        //        usuarioViewModel.Usuarios = newUsuarioViewModel.Usuarios;
-        //    }
-        //    return View("Usuarios", usuarioViewModel);
-        //}
-
-        //[HttpPost]
-        //public ActionResult ModificarUsuario(CreateViewModel usuarioViewModel)
-        //{
-        //    UserProfile userProfile;
-        //    using (UsersContext usersContexta = new UsersContext())
-        //    {
-        //        userProfile = usersContexta.UserProfiles.FirstOrDefault(x => x.UserName == usuarioViewModel.NewUsuario);
-
-
-        //    if(userProfile != null)
-        //    {
-        //            if (!string.IsNullOrEmpty(usuarioViewModel.NewClave))
-        //            {
-        //                string token = WebSecurity.GeneratePasswordResetToken(usuarioViewModel.NewUsuario);
-        //                WebSecurity.ResetPassword(token, usuarioViewModel.NewClave);
-
-        //                Roles.RemoveUserFromRoles(usuarioViewModel.NewUsuario, Roles.GetRolesForUser(usuarioViewModel.NewUsuario));
-        //                Roles.AddUserToRole(usuarioViewModel.NewUsuario, usuarioViewModel.SelectRol);
-        //            }
-        //            else
-        //            { 
-        //                userProfile.UserName = usuarioViewModel.NewUsuario;
-        //                usersContexta.SaveChanges();
-        //            }
-        //        }
-        //    else
-        //    { 
-        //        ModelState.AddModelError("Error", string.Format("El usuario {0} no existe, no se ha podido modificar el usuario.", usuarioViewModel.NewUsuario));
-        //    }
-        //    }
-        //    return View("Usuarios", new CreateViewModel());
-        //}
-
         public ActionResult TipoGastos()
         {
             TipoGastoViewModel tipoGastoViewModel = new TipoGastoViewModel();
-
+            tipoGastoViewModel.Concepto = EnumHelper.GetEnumList<ConceptoGasto>();
             tipoGastoViewModel.TiposGastos = db.TipoGasto.ToList().ToPagedList<TipoGasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(tipoGastoViewModel);
@@ -158,16 +81,22 @@ namespace SAV.Controllers
             return View(formaPagoViewModel);
         }
 
+        public ActionResult TipoAdicionalesConductor()
+        {
+            TipoAdicionalConductorViewModel tipoAdicionalConductorViewModel = new TipoAdicionalConductorViewModel();
+
+            tipoAdicionalConductorViewModel.TipoAdicionalConductor = db.TipoAdicionalConductor.ToList().ToPagedList<TipoAdicionalConductor>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            return View(tipoAdicionalConductorViewModel);
+        }
+
         [HttpPost]
         public ActionResult TipoGastos(TipoGastoViewModel tipoGastoViewModel)
         {
-            db.TipoGasto.Add(new TipoGasto() { Descripcion = tipoGastoViewModel.Descripcion, Habilitado = true });
+            db.TipoGasto.Add(new TipoGasto() { Concepto = (ConceptoGasto)tipoGastoViewModel.SelectConcepto.Value, Descripcion = tipoGastoViewModel.Descripcion, Habilitado = true });
             db.SaveChanges();
 
-            tipoGastoViewModel.Descripcion = string.Empty;
-            tipoGastoViewModel.TiposGastos = db.TipoGasto.ToList().ToPagedList<TipoGasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
-
-            return View(tipoGastoViewModel);
+            return RedirectToAction("TipoGastos");
         }
 
         [HttpPost]
@@ -176,10 +105,19 @@ namespace SAV.Controllers
             db.FormaPago.Add(new FormaPago() { Descripcion = formaPagoViewModel.FormaPago, Habilitado = true });
             db.SaveChanges();
 
-            formaPagoViewModel.FormaPago = string.Empty;
-            formaPagoViewModel.FormaPagos = db.FormaPago.ToList().ToPagedList<FormaPago>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            return RedirectToAction("FormaPago");
+        }
 
-            return View(formaPagoViewModel);
+        [HttpPost]
+        public ActionResult TipoAdicionalesConductor(TipoAdicionalConductorViewModel tipoAdicionalConductorViewModel)
+        {
+            db.TipoAdicionalConductor.Add(new TipoAdicionalConductor() { Descripcion = tipoAdicionalConductorViewModel.Descripcion, Habilitado = true });
+            db.SaveChanges();
+
+            tipoAdicionalConductorViewModel.Descripcion = string.Empty;
+            tipoAdicionalConductorViewModel.TipoAdicionalConductor = db.TipoAdicionalConductor.ToList().ToPagedList<TipoAdicionalConductor>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            return RedirectToAction("TipoAdicionalesConductor");
         }
 
         public void setHabilitadoTipoGasto(int TipoGastoID, int Habilitado)
@@ -212,6 +150,21 @@ namespace SAV.Controllers
             }
         }
 
+        public void setHabilitadoTipoAdicionalConductor(int TipoAdicionalConductorID, int Habilitado)
+        {
+            if (TipoAdicionalConductorID > 0)
+            {
+                TipoAdicionalConductor tipoAdicionalConductor = db.TipoAdicionalConductor.Find(TipoAdicionalConductorID);
+
+                if (tipoAdicionalConductor != null)
+                {
+                    tipoAdicionalConductor.Habilitado = Convert.ToBoolean(Habilitado);
+                    db.Entry(tipoAdicionalConductor).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public ActionResult SearchPagingTipoGasto(int? pageNumber)
         {
             IPagedList<TipoGasto> viajesResult = db.TipoGasto.ToList().ToPagedList<TipoGasto>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -224,6 +177,13 @@ namespace SAV.Controllers
             IPagedList<FormaPago> viajesResult = db.FormaPago.ToList().ToPagedList<FormaPago>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return PartialView("_FormaPagoTable", viajesResult);
+        }
+
+        public ActionResult SearchPagingTipoAdicionalConductor(int? pageNumber)
+        {
+            IPagedList<TipoAdicionalConductor> tipoAdicionalConductor = db.TipoAdicionalConductor.ToList().ToPagedList<TipoAdicionalConductor>(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+
+            return PartialView("_TipoAdicionalesConductorTable", tipoAdicionalConductor);
         }
     }
 }

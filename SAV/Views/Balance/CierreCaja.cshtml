@@ -29,7 +29,7 @@
                     <input id="buscar" class="centroBotonGris waiting" type="submit" value="Buscar"></input>
                     <div class="finBotonGris"></div>
                 </div>
-                @if (Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
+                @if (Model.Pasajeros.Count > 0 || Model.Conductores.Count > 0 || Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
                 {
                     <div class="boton">
                         <div class="inicioBotonGris"></div>
@@ -45,9 +45,8 @@
             <p>@Html.ValidationSummary(true)</p>
         </div>
     }
-
-    @if (Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
-    {
+@if (Model.Pasajeros.Count > 0 || Model.Conductores.Count > 0 || Model.Comisiones.Count > 0 || Model.Gastos.Count > 0)
+{
         <div class="alertTablesExtended" id="alertTablesExtended">
             <div class="seccion">
                 <div class="headAlertTablesExtended selected">
@@ -58,11 +57,11 @@
                     <table id="tablaParts" class="tablesorter">
                         <thead>
                             <tr class="headTitles noBorder">
-                                <th class="type2" style="width: 500px;">
+                                <th class="type2" style="width: 700px;">
                                     <p>@Html.DisplayNameFor(model => model.Comisiones.First().Concepto)</p>
                                     <span class="ordenamiento"></span>
                                 </th>
-                                <th style="width: 400px;">
+                                <th style="width: 200px;">
                                     <p>@Html.DisplayNameFor(model => model.Comisiones.First().Importe)</p>
                                     <span class="ordenamiento"></span>
                                 </th>
@@ -73,10 +72,10 @@
                             @foreach (var item in Model.Pasajeros)
                             {
                                 <tr>
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                     </td>
                                 </tr>
@@ -84,10 +83,10 @@
                             @if (Model.Pasajeros.Count > 0)
                             {
                                 <tr class="headTitles noBorder" style="font-weight: bold">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>Total Pasajeros:</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Model.totalPasajeros</p>
                                     </td>
                                 </tr>
@@ -95,10 +94,10 @@
                             @foreach (var item in Model.Conductores)
                             {
                                 <tr>
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                     </td>
                                 </tr>
@@ -106,10 +105,10 @@
                             @if (Model.Conductores.Count > 0)
                             {
                                 <tr class="headTitles noBorder" style="font-weight: bold">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>Total Conductores:</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Model.totalConductores</p>
                                     </td>
                                 </tr>
@@ -117,10 +116,10 @@
                             @foreach (var item in Model.Comisiones)
                             {
                                 <tr>
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                     </td>
                                 </tr>
@@ -128,10 +127,10 @@
                             @if (Model.Comisiones.Count > 0)
                             {
                                 <tr class="headTitles noBorder" style="font-weight: bold">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>Total Comisiones:</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Model.totalComision</p>
                                     </td>
                                 </tr>
@@ -139,10 +138,10 @@
                             @foreach (var item in Model.Gastos)
                             {
                                 <tr>
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>@Html.DisplayFor(modelItem => item.Concepto)</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Html.DisplayFor(modelItem => item.Importe)</p>
                                     </td>
                                 </tr>
@@ -150,19 +149,19 @@
                             @if (Model.Gastos.Count > 0)
                             {
                                 <tr class="headTitles noBorder" style="font-weight: bold">
-                                    <td class="type2" style="width: 500px;">
+                                    <td class="type2" style="width: 700px;">
                                         <p>Total Gasto:</p>
                                     </td>
-                                    <td style="width: 400px;">
+                                    <td style="width: 200px;">
                                         <p>@Model.totalGasto</p>
                                     </td>
                                 </tr>
                             }
                             <tr class="headTitles noBorder" style="font-weight: bold">
-                                <td class="type2" style="width: 500px;">
+                                <td class="type2" style="width: 700px;">
                                     <p>Total:</p>
                                 </td>
-                                <td style="width: 400px;">
+                                <td style="width: 200px;">
                                     <p>@Model.total</p>
                                 </td>
                             </tr>
@@ -171,7 +170,7 @@
                 </div>
             </div>
         </div>
-    }
+}
 </div>
 
 <script language="javascript">

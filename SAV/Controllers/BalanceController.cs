@@ -27,22 +27,24 @@ namespace SAV.Controllers
             DateTime fecha = ViajeHelper.getFecha(cierreCajaViewModel.Fecha);
             if (string.IsNullOrEmpty(cierreCajaViewModel.FechaHasta))
             {
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date && x.Pago).ToList<ClienteViaje>();
+                List<ClienteViaje> clienteViaje = db.ClienteViajes.Where(x => DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date && x.Pago).ToList<ClienteViaje>();
                 List<Viaje> viajes = BalanceHelper.getViajes(db.Viajes.ToList<Viaje>(), fecha);
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
-                List<Gasto> comisionGastos = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
-                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, null);
+                List<Comision> comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> cuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<Gasto> gasto = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                List<AdicionalConductor> adiocionales = db.AdicionalConductor.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(clienteViaje, viajes, comisiones, cuentasCorrientes, gasto, adiocionales, fecha, null);
             }
             else
             {
                 DateTime fechaHasta = ViajeHelper.getFecha(cierreCajaViewModel.FechaHasta);
-                List<ClienteViaje> ClienteViaje = db.ClienteViajes.Where(x => DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0 && x.Pago).ToList<ClienteViaje>();
-                List<Viaje> Viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
-                List<Gasto> comisionGastos = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
-                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, Viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
+                List<ClienteViaje> clienteViaje = db.ClienteViajes.Where(x => DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0 && x.Pago).ToList<ClienteViaje>();
+                List<Viaje> viajes = db.Viajes.Where(x => x.FechaArribo.CompareTo(fecha) >= 0 && x.FechaArribo.CompareTo(fechaHasta) <= 0 && x.Estado == ViajeEstados.Cerrado).ToList<Viaje>();
+                List<Comision> comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> cuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<Gasto> gasto = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
+                List<AdicionalConductor> adiocionales = db.AdicionalConductor.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<AdicionalConductor>();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(clienteViaje, viajes, comisiones, cuentasCorrientes, gasto, adiocionales, fecha, fechaHasta);
             }
 
             return View(cierreCajaViewModel);
@@ -88,6 +90,7 @@ namespace SAV.Controllers
             DateTime fecha = ViajeHelper.getFecha(balanceViewModel.Fecha);
             List<ClienteViaje> ClienteViaje = new List<Models.ClienteViaje>();
             List<Gasto> Gastos = new List<Gasto>();
+            List<FormaPago> formasPago = db.FormaPago.ToList();
 
             if (string.IsNullOrEmpty(balanceViewModel.FechaHasta))
             {
@@ -101,7 +104,7 @@ namespace SAV.Controllers
                 Gastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Viaje && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
             }
 
-            balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje, Gastos, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name);
+            balanceViewModel = BalanceHelper.getBalanceVendedor(formasPago, ClienteViaje, Gastos, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name.ToUpper());
 
             return View(balanceViewModel);
         }
@@ -119,19 +122,20 @@ namespace SAV.Controllers
             DateTime fecha = ViajeHelper.getFecha(balanceComisionDiarioViewModel.Fecha);
             if (string.IsNullOrEmpty(balanceComisionDiarioViewModel.FechaHasta))
             {
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<FormaPago> FormasPago = db.FormaPago.ToList();
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.Pago && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientePagos = db.CuentaCorriente.Include(x => x.Pagos).Where(x => x.Pagos.Any(z => DbFunctions.TruncateTime(z.Fecha).Value == fecha.Date)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Comision && DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha);
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(FormasPago, Comisiones, BalanceHelper.ObtenerPago(CuentasCorrientePagos, fecha, fecha), comisionGastos);
             }
             else
             {
+                List<FormaPago> FormasPago = db.FormaPago.ToList();
                 DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.Pago && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientePagos = db.CuentaCorriente.Include(x => x.Pagos).Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Comision && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
-
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(FormasPago, Comisiones, BalanceHelper.ObtenerPago(CuentasCorrientePagos, fecha, fechaHasta), comisionGastos);
             }
 
             return View(balanceComisionDiarioViewModel);
@@ -175,21 +179,23 @@ namespace SAV.Controllers
 
             if (string.IsNullOrEmpty(fechaHastaBusqueda))
             {
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
+                List<FormaPago> FormasPago = db.FormaPago.ToList();
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.Pago && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
+                List<CuentaCorriente> CuentasCorrientePagos = db.CuentaCorriente.Include(x => x.Pagos).Where(x => x.Pagos.Any(z => DbFunctions.TruncateTime(z.Fecha).Value == fecha.Date)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Comision && DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha);
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(FormasPago, Comisiones, BalanceHelper.ObtenerPago(CuentasCorrientePagos, fecha, fecha), comisionGastos);
 
                 name = String.Format("Reporte_Comisiones_Dia_{0}", fecha.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Comisiones día {0}", fecha.ToString("dd/MM/yyyy"));
             }
             else
             {
-                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
-                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
-                List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
+                List<FormaPago> FormasPago = db.FormaPago.ToList();
+                DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
+                List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.Pago && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
+                List<CuentaCorriente> CuentasCorrientePagos = db.CuentaCorriente.Include(x => x.Pagos).Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Comision && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
-                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
+                balanceComisionDiarioViewModel = BalanceHelper.getBalanceComision(FormasPago, Comisiones, BalanceHelper.ObtenerPago(CuentasCorrientePagos, fecha, fechaHasta), comisionGastos);
 
                 name = String.Format("Reporte_Comisiones_Dia_{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Consolidado Comisiones desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
@@ -217,7 +223,8 @@ namespace SAV.Controllers
                 List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value == fecha.Date).ToList();
                 List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value == fecha.Date)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
-                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, null);
+                List<AdicionalConductor> adiocionales = db.AdicionalConductor.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value == fecha.Date).ToList();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, viajes, Comisiones, CuentasCorrientes, comisionGastos, adiocionales, fecha, null);
 
                 name = String.Format("Reporte_Cierre_Caja_{0}", fecha.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Cierre Caja día {0}", fecha.ToString("dd/MM/yyyy"));
@@ -230,7 +237,8 @@ namespace SAV.Controllers
                 List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
                 List<CuentaCorriente> CuentasCorrientes = db.CuentaCorriente.Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();
-                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, Viajes, Comisiones, CuentasCorrientes, comisionGastos, fecha, fechaHasta);
+                List<AdicionalConductor> adiocionales = db.AdicionalConductor.Where(x => DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<AdicionalConductor>();
+                cierreCajaViewModel = BalanceHelper.getBalanceCierreCaja(ClienteViaje, Viajes, Comisiones, CuentasCorrientes, comisionGastos, adiocionales, fecha, fechaHasta);
 
                 name = String.Format("Reporte_Cierre_Caja_{0}_{1}", fecha.ToString("dd_MM_yyyy"), fechaHasta.ToString("dd_MM_yyyy"));
                 @ViewBag.titulo = string.Format("Consolidado Cierre Caja desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
@@ -251,6 +259,7 @@ namespace SAV.Controllers
             BalanceVendedorDiarioViewModel balanceViewModel;
             List<ClienteViaje> ClienteViaje = new List<Models.ClienteViaje>();
             List<Gasto> Gastos = new List<Gasto>();
+            List<FormaPago> formasPago = db.FormaPago.ToList();
 
             string name;
 
@@ -271,7 +280,7 @@ namespace SAV.Controllers
                 @ViewBag.titulo = string.Format("Consolidado Vendedores desde {0} hasta {1}", fecha.ToString("dd/MM/yyyy"), fechaHasta.ToString("dd/MM/yyyy"));
             }
 
-            balanceViewModel = BalanceHelper.getBalanceVendedor(ClienteViaje, Gastos, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name);
+            balanceViewModel = BalanceHelper.getBalanceVendedor(formasPago, ClienteViaje, Gastos, Roles.GetRolesForUser(User.Identity.Name), User.Identity.Name.ToUpper());
 
             Response.AddHeader("content-disposition", "attachment;filename=" + name + ".xls");
             Response.ContentType = "application/vnd.ms-excel";

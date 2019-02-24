@@ -9,6 +9,10 @@ $(document).ready(function () {
         agregarGasto();
     });
 
+    $("#agregarAdicionalConductor").click(function () {
+        agregarAdicionalConductor();
+    });
+
     $("#modificar").click(function () {
         ModificarViaje();
     });
@@ -17,8 +21,7 @@ $(document).ready(function () {
 
 })
 
-function addEventToPasajeros()
-{
+function addEventToPasajeros() {
     $("#tablaPasajeros [type='checkbox']").change(function () {
         actualizarInfoCliente();
     });
@@ -26,8 +29,7 @@ function addEventToPasajeros()
     disableSpinner();
 }
 
-function cerrar()
-{
+function cerrar() {
     $("#newGasto").hide();
     $("form").resetValidation();
     if (!ErrorClose) {
@@ -44,102 +46,146 @@ function cerrar()
     }
 }
 
-function agregarGasto()
-{
-        if ($("form").valid()) {
+function agregarGasto() {
+    var validator = $("#FormNewGasto").validate();
+    validator.form();
 
-            enableSpinner();
+    if (validator.valid()) {
 
-            $.ajax({
-                async: true,
-                url: '/Viaje/AddGasto',
-                type: 'POST',
-                data:
-                    {
-                        "idTipoGasto": $("#NewGastos_TipoGasto").val(),
-                        "monto": $("#Monto").val(),
-                        "comentario": $("#Comentario").val(),
-                        "idViaje": $("#viajeID").val()
-                    },
-                dataType: "html",
-                success: function (data) { $('#partialViewGastos').html(data); $('#dialog').dialog('close'); disableSpinner(); },
-                error: function (error) { alert(error); disableSpinner(); }
-            });
-        }
+        enableSpinner();
 
-        $('#Patente, #PatenteSuplente, #Interno').prop('disabled', false);
-    }
-
-    function ModificarViaje() {
-
-        if ($("form").valid()) {
-            enableSpinner();
-
-            $.ajax({
-                async: true,
-                url: '/Viaje/Actualizar',
-                type: 'POST',
-                data:
-                    {
-                        "patente": $("#Patente").val(),
-                        "PatenteSuplente": $("#PatenteSuplente").val(),
-                        "interno": $("#Interno").val(),
-                        "idViaje": $("#viajeID").val()
-                    },
-                dataType: "html",
-                success: function (data) {
-                    disableSpinner()
-                },
-                error: function (error) {
-                    addError(error, "ModificarViaje", "Hubo un error al modificar la información de Viaje"); disableSpinner();
-                }
-            });
-        }
-        $("#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario").prop('disabled', false);
-    }
-
-    function addError(error, displayError, mesage) {
-        if ($("#Error" + displayError).length == 0)
-            $("#Error").append("<span id='Error" + displayError + "' class='field-validation-error'><p>" + mesage + "</p></span>");
-    }
-
-    function deleteGasto(idGasto, idViaje)
-    {
         $.ajax({
-            async: false,
-            url: '/Viaje/DeleteGasto',
+            async: true,
+            url: '/Viaje/AddGasto',
             type: 'POST',
-            data:   {
-                "id": idGasto,
-                "idViaje": idViaje
-            },
+            data:
+                {
+                    "idTipoGasto": $("#NewGastos_TipoGasto").val(),
+                    "monto": $("#Monto").val(),
+                    "comentario": $("#Comentario").val(),
+                    "idViaje": $("#viajeID").val()
+                },
             dataType: "html",
             success: function (data) { $('#partialViewGastos').html(data); disableSpinner(); },
-            error: function (error) { addError(error, "deletGasto", "Hubo un error al eliminar el Gasto"); ErrorClose = true; }
+            error: function (error) { alert(error); disableSpinner(); }
         });
     }
 
-    function actualizarInfoCliente()
-    {
-        //Tr perteneciente al pasajero a modificar
-        var contexto = $(event.target).closest("tr");
+    $('#Patente, #PatenteSuplente, #Interno').prop('disabled', false);
+}
 
-        //Obtengo la informacion del pasajero que se esta actualizando
-        var datos = {
-            "clienteViajeID": $("[name*='ClienteViajeID']", contexto).val(),
-            "pago": $("[name*='Pago']:checked", contexto).length,
-            "presente": $("[name*='Presente']:checked", contexto).length,
-        };
+function agregarAdicionalConductor() {
+    debugger;
+    var validator = $("#FormAdicionalesConductor").validate();
+    validator.form();
+
+    if (validator.valid()) {
+
+        enableSpinner();
 
         $.ajax({
-            async: false,
-            url: '/Viaje/setAsistenciaPasajeros',
+            async: true,
+            url: '/Viaje/AddAdicionalConductor',
             type: 'POST',
-            data: datos,
+            data:
+                {
+                    "idTipoAdicional": $("#AdicionalCoductor_TipoAdicional").val(),
+                    "monto": $("#MontoAdicionalesConductor").val(),
+                    "comentario": $("#ComentarioAdicionalesConductor").val(),
+                    "idViaje": $("#viajeID").val(),
+                },
             dataType: "html",
-            success: function (data) { disableSpinner(); },
-            error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al registrar el pago o la asistencia del pasajero."); ErrorClose = true; }
+            success: function (data) { $('#partialViewAdicionalConductor').html(data); disableSpinner(); },
+            error: function (error) { alert(error); disableSpinner(); }
         });
-        $(this).closest("tr")
     }
+
+    $('#Patente, #PatenteSuplente, #Interno').prop('disabled', false);
+}
+
+function ModificarViaje() {
+
+    if ($("form").valid()) {
+        enableSpinner();
+
+        $.ajax({
+            async: true,
+            url: '/Viaje/Actualizar',
+            type: 'POST',
+            data:
+                {
+                    "patente": $("#Patente").val(),
+                    "PatenteSuplente": $("#PatenteSuplente").val(),
+                    "interno": $("#Interno").val(),
+                    "idViaje": $("#viajeID").val()
+                },
+            dataType: "html",
+            success: function (data) {
+                disableSpinner()
+            },
+            error: function (error) {
+                addError(error, "ModificarViaje", "Hubo un error al modificar la información de Viaje"); disableSpinner();
+            }
+        });
+    }
+    $("#RazonSocial, #CUIT, #NroTicket, #Monto, #Comentario").prop('disabled', false);
+}
+
+function addError(error, displayError, mesage) {
+    if ($("#Error" + displayError).length == 0)
+        $("#Error").append("<span id='Error" + displayError + "' class='field-validation-error'><p>" + mesage + "</p></span>");
+}
+
+function deleteGasto(idGasto, idViaje) {
+    $.ajax({
+        async: false,
+        url: '/Viaje/DeleteGasto',
+        type: 'POST',
+        data: {
+            "id": idGasto,
+            "idViaje": idViaje
+        },
+        dataType: "html",
+        success: function (data) { $('#partialViewGastos').html(data); disableSpinner(); },
+        error: function (error) { addError(error, "deletGasto", "Hubo un error al eliminar el Gasto"); ErrorClose = true; }
+    });
+}
+
+function deleteAdicionalConductor(idAdicionalConductor, idViaje) {
+    $.ajax({
+        async: false,
+        url: '/Viaje/DeleteAdicionalConductor',
+        type: 'POST',
+        data: {
+            "id": idAdicionalConductor,
+            "idViaje": idViaje
+        },
+        dataType: "html",
+        success: function (data) { $('#partialViewAdicionalConductor').html(data); disableSpinner(); },
+        error: function (error) { addError(error, "deletAdicionalConductor", "Hubo un error al eliminar el Gasto"); ErrorClose = true; }
+    });
+}
+
+function actualizarInfoCliente() {
+    //Tr perteneciente al pasajero a modificar
+    var contexto = $(event.target).closest("tr");
+
+    //Obtengo la informacion del pasajero que se esta actualizando
+    var datos = {
+        "clienteViajeID": $("[name*='ClienteViajeID']", contexto).val(),
+        "pago": $("[name*='Pago']:checked", contexto).length,
+        "presente": $("[name*='Presente']:checked", contexto).length,
+    };
+
+    $.ajax({
+        async: false,
+        url: '/Viaje/setAsistenciaPasajeros',
+        type: 'POST',
+        data: datos,
+        dataType: "html",
+        success: function (data) { disableSpinner(); },
+        error: function (error) { addError(error, "EntregaRetiraComision", "Hubo un error al registrar el pago o la asistencia del pasajero."); ErrorClose = true; }
+    });
+    $(this).closest("tr")
+}
 

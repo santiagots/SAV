@@ -8,6 +8,7 @@ namespace SAV.Models
     public enum ConceptoGasto
     {
         Viaje,
-        Comision
+        Comision,
+        Oficina
     }
 }

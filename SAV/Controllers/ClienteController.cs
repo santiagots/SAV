@@ -23,7 +23,7 @@ namespace SAV.Controllers
             var clienteViaje = db.ClienteViajes.Find(IdClienteViaje);
 
             ViewBag.IdViaje = clienteViaje.Viaje.ID;
-            ViewBag.Servicio = clienteViaje.Viaje.Servicio;
+            ViewBag.Servicio = clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo? "Turismo": clienteViaje.Viaje.Servicio.ToString();
             ViewBag.Apellido = clienteViaje.Cliente.Apellido;
             ViewBag.Nombre = clienteViaje.Cliente.Nombre;
             ViewBag.DNI = clienteViaje.Cliente.DNI;
@@ -36,11 +36,12 @@ namespace SAV.Controllers
             //return View("Boleto");
         }
 
-        public ActionResult Search(int? IdViaje)
+        public ActionResult Search(int? IdViaje, int? NumeroAsiento)
         {
             if (IdViaje.HasValue)
             {
                 ViewBag.IdViaje = IdViaje.Value;
+                ViewBag.NumeroAsiento = NumeroAsiento;
 
                 var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(DbFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
 
@@ -55,7 +56,7 @@ namespace SAV.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(SearchClienteViewModel searchClienteViewModel, int? IdViaje)
+        public ActionResult Search(SearchClienteViewModel searchClienteViewModel, int? IdViaje, int? NumeroAsiento)
         {
             ViewBag.nombre = searchClienteViewModel.Nombre;
             ViewBag.apellido = searchClienteViewModel.Apellido;
@@ -63,7 +64,10 @@ namespace SAV.Controllers
             ViewBag.telefono = searchClienteViewModel.Telefono;
 
             if (IdViaje.HasValue)
+            {
                 ViewBag.IdViaje = IdViaje.Value;
+                ViewBag.NumeroAsiento = NumeroAsiento;
+            }
 
             List<Cliente> cliente = db.Clientes.ToList<Cliente>();
 
@@ -76,7 +80,7 @@ namespace SAV.Controllers
             return View(searchClienteViewModel);
         }
 
-        public ActionResult Create(int? id, int? IdViaje)
+        public ActionResult Create(int? id, int? IdViaje, int? NumeroAsiento)
         {
             ClienteViewModel clienteViewModel = new ClienteViewModel();
 
@@ -97,7 +101,7 @@ namespace SAV.Controllers
                     cliente.Domicilios.Clear();
                     db.SaveChanges();
                 }
-                return RedirectToAction("Create", new { id = cliente.ID, IdViaje = IdViaje });
+                return RedirectToAction("Create", new { id = cliente.ID, IdViaje = IdViaje, NumeroAsiento = NumeroAsiento });
             }
             else
             {
@@ -110,10 +114,11 @@ namespace SAV.Controllers
             {
                 List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
                 ViewBag.IdViaje = IdViaje.Value;
+                ViewBag.NumeroAsiento = NumeroAsiento;
                 Viaje viaje = db.Viajes.Find(IdViaje);
                 List<Provincia> provincias = db.Provincias.ToList();
 
-                clienteViewModel = new ClienteViewModel(provincias, viaje, formaPagos);
+                clienteViewModel = new ClienteViewModel(provincias, viaje, formaPagos, User.Identity.Name.ToUpper());
                 ViewBag.Servicio = viaje.Servicio;
             }
 
@@ -121,7 +126,7 @@ namespace SAV.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ClienteViewModel clienteViewModel, int? idViaje)
+        public ActionResult Create(ClienteViewModel clienteViewModel, int? idViaje, int? NumeroAsiento)
         {
             lock (clienteViajesLock)
             {
@@ -146,11 +151,17 @@ namespace SAV.Controllers
 
                     if (viaje.tieneLugar())
                     {
-                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name);
+                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), NumeroAsiento);
                         cliente.ClienteViaje.Add(clienteViaje);
+
+                        RegistroViaje registroViaje = RegistroViajeHelper.GetRegistro(User.Identity.Name.ToUpper(), null, clienteViaje);
+                            if(registroViaje != null)
+                                clienteViaje.Registro.Add(registroViaje);
+
                         db.SaveChanges();
 
-                        var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(EntityFunctions.AddHours(DateTime.Now, 4).Value) < 0 && x.Estado == ViajeEstados.Abierto);
+                        DateTime fechaActual = DateHelper.getLocal();
+                        var viajesFinalizados = db.Viajes.Where(x => x.FechaArribo.CompareTo(fechaActual) < 0 && x.Estado == ViajeEstados.Abierto);
 
                         if (viajesFinalizados.Where(x => x.ID == idViaje.Value).Any())
                             return RedirectToAction("Close", "Viaje", new { id = idViaje });
@@ -175,7 +186,7 @@ namespace SAV.Controllers
             }
         }
 
-        public ActionResult Details(int id, int? idViaje, string From, bool? error)
+        public ActionResult Details(int id, int? idViaje, string From, bool? error, int? NumeroAsiento)
         {
             ViewBag.Action = "Details";
             ViewBag.From = From;
@@ -194,10 +205,11 @@ namespace SAV.Controllers
             if (idViaje.HasValue)
             {
                 ViewBag.IdViaje = idViaje;
+                ViewBag.NumeroAsiento = NumeroAsiento;
                 Viaje viaje = db.Viajes.Find(idViaje);
                 ViewBag.Servicio = viaje.Servicio;
                 List<ClienteViaje> viajesDelDia = db.ClienteViajes.Where(x => x.Cliente.ID == cliente.ID && x.Viaje.ID != viaje.ID && EntityFunctions.TruncateTime(x.Viaje.FechaSalida) == EntityFunctions.TruncateTime(viaje.FechaSalida)).ToList();
-                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, viajesDelDia, formaPagos, User.Identity.Name);
+                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, viajesDelDia, formaPagos, User.Identity.Name.ToUpper());
             }
             else
                 clienteViewModel = new ClienteViewModel(Provincias, cliente, formaPagos);
@@ -206,7 +218,7 @@ namespace SAV.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details(ClienteViewModel clienteViewModel, int id, int? idViaje)
+        public ActionResult Details(ClienteViewModel clienteViewModel, int id, int? idViaje, int? NumeroAsiento)
         {
 
             List<Parada> paradas = db.Paradas.ToList<Parada>();
@@ -227,7 +239,7 @@ namespace SAV.Controllers
             if (idViaje.HasValue) //se ingresa a detalle del cliente desde un viaje
             {
                 Viaje viaje = db.Viajes.Find(idViaje.Value);
-                ClienteViaje NewclienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name);
+                ClienteViaje newClienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), NumeroAsiento);
 
                 ClienteViaje clienteViaje = cliente.ClienteViaje.Where(x => x.Viaje != null && x.Viaje.ID == idViaje).FirstOrDefault();
 
@@ -236,35 +248,45 @@ namespace SAV.Controllers
                     if (viaje.tieneLugar())
                     {
                         //agrego la relacion de cliente viaje
-                        db.ClienteViajes.Add(NewclienteViaje);
+                        db.ClienteViajes.Add(newClienteViaje);
+
+                        RegistroViaje registroViaje = RegistroViajeHelper.GetRegistro(User.Identity.Name.ToUpper(), null, newClienteViaje);
+                        if (registroViaje != null)
+                            newClienteViaje.Registro.Add(registroViaje);
+
                     }
                     else
                     {
                         db.Entry(cliente).State = EntityState.Modified;
+
                         db.SaveChanges();
 
-                        return RedirectToAction("Details", new { id = cliente.ID, idViaje = idViaje, error = true });
+                        return RedirectToAction("Details", new { id = cliente.ID, idViaje = idViaje, error = true, NumeroAsiento = NumeroAsiento});
                     }
 
                 }
                 else
                 {
+                    RegistroViaje registroViaje = RegistroViajeHelper.GetRegistro(User.Identity.Name.ToUpper(), clienteViaje, newClienteViaje);
+                    if(registroViaje != null)
+                        clienteViaje.Registro.Add(registroViaje);
+
                     //actualizo la relacion de cliente viaje
-                    clienteViaje.Ascenso = NewclienteViaje.Ascenso;
-                    clienteViaje.Descenso = NewclienteViaje.Descenso;
-                    clienteViaje.DomicilioAscenso = NewclienteViaje.DomicilioAscenso;
-                    clienteViaje.DomicilioDescenso = NewclienteViaje.DomicilioDescenso;
-                    clienteViaje.Vendedor = User.Identity.Name;
+                    clienteViaje.Ascenso = newClienteViaje.Ascenso;
+                    clienteViaje.Descenso = newClienteViaje.Descenso;
+                    clienteViaje.DomicilioAscenso = newClienteViaje.DomicilioAscenso;
+                    clienteViaje.DomicilioDescenso = newClienteViaje.DomicilioDescenso;
+                    clienteViaje.Vendedor = User.Identity.Name.ToUpper();
 
                     //Actualizo el costo solo si es mayor a 0, puede ser 0 porque el costo se deshabilita cuando el viaje esta pago!!!
-                    if (NewclienteViaje.Costo > 0)
-                        clienteViaje.Costo = NewclienteViaje.Costo;
+                    if (newClienteViaje.Costo > 0)
+                        clienteViaje.Costo = newClienteViaje.Costo;
 
-                    clienteViaje.FormaPago = NewclienteViaje.FormaPago;
+                    clienteViaje.FormaPago = newClienteViaje.FormaPago;
                     if (clienteViewModel.Pago && !clienteViaje.Pago)
                     {
                         clienteViaje.Pago = clienteViewModel.Pago;
-                        clienteViaje.VendedorCobro = User.Identity.Name;
+                        clienteViaje.VendedorCobro = User.Identity.Name.ToUpper();
                         clienteViaje.FechaPago = DateTime.Now;
                     }
                     db.Entry(clienteViaje).State = EntityState.Modified;
@@ -279,7 +301,7 @@ namespace SAV.Controllers
                     return RedirectToAction("Close", "Viaje", new { id = idViaje });
                 else
                 {
-                    clienteViaje = clienteViaje == null ? NewclienteViaje : clienteViaje;
+                    clienteViaje = clienteViaje == null ? newClienteViaje : clienteViaje;
                     if (clienteViaje.Pago)
                         return RedirectToAction("Details", "Viaje", new { id = idViaje, IdClienteViajePago = clienteViaje.ID });
                     else
@@ -297,6 +319,7 @@ namespace SAV.Controllers
 
             if (clienteViaje != null)
             {
+                clienteViaje.Registro.Clear();
                 db.ClienteViajes.Remove(clienteViaje);
                 db.SaveChanges();
             }
@@ -360,13 +383,22 @@ namespace SAV.Controllers
             return PartialView("_DomiciliosTable", domicilios);
         }
 
+        public ActionResult PagingRegistro(int? pageNumber, int idCliente, int idViaje)
+        {
+            ClienteViaje clienteViaje = db.Clientes.Find(idCliente).ClienteViaje.Where(x => x.Viaje != null && x.Viaje.ID == idViaje).FirstOrDefault();
+            if(clienteViaje != null)
+                return PartialView("_Registro", clienteViaje.Registro.ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
+            else
+                return PartialView("_Registro", new List<RegistroViaje>().ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
+        }
 
-        public ActionResult SearchPagingClientes(int? IdViaje, int? pageNumber, string apellido, string nombre, string dni, string telefono)
+        public ActionResult SearchPagingClientes(int? IdViaje, int? NumeroAsiento, int? pageNumber, string apellido, string nombre, string dni, string telefono)
         {
             ViewBag.nombre = nombre;
             ViewBag.apellido = apellido;
             ViewBag.dni = dni;
             ViewBag.telefono = telefono;
+            ViewBag.NumeroAsiento = NumeroAsiento;
 
             if (IdViaje.HasValue)
                 ViewBag.IdViaje = IdViaje.Value;

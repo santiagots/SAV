@@ -8,6 +8,7 @@ namespace SAV.Models
     public class CuentaCorriente
     {
         public int ID { get; set; }
+
         public string RazonSocial { get; set; }
 
         public string CUIL { get; set; }
