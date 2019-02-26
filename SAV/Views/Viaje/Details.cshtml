@@ -96,7 +96,7 @@
             <div class="botones">
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
-                    <input id="modificar" class="centroBotonGris" onclick="return Validate();" type="submit" value="Modificar" />
+                    <input id="modificar" class="centroBotonGris" @*onclick="return Validar();"*@ type="submit" value="Modificar" />
                     <div class="finBotonGris"></div>
                 </div>
                 <div class="boton">
@@ -165,6 +165,7 @@
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectConductorNombre)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Patente)</p>
             <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.Interno)</p>
+            <p>@Html.ValidationMessageFor(model => model.DatosBasicosViaje.SelectModalidadPrestacion)</p>
         </div>
         <div id="Error" class="contenidoDatosError">
         </div>

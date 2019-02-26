@@ -26,16 +26,21 @@
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Costo)<b>(*)</b></p>
                 @Html.TextBoxFor(model => model.Costo)
 
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)</p>
-                @Html.EditorFor(model => model.Pago)
-            </div>
-
-            <div class="datosInputs">
                 <p class="edicion">@Html.LabelFor(model => model.FechaEnvio)</p>
                 <div class="divFecha">
-                    @Html.TextBoxFor(model => model.FechaEnvio, new {@class = "fecha fechaDesde", @id = "fechaAltaEnvio", @name = "fechaEnvio", @readonly = true })
+                    @Html.TextBoxFor(model => model.FechaEnvio, new { @class = "fecha fechaDesde", @id = "fechaAltaEnvio", @name = "fechaEnvio", @readonly = true })
                 </div>
             </div>
+            @if (Model.idCuentaCorriente == -1)
+            {
+            <div class="datosInputs">
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.Pago)</p>
+                @Html.EditorFor(model => model.Pago)
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.FormaPago)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.SelectFormaPago, new SelectList(Model.FormaPago, "Key", "Value"), "Elija una opción", !Model.Pago ? (object)new { @disabled = "disabled" } : (object)new { })
+            </div>
+            }
 
             <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Servicio)<b>(*)</b></p>

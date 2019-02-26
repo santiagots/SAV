@@ -37,6 +37,13 @@ $(document).ready(function () {
         return false;
     });
 
+    $("#Pago").click(function () {
+        if (this.checked)
+            $("#SelectFormaPago").prop("disabled", false);
+        else
+            $("#SelectFormaPago").prop("disabled", true);
+    });
+
     $("#dialog").dialog({
         title: 'Agregar Responsable',
         autoOpen: false,

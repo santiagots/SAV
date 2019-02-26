@@ -31,8 +31,9 @@ function ChangeOrigenDestino() {
     }
 }
 
-function Validate()
+function Validar()
 {
+    debugger;
     $("#Error").empty();
 
     var asientos = $("#DatosBasicosViaje_Asientos").val();

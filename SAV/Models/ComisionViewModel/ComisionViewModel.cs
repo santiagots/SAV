@@ -32,6 +32,12 @@ namespace SAV.Models
         [Display(Name = "Pagó:")]
         public bool Pago { get; set; }
 
+        [Display(Name = "Forma de Pago:")]
+        public List<KeyValuePair<int, string>> FormaPago { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar una Forma de Pago")]
+        public int SelectFormaPago { get; set; }
+
         [Display(Name = "Comentario:")]
         public string Comentario { get; set; }
 
@@ -119,7 +125,7 @@ namespace SAV.Models
 
         public ComisionViewModel() : base() { }
 
-        public ComisionViewModel(List<Provincia> provincias, Comision comision, List<ComisionResponsable> responsable, List<Parada> paradas)
+        public ComisionViewModel(List<Provincia> provincias, Comision comision, List<ComisionResponsable> responsable, List<Parada> paradas, List<FormaPago> formaPagos)
         {
             Contacto = comision.Contacto;
             Telefono = comision.Telefono;
@@ -130,8 +136,11 @@ namespace SAV.Models
             Servicio = comision.Servicio;
             FechaEnvio = comision.FechaEnvio.ToString("dd/MM/yyyy");
             Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre)).ToList();
+            FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
+            if(comision.FormaPago != null)
+            SelectFormaPago = comision.FormaPago.ID;
 
-            if(comision.Responsable != null)
+            if (comision.Responsable != null)
                 SelectResponsable = comision.Responsable.ID;
 
             ProvinciaRetirar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
@@ -171,7 +180,7 @@ namespace SAV.Models
             }
         }
 
-        public ComisionViewModel(List<Provincia> provincias, List<ComisionResponsable> responsable, List<Parada> paradas)
+        public ComisionViewModel(List<Provincia> provincias, List<ComisionResponsable> responsable, List<Parada> paradas, List<FormaPago> formaPagos)
         {
             Responsable = responsable.Select(x => new KeyValuePair<int, string>(x.ID, x.Apellido + ", " + x.Nombre )).ToList();
             ProvinciaRetirar = provincias.Select(x => new KeyValuePair<int, string>(x.ID, x.Nombre)).ToList();
@@ -181,19 +190,20 @@ namespace SAV.Models
             LocalidadRetirar = new List<KeyValuePair<int, string>>();
             LocalidadEntregar = new List<KeyValuePair<int, string>>();
             FechaEnvio = DateHelper.getLocal().AddDays(1).ToString("dd/MM/yyyy");
+            FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
         }
 
-        public Comision getComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada)
+        public Comision getComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada, List<FormaPago> formaPagos)
         {
             Comision comision = new Comision();
 
-            upDateComision(comisionViewModel, provincias, localidades, parada, ref comision);
+            upDateComision(comisionViewModel, provincias, localidades, parada, formaPagos, ref comision);
             comision.FechaAlta = DateHelper.getLocal();
             comision.FechaEnvio = DateTime.ParseExact(comisionViewModel.FechaEnvio, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             return comision;
         }
 
-        public void upDateComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada, ref Comision comision)
+        public void upDateComision(ComisionViewModel comisionViewModel, List<Provincia> provincias, List<Localidad> localidades, List<Parada> parada, List<FormaPago> formaPagos, ref Comision comision)
         {
             comision.Contacto = comisionViewModel.Contacto.ToUpper();
             comision.Telefono = comisionViewModel.Telefono;
@@ -203,6 +213,7 @@ namespace SAV.Models
             comision.Comentario = comisionViewModel.Comentario;
             comision.Pago = comisionViewModel.Pago;
             comision.FechaEnvio = ComisionHelper.getFecha(comisionViewModel.FechaEnvio).Value;
+            comision.FormaPago = formaPagos.FirstOrDefault(x => x.ID == comisionViewModel.SelectFormaPago);
 
             if (comisionViewModel.Pago)
                 comision.FechaPago = DateTime.Now;

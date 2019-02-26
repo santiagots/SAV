@@ -35,19 +35,19 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td class="type2" style="width: 55px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.ID)</p></td>
-                            <td class="type2" style="width: 170px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.Contacto)</p></td>
+                            <td class="type2" style="width: 55px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => item.ID)</p></td>
+                            <td class="type2" style="width: 170px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => item.Contacto)</p></td>
                             @{var fecha = item.FechaAlta.ToString("dd/MM");}
-                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
                             @{fecha = item.FechaEnvio.ToString("dd/MM");}
-                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
                             @{fecha = item.FechaEntrega.HasValue ? item.FechaEntrega.Value.Date.ToString("dd/MM") : "";}
-                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
                             @{fecha = item.FechaPago.HasValue ? item.FechaPago.Value.Date.ToString("dd/MM") : "";}
-                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
-                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => item.Costo)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => fecha)</p></td>
+                            <td class="type2" style="width: 65px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => item.Costo)</p></td>
                             @{var cuentaCorriente = item.CuentaCorriente == null ? string.Empty : item.CuentaCorriente.RazonSocial;}
-                            <td class="type2" style="width: 230px;" onclick="location.href='@Url.Action("Details", new { id = item.ID })'"><p>@Html.DisplayFor(modelItem => cuentaCorriente)</p></td>
+                            <td class="type2" style="width: 230px;" onclick="location.href='@Url.Action("Details", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })'"><p>@Html.DisplayFor(modelItem => cuentaCorriente)</p></td>
                             <td style="width: 150px;">
                                 @if (!item.FechaPago.HasValue && string.IsNullOrEmpty(cuentaCorriente))
                                 {
@@ -60,7 +60,7 @@
                                 }
                                 <a onclick="actualizarEstadoComision('RegresarAEnvio','pendienteTable',@item.ID,'@this.ViewData["Numero"]','@this.ViewData["Contacto"]','@this.ViewData["Servicio"]','@this.ViewData["Accion"]','@this.ViewData["FechaAlta"]','@this.ViewData["FechaEnvio"]','@this.ViewData["FechaEntrega"]','@this.ViewData["FechaPago"]','@this.ViewData["Costo"]','@this.ViewData["IdResponsable"]','@this.ViewData["IdCuentaCorriente"]', @Model.PageNumber)"><span class="action volver" title="Regresar" /></a>
                                 <a href="@Url.Action("clone", "comision", new { idComision = item.ID, idCuentaCorriente = this.ViewData["idCuentaCorriente"] })"><span class="action clonar" title="Copiar" /></a>
-                                <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", new { id = item.ID })"><span class="action retirar" title="Eliminar" /></a>
+                                <a onclick="return confirmSpinner('Esta seguro que desea borrar la comision?');" href="@Url.Action("Delete", new { id = item.ID, idCuentaCorriente = item.CuentaCorriente==null? (int?) null: item.CuentaCorriente.ID })"><span class="action retirar" title="Eliminar" /></a>
                             </td>
                         </tr>
                     }

@@ -107,12 +107,12 @@ namespace SAV.Controllers
 
         public ActionResult Create(int? idCuentaCorriente)
         {
-
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<ComisionResponsable> comisionResponsable = db.ComisionResponsable.ToList<ComisionResponsable>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
             List<Parada> paradas = db.Paradas.ToList<Parada>();
 
-            ComisionViewModel comisionViewModel = new ComisionViewModel(provincia, comisionResponsable, paradas);
+            ComisionViewModel comisionViewModel = new ComisionViewModel(provincia, comisionResponsable, paradas, formaPagos);
 
             comisionViewModel.idCuentaCorriente = idCuentaCorriente.HasValue? idCuentaCorriente.Value: -1;
 
@@ -122,12 +122,13 @@ namespace SAV.Controllers
         public ActionResult Clone(int idComision, int? idCuentaCorriente)
         {
             ViewBag.Action = "Create";
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<ComisionResponsable> comisionResponsable = db.ComisionResponsable.ToList<ComisionResponsable>();
             List<Provincia> provincia = db.Provincias.ToList<Provincia>();
             List<Parada> paradas = db.Paradas.ToList<Parada>();
             Comision comision = db.Comisiones.Find(idComision);
 
-            ComisionViewModel comisionViewModel = new ComisionViewModel(provincia, comision, comisionResponsable, paradas);
+            ComisionViewModel comisionViewModel = new ComisionViewModel(provincia, comision, comisionResponsable, paradas, formaPagos);
             comisionViewModel.FechaEnvio = DateHelper.getLocal().AddDays(1).ToString("dd/MM/yyyy"); ;
             if (idCuentaCorriente.HasValue)
                 comisionViewModel.idCuentaCorriente = idCuentaCorriente.Value;
@@ -201,11 +202,12 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Create(ComisionViewModel comisionViewModel)
         {
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
             List<Parada> paradas = db.Paradas.ToList<Parada>();
 
-            Comision comision = comisionViewModel.getComision(comisionViewModel, provincias, localidades, paradas);
+            Comision comision = comisionViewModel.getComision(comisionViewModel, provincias, localidades, paradas, formaPagos);
             comision.Responsable = db.ComisionResponsable.Find(comisionViewModel.SelectResponsable);
 
             if (comisionViewModel.idCuentaCorriente > 0)
@@ -227,13 +229,14 @@ namespace SAV.Controllers
         {
             ViewBag.Action = "Details";
 
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<ComisionResponsable> comisionResponsable = db.ComisionResponsable.ToList<ComisionResponsable>();
             Comision comision = db.Comisiones.Find(id);
             ComisionViewModel comisionViewModel = new ComisionViewModel();
             List<Provincia> Provincias = db.Provincias.ToList<Provincia>();
             List<Parada> paradas = db.Paradas.ToList<Parada>();
 
-            comisionViewModel = new ComisionViewModel(Provincias, comision, comisionResponsable, paradas);
+            comisionViewModel = new ComisionViewModel(Provincias, comision, comisionResponsable, paradas, formaPagos);
             comisionViewModel.idCuentaCorriente = idCuentaCorriente.HasValue ? idCuentaCorriente.Value : -1;
             return View("Create", comisionViewModel);
         }
@@ -241,12 +244,13 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Details(ComisionViewModel comisionViewModel, int id)
         {
+            List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
             List<Provincia> provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> localidades = db.Localidades.ToList<Localidad>();
             List<Parada> paradas = db.Paradas.ToList<Parada>();
             Comision comisiones = db.Comisiones.Find(id);
 
-            comisionViewModel.upDateComision(comisionViewModel, provincias, localidades, paradas, ref comisiones);
+            comisionViewModel.upDateComision(comisionViewModel, provincias, localidades, paradas, formaPagos, ref comisiones);
             comisiones.Responsable = db.ComisionResponsable.Find(comisionViewModel.SelectResponsable);
 
             db.Entry(comisiones).State = EntityState.Modified;
