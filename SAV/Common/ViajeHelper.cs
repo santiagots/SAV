@@ -87,38 +87,61 @@ namespace SAV.Common
             }).ToList<Pasajeros>();
         }
 
-        public static IPagedList<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, int cantidadAsientos, int pagina, int tamanioPagina)
+        public static IPagedList<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, int cantidadAsientos, int pagina, int tamanioPagina, Configuracion configuracion)
         {
-            Pasajeros[] aux = new Pasajeros[cantidadAsientos];
-            List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
-
-            for (int i = 0; i < cantidadAsientos; i++)
+            if (configuracion.UtilizarNumeroPasajes)
             {
-                Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
-                if (pasajero != null)
-                    aux[i] = pasajero;
-                else
-                    aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
-            }
+                List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
+                Pasajeros[] aux = new Pasajeros[cantidadAsientos];
+                for (int i = 0; i < cantidadAsientos; i++)
+                {
+                    Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
+                    if (pasajero != null)
+                        aux[i] = pasajero;
+                    else
+                        aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
+                }
 
-            return aux.ToList().ToPagedList<Pasajeros>(pagina, tamanioPagina); ;
+                return aux.ToList().ToPagedList<Pasajeros>(pagina, tamanioPagina);
+            }
+            else
+            {
+                List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).ToList();
+                for (int i = 0; i < pasajeros.Count; i++)
+                {
+                    pasajeros[i].NumeroAsiento = i + 1;
+                }
+                return pasajeros.ToList().ToPagedList<Pasajeros>(pagina, tamanioPagina);
+            }
         }
 
-        public static List<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, int cantidadAsientos)
+        public static List<Pasajeros> getPasajerosViajeAbierto(List<ClienteViaje> ClienteViaje, Configuracion Configuracion, int cantidadAsientos)
         {
-            Pasajeros[] aux = new Pasajeros[cantidadAsientos];
-            List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
-
-            for (int i = 0; i < cantidadAsientos; i++)
+            if (Configuracion.UtilizarNumeroPasajes)
             {
-                Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
-                if (pasajero != null)
-                    aux[i] = pasajero;
-                else
-                    aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
-            }
+                Pasajeros[] aux = new Pasajeros[cantidadAsientos];
+                List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).OrderBy(x => x.NumeroAsiento).ToList();
 
-            return aux.ToList();
+                for (int i = 0; i < cantidadAsientos; i++)
+                {
+                    Pasajeros pasajero = pasajeros.FirstOrDefault(x => x.NumeroAsiento - 1 == i);
+                    if (pasajero != null)
+                        aux[i] = pasajero;
+                    else
+                        aux[i] = new Pasajeros() { NumeroAsiento = i + 1 };
+                }
+
+                return aux.ToList();
+            }
+            else
+            {
+                List<Pasajeros> pasajeros = getPasajeros(ClienteViaje).ToList();
+                for (int i = 0; i < pasajeros.Count; i++)
+                {
+                    pasajeros[i].NumeroAsiento = i + 1;
+                }
+                return pasajeros.ToList();
+            }
         }
 
         public static IPagedList<Pasajeros> getPasajerosViajeCerrado(List<ClienteViaje> ClienteViaje, int cantidadAsientos, int pagina, int tamanioPagina)

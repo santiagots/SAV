@@ -44,7 +44,7 @@ namespace SAV.Models
 
         public DbSet<Pago> Pagos { get; set; }
 
-        public DbSet<DatosEmpresa> Configuracion { get; set; }
+        public DbSet<DatosEmpresa> DatosEmpresa { get; set; }
 
         public DbSet<TipoGasto> TipoGasto { get; set; }
 
@@ -57,6 +57,8 @@ namespace SAV.Models
         public DbSet<TipoAdicionalConductor> TipoAdicionalConductor { get; set; }
 
         public DbSet<AdicionalConductor> AdicionalConductor { get; set; }
+
+        public DbSet<Configuracion> Configuracion { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

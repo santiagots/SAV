@@ -133,6 +133,7 @@ namespace SAV.Controllers
                 List<Parada> paradas = db.Paradas.ToList<Parada>();
                 List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
                 Cliente cliente = db.Clientes.Find(clienteViewModel.Id);
+                Configuracion configuracion = db.Configuracion.First();
 
                 cliente.Apellido = clienteViewModel.Apellido;
                 cliente.DNI = clienteViewModel.DNI;
@@ -151,7 +152,7 @@ namespace SAV.Controllers
 
                     if (viaje.tieneLugar())
                     {
-                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), NumeroAsiento);
+                        ClienteViaje clienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), configuracion, NumeroAsiento);
                         cliente.ClienteViaje.Add(clienteViaje);
 
                         RegistroViaje registroViaje = RegistroViajeHelper.GetRegistro(User.Identity.Name.ToUpper(), null, clienteViaje);
@@ -224,6 +225,7 @@ namespace SAV.Controllers
             List<Parada> paradas = db.Paradas.ToList<Parada>();
             List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
 
+            Configuracion configuracion = db.Configuracion.First();
             Cliente cliente = db.Clientes.Find(id);
             cliente.Apellido = clienteViewModel.Apellido;
             cliente.DNI = clienteViewModel.DNI;
@@ -239,7 +241,7 @@ namespace SAV.Controllers
             if (idViaje.HasValue) //se ingresa a detalle del cliente desde un viaje
             {
                 Viaje viaje = db.Viajes.Find(idViaje.Value);
-                ClienteViaje newClienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), NumeroAsiento);
+                ClienteViaje newClienteViaje = clienteViewModel.getClienteViaje(clienteViewModel, viaje, paradas, cliente, formaPagos, User.Identity.Name.ToUpper(), configuracion, NumeroAsiento);
 
                 ClienteViaje clienteViaje = cliente.ClienteViaje.Where(x => x.Viaje != null && x.Viaje.ID == idViaje).FirstOrDefault();
 

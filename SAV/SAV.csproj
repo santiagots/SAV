@@ -256,6 +256,7 @@
     <Compile Include="Models\Comision.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
     <Compile Include="Models\ComisionViewModel\PagoComisionViewModel.cs" />
+    <Compile Include="Models\Configuracion.cs" />
     <Compile Include="Models\ConfiguracionViewModel\TipoAdicionalConductorViewModel.cs" />
     <Compile Include="Models\ModalidadPrestacion.cs" />
     <Compile Include="Models\Enum\ConceptoGasto.cs" />

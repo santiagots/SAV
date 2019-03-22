@@ -237,23 +237,25 @@ namespace SAV.Models
             }
         }
 
-        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<FormaPago> formaPagos, String Vendedor, int? NumeroAsiento)
+        public ClienteViaje getClienteViaje(ClienteViewModel clienteViewModel, Viaje viaje, List<Parada> Paradas, Cliente cliente, List<FormaPago> formaPagos, String Vendedor, Configuracion Configuracion, int? NumeroAsiento)
         {
             ClienteViaje clienteViaje = new ClienteViaje();
-            
 
-            if (NumeroAsiento.HasValue)
+            if (Configuracion.UtilizarNumeroPasajes)
             {
-                clienteViaje.NumeroAsiento = NumeroAsiento.Value;
-            }
-            else
-            {
-                for (int i = 1; i <= viaje.Asientos; i++)
+                if (NumeroAsiento.HasValue)
                 {
-                    if (!viaje.ClienteViaje.Any(x => x.NumeroAsiento == i))
+                    clienteViaje.NumeroAsiento = NumeroAsiento.Value;
+                }
+                else
+                {
+                    for (int i = 1; i <= viaje.Asientos; i++)
                     {
-                        clienteViaje.NumeroAsiento = i;
-                        break;
+                        if (!viaje.ClienteViaje.Any(x => x.NumeroAsiento == i))
+                        {
+                            clienteViaje.NumeroAsiento = i;
+                            break;
+                        }
                     }
                 }
             }

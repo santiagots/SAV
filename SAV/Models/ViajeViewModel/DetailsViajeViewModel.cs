@@ -26,7 +26,7 @@ namespace SAV.Models
 
         public DetailsViajeViewModel(): base(){}
 
-        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, bool cierre = false) :this(viaje, cierre)
+        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, Configuracion configuracion, bool cierre = false) :this(viaje, configuracion, cierre)
         {
             if(viaje.Conductor != null)
                 DatosBasicosViaje.SelectConductorNombre = viaje.Conductor.ID.ToString();
@@ -34,8 +34,8 @@ namespace SAV.Models
             DatosBasicosViaje.ConductorNombre = conductores.Select(x => new KeyValuePair<int, string>(x.ID, string.Format("{0} , {1}", x.Apellido, x.Nombre))).ToList();
         }
 
-        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<ModalidadPrestacion> modalidadPrestacion, bool cierre = false)
-            : this(viaje, conductores, cierre)
+        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<ModalidadPrestacion> modalidadPrestacion, Configuracion configuracion, bool cierre = false)
+            : this(viaje, conductores, configuracion, cierre)
         {
             if (viaje.Servicio != ViajeTipoServicio.Cerrado)
             {
@@ -59,8 +59,8 @@ namespace SAV.Models
             DatosBasicosViaje.SelectModalidadPrestacion = viaje.ModalidadPrestacion?.Codigo;
         }
 
-        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<TipoGasto> tipoGasto, List<TipoAdicionalConductor> tipoAdicional, List<ModalidadPrestacion> modalidadPrestacion, bool cierre = false)
-            : this(viaje, conductores, localidad, provincia, modalidadPrestacion, cierre)
+        public DetailsViajeViewModel(Viaje viaje, List<Conductor> conductores, List<Localidad> localidad, List<Provincia> provincia, List<TipoGasto> tipoGasto, List<TipoAdicionalConductor> tipoAdicional, List<ModalidadPrestacion> modalidadPrestacion, Configuracion configuracion, bool cierre = false)
+            : this(viaje, conductores, localidad, provincia, modalidadPrestacion, configuracion, cierre)
         {
             NewGastos = new GastoViajeViewModel();
             NewGastos.TipoGasto = tipoGasto.Where(x=>x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
@@ -69,7 +69,7 @@ namespace SAV.Models
             AdicionalCoductor.TipoAdicional = tipoAdicional.Where(x => x.Habilitado).Select(y => new KeyValuePair<int, string>(y.ID, y.Descripcion)).ToList();
         }
 
-        public DetailsViajeViewModel(Viaje viaje, bool cierre = false)
+        public DetailsViajeViewModel(Viaje viaje, Configuracion configuracion, bool cierre = false)
         {
             DatosBasicosViaje = new ViajeViewModel();
 
@@ -78,7 +78,7 @@ namespace SAV.Models
             if(cierre)
                 Pasajero = ViajeHelper.getPasajerosViajeCerrado(viaje.ClienteViaje, viaje.Asientos, 1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             else
-                Pasajero = ViajeHelper.getPasajerosViajeAbierto(viaje.ClienteViaje, viaje.Asientos, 1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+                Pasajero = ViajeHelper.getPasajerosViajeAbierto(viaje.ClienteViaje, viaje.Asientos, 1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]), configuracion);
 
             Gastos = viaje.Gastos.ToPagedList<Gasto>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             AdicionalesCoductor = viaje.AdicionalConductor.ToPagedList<AdicionalConductor>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));

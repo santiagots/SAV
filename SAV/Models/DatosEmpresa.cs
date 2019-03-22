@@ -15,7 +15,5 @@ namespace SAV.Models
         public string ContrtanteCuit { get; set; }
         public string ContratanteDenominacion { get; set; }
         public virtual Domicilio ContratanteDomicilio { get; set; }
-
-        public string aa { get; set; }
     }
 }

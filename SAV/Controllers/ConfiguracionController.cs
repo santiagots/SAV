@@ -19,7 +19,7 @@ namespace SAV.Controllers
         private SAVContext db = new SAVContext();
         public ActionResult Details()
         {
-            DatosEmpresa configuracion = db.Configuracion.FirstOrDefault();
+            DatosEmpresa configuracion = db.DatosEmpresa.FirstOrDefault();
             List<Provincia> Provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> Localidades = db.Localidades.ToList<Localidad>();
             DetailsDatosEmpresaViewModel detailsDatosEmpresaViewModel;
@@ -35,7 +35,7 @@ namespace SAV.Controllers
         [HttpPost]
         public ActionResult Details(DetailsDatosEmpresaViewModel detailsDatosEmpresaViewModel)
         {
-            DatosEmpresa configuracion = db.Configuracion.FirstOrDefault();
+            DatosEmpresa configuracion = db.DatosEmpresa.FirstOrDefault();
             List<Provincia> Provincias = db.Provincias.ToList<Provincia>();
             List<Localidad> Localidades = db.Localidades.ToList<Localidad>();
 
@@ -50,7 +50,7 @@ namespace SAV.Controllers
                 configuracion.Domicilio = new Domicilio();
                 configuracion.ContratanteDomicilio = new Domicilio();
                 configuracion = DetailsDatosEmpresaViewModel.getConfiguracion(detailsDatosEmpresaViewModel, configuracion, Provincias, Localidades);
-                db.Configuracion.Add(configuracion);
+                db.DatosEmpresa.Add(configuracion);
             }
             db.SaveChanges();
 
