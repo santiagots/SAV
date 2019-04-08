@@ -14,12 +14,7 @@ namespace SAV.Models
         public string apellido { get; set; }
         public string sexo { get; set; }
         public string menor { get; set; }
-        public string origen { get; set; }
-        public string provincia_origen { get; set; }
-        public string destino { get; set; }
-        public string provincia_destino { get; set; }
         public string nacionalidad { get; set; }
-        public int numero_butaca { get; set; }
-        public int numero_boleto { get; set; }
+        public string tripulante { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace SAV.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Numero de Documento:")]
-        public string DNI { get; set; }
+        public string NumeroDocumento { get; set; }
 
         [Display(Name = "Telefono:")]
         public string Telefono { get; set; }

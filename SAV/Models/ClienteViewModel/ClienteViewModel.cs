@@ -24,10 +24,14 @@ namespace SAV.Models
         [RegularExpression("^[A-Za-z ÑÁÉÍÓÚñáéíóú]+$", ErrorMessage = "El Apellido solo debe contener letras")]
         public string Apellido { get; set; }
 
-        [Display(Name = "DNI:")]
-        [Required(ErrorMessage = "Debe ingresar un DNI")]
+        [Display(Name = "Tipo de Documento:")]
+        [Required(ErrorMessage = "Debe ingresar un Tipo de Documento")]
+        public TipoDocumento TipoDocumento { get; set; }
+
+        [Display(Name = "N° de Documento:")]
+        [Required(ErrorMessage = "Debe ingresar un N° de Documento")]
         [RegularExpression("^(?!^0+$)[a-zA-Z0-9]{6,10}$", ErrorMessage = "El DNI o Pasaporte solo debe contener numeros y letras de entre 6 y 10 caracteres")]
-        public string DNI { get; set; }
+        public string NumeroDocumento { get; set; }
 
         [Display(Name = "Edad:")]
         [Required(ErrorMessage = "Debe ingresar una Edad")]
@@ -38,8 +42,10 @@ namespace SAV.Models
         public Sexo? Sexo { get; set; }
 
         [Display(Name = "Nacionalidad:")]
-        [Required(ErrorMessage = "Debe ingresar una Nacionalidad")]
-        public string Nacionalidad { get; set; }
+        public List<KeyValuePair<string, string>> Nacionalidad { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar un Nacionalidad")]
+        public string SelectNacionalidad { get; set; }
 
         public IPagedList Domicilios { get; set; }
 
@@ -118,12 +124,20 @@ namespace SAV.Models
 
         public ClienteViewModel() : base()
         {
-            Nacionalidad = "Argentino";
+            SelectNacionalidad = "AR";
             Domicilios = new List<Domicilio>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, List<FormaPago> formaPagos, string vendedor)
+        public ClienteViewModel(List<Nacionalidad> Nacionalidades) : base()
+        {
+            Nacionalidad = Nacionalidades.Select(x => new KeyValuePair<string, string>(x.Codigo, x.Descripcion)).ToList();
+            SelectNacionalidad = "AR";
+            Domicilios = new List<Domicilio>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+        }
+
+        public ClienteViewModel(List<Nacionalidad> Nacionalidades, Viaje viaje, List<FormaPago> formaPagos, string vendedor)
         {
             DomicilioAscenso = new List<KeyValuePair<int, string>>();
             DomicilioDescenso = new List<KeyValuePair<int, string>>();
@@ -149,14 +163,15 @@ namespace SAV.Models
             }
 
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
-            Nacionalidad = "Argentino";
+            SelectNacionalidad = "AR";
+            Nacionalidad = Nacionalidades.Select(x => new KeyValuePair<string, string>(x.Codigo, x.Descripcion)).ToList();
             Domicilios = new List<Domicilio>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
             FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
             VendedorAlta = vendedor;
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Cliente cliente, List<FormaPago> formaPagos)
+        public ClienteViewModel(List<Nacionalidad> Nacionalidades, Cliente cliente, List<FormaPago> formaPagos)
         {
             Id = cliente.ID;
             Apellido = cliente.Apellido;
@@ -164,13 +179,15 @@ namespace SAV.Models
             Telefono = cliente.Telefono;
             TelefonoAlternativo = cliente.TelefonoAlternativo;
             Email = cliente.Email;
-            DNI = cliente.DNI.ToString();
+            TipoDocumento = cliente.TipoDocumento;
+            NumeroDocumento = cliente.NumeroDocumento;
             Estudiante = cliente.Estudiante;
             Sexo = cliente.Sexo;
             Edad = cliente.Edad;
-            Nacionalidad = cliente.Nacionalidad;
+            SelectNacionalidad = cliente.Nacionalidad;
             FormaPago = formaPagos.Select(x => new KeyValuePair<int, string>(x.ID, x.Descripcion)).ToList();
             Domicilios = cliente.Domicilios.ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
+            Nacionalidad = Nacionalidades.Select(x => new KeyValuePair<string, string>(x.Codigo, x.Descripcion)).ToList();
 
             if (cliente.ClienteViaje == null)
                 Viajes = new List<ClienteViaje>().ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
@@ -178,7 +195,7 @@ namespace SAV.Models
                 Viajes = cliente.ClienteViaje.Where(x => x.Viaje != null && x.Viaje.Estado == ViajeEstados.Cerrado).ToPagedList<ClienteViaje>(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
         }
 
-        public ClienteViewModel(List<Provincia> provincias, Viaje viaje, Cliente cliente, List<ClienteViaje> viajesDelDia, List<FormaPago> formaPagos, String vendedor) : this(provincias, cliente, formaPagos)
+        public ClienteViewModel(List<Nacionalidad> Nacionalidades, Viaje viaje, Cliente cliente, List<ClienteViaje> viajesDelDia, List<FormaPago> formaPagos, String vendedor) : this(Nacionalidades, cliente, formaPagos)
         {
             FechaSalida = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm");
 

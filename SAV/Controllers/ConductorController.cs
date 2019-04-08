@@ -77,12 +77,12 @@ namespace SAV.Controllers
 
             ViewBag.nombre = searchConductorViewModel.Nombre;
             ViewBag.apellido = searchConductorViewModel.Apellido;
-            ViewBag.dni = searchConductorViewModel.DNI;
+            ViewBag.NumeroDocumento = searchConductorViewModel.NumeroDocumento;
             ViewBag.telefono = searchConductorViewModel.Telefono;
 
             List<Conductor> conductores = db.Conductores.ToList<Conductor>();
 
-            conductores = ConductorHelper.searchCondictores(conductores, searchConductorViewModel.Apellido, searchConductorViewModel.Nombre, searchConductorViewModel.DNI, searchConductorViewModel.Telefono);
+            conductores = ConductorHelper.searchCondictores(conductores, searchConductorViewModel.Apellido, searchConductorViewModel.Nombre, searchConductorViewModel.NumeroDocumento, searchConductorViewModel.Telefono);
 
             conductores = conductores.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList<Conductor>();
 
@@ -91,16 +91,16 @@ namespace SAV.Controllers
             return View(searchConductorViewModel);
         }
 
-        public ActionResult SearchPagingConductores(int? pageNumber, string apellido, string nombre, string dni, string telefono)
+        public ActionResult SearchPagingConductores(int? pageNumber, string apellido, string nombre, string numeroDocumento, string telefono)
         {
             ViewBag.nombre = nombre;
             ViewBag.apellido = apellido;
-            ViewBag.dni = dni;
+            ViewBag.NumeroDocumento = numeroDocumento;
             ViewBag.telefono = telefono;
 
             List<Conductor> conductores = db.Conductores.ToList<Conductor>();
 
-            conductores = ConductorHelper.searchCondictores(conductores, apellido, nombre, dni, telefono);
+            conductores = ConductorHelper.searchCondictores(conductores, apellido, nombre, numeroDocumento, telefono);
 
             conductores = conductores.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList<Conductor>();
 

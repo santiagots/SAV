@@ -111,7 +111,7 @@
                 </div>
                 <div class="boton">
                     <div class="inicioBotonGris"></div>
-                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar CNRT" onclick="abrirModal('@Url.Action("ProgramacionTuristica", new { id = Model.DatosBasicosViaje.viajeID })')"></input>
+                    <input id="exportar" class="centroBotonGris" type="button" value="Exportar CNRT" onclick="location.href='@Url.Action("ExportViajeCNRT", new { id = Model.DatosBasicosViaje.viajeID })'"></input>
                     <div class="finBotonGris"></div>
                 </div>
                 <div class="boton">

@@ -26,7 +26,7 @@ namespace SAV.Controllers
             ViewBag.Servicio = clienteViaje.Viaje.Servicio == ViajeTipoServicio.Directo? "Turismo": clienteViaje.Viaje.Servicio.ToString();
             ViewBag.Apellido = clienteViaje.Cliente.Apellido;
             ViewBag.Nombre = clienteViaje.Cliente.Nombre;
-            ViewBag.DNI = clienteViaje.Cliente.DNI;
+            ViewBag.NumeroDocumento = clienteViaje.Cliente.NumeroDocumento;
             ViewBag.Origen = clienteViaje.Viaje.Servicio == ViajeTipoServicio.Cerrado? clienteViaje.Viaje.OrigenCerrado : clienteViaje.Viaje.Origen.Nombre;
             ViewBag.Destino = clienteViaje.Viaje.Servicio == ViajeTipoServicio.Cerrado ? clienteViaje.Viaje.DestinoCerrado : clienteViaje.Viaje.Destino.Nombre;
             ViewBag.FechaPago = clienteViaje.FechaPago.HasValue ? clienteViaje.FechaPago.Value.ToString("dd/MM/yyyy") : "SIN PAGO";
@@ -60,7 +60,7 @@ namespace SAV.Controllers
         {
             ViewBag.nombre = searchClienteViewModel.Nombre;
             ViewBag.apellido = searchClienteViewModel.Apellido;
-            ViewBag.dni = searchClienteViewModel.DNI;
+            ViewBag.NumeroDocumento = searchClienteViewModel.NumeroDocumento;
             ViewBag.telefono = searchClienteViewModel.Telefono;
 
             if (IdViaje.HasValue)
@@ -71,7 +71,7 @@ namespace SAV.Controllers
 
             List<Cliente> cliente = db.Clientes.ToList<Cliente>();
 
-            cliente = ClienteHelper.searchClientes(cliente, searchClienteViewModel.Apellido, searchClienteViewModel.Nombre, searchClienteViewModel.DNI, searchClienteViewModel.Telefono);
+            cliente = ClienteHelper.searchClientes(cliente, searchClienteViewModel.Apellido, searchClienteViewModel.Nombre, searchClienteViewModel.NumeroDocumento, searchClienteViewModel.Telefono);
 
             cliente = cliente.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList<Cliente>();
 
@@ -82,13 +82,14 @@ namespace SAV.Controllers
 
         public ActionResult Create(int? id, int? IdViaje, int? NumeroAsiento)
         {
-            ClienteViewModel clienteViewModel = new ClienteViewModel();
+            List<Nacionalidad> nacionalidades = db.Nacionalidad.ToList();
+            ClienteViewModel clienteViewModel = new ClienteViewModel(nacionalidades);
 
             //si no hay ID quiere decir que es un cliete nuevo por lo que tengo que forzar la creacion en la DB de uno para poder vincularle los domicilios
             if (!id.HasValue)
             {
                 Cliente cliente = new Cliente();
-                cliente = db.Clientes.FirstOrDefault(x => x.Nombre == null && x.Apellido == null && x.DNI == null && DbFunctions.DiffDays(x.FechaCreacion, DateTime.Now).Value > 5);
+                cliente = db.Clientes.FirstOrDefault(x => x.Nombre == null && x.Apellido == null && x.NumeroDocumento == null && DbFunctions.DiffDays(x.FechaCreacion, DateTime.Now).Value > 5);
                 if (cliente == null)
                 {
                     cliente = new Cliente() { FechaCreacion = DateTime.Now };
@@ -116,9 +117,8 @@ namespace SAV.Controllers
                 ViewBag.IdViaje = IdViaje.Value;
                 ViewBag.NumeroAsiento = NumeroAsiento;
                 Viaje viaje = db.Viajes.Find(IdViaje);
-                List<Provincia> provincias = db.Provincias.ToList();
 
-                clienteViewModel = new ClienteViewModel(provincias, viaje, formaPagos, User.Identity.Name.ToUpper());
+                clienteViewModel = new ClienteViewModel(nacionalidades, viaje, formaPagos, User.Identity.Name.ToUpper());
                 ViewBag.Servicio = viaje.Servicio;
             }
 
@@ -136,11 +136,12 @@ namespace SAV.Controllers
                 Configuracion configuracion = db.Configuracion.First();
 
                 cliente.Apellido = clienteViewModel.Apellido;
-                cliente.DNI = clienteViewModel.DNI;
+                cliente.TipoDocumento = clienteViewModel.TipoDocumento;
+                cliente.NumeroDocumento = clienteViewModel.NumeroDocumento;
                 cliente.Edad = clienteViewModel.Edad.Value;
                 cliente.Email = clienteViewModel.Email;
                 cliente.Estudiante = clienteViewModel.Estudiante;
-                cliente.Nacionalidad = clienteViewModel.Nacionalidad;
+                cliente.Nacionalidad = clienteViewModel.SelectNacionalidad;
                 cliente.Nombre = clienteViewModel.Nombre;
                 cliente.Sexo = clienteViewModel.Sexo.Value;
                 cliente.Telefono = clienteViewModel.Telefono;
@@ -193,8 +194,10 @@ namespace SAV.Controllers
             ViewBag.From = From;
 
             Cliente cliente = db.Clientes.Find(id);
-            ClienteViewModel clienteViewModel = new ClienteViewModel();
-            List<Provincia> Provincias = db.Provincias.ToList<Provincia>();
+            List<Nacionalidad> nacionalidades = db.Nacionalidad.ToList();
+
+            ClienteViewModel clienteViewModel = new ClienteViewModel(nacionalidades);
+            List<Nacionalidad> Nacionalidades = db.Nacionalidad.ToList<Nacionalidad>();
             List<FormaPago> formaPagos = db.FormaPago.Where(x => x.Habilitado).ToList();
 
             if (error.HasValue)
@@ -210,10 +213,10 @@ namespace SAV.Controllers
                 Viaje viaje = db.Viajes.Find(idViaje);
                 ViewBag.Servicio = viaje.Servicio;
                 List<ClienteViaje> viajesDelDia = db.ClienteViajes.Where(x => x.Cliente.ID == cliente.ID && x.Viaje.ID != viaje.ID && EntityFunctions.TruncateTime(x.Viaje.FechaSalida) == EntityFunctions.TruncateTime(viaje.FechaSalida)).ToList();
-                clienteViewModel = new ClienteViewModel(Provincias, viaje, cliente, viajesDelDia, formaPagos, User.Identity.Name.ToUpper());
+                clienteViewModel = new ClienteViewModel(Nacionalidades, viaje, cliente, viajesDelDia, formaPagos, User.Identity.Name.ToUpper());
             }
             else
-                clienteViewModel = new ClienteViewModel(Provincias, cliente, formaPagos);
+                clienteViewModel = new ClienteViewModel(Nacionalidades, cliente, formaPagos);
 
             return View("Create", clienteViewModel);
         }
@@ -228,11 +231,12 @@ namespace SAV.Controllers
             Configuracion configuracion = db.Configuracion.First();
             Cliente cliente = db.Clientes.Find(id);
             cliente.Apellido = clienteViewModel.Apellido;
-            cliente.DNI = clienteViewModel.DNI;
+            cliente.TipoDocumento = clienteViewModel.TipoDocumento;
+            cliente.NumeroDocumento = clienteViewModel.NumeroDocumento;
             cliente.Edad = clienteViewModel.Edad.Value;
             cliente.Email = clienteViewModel.Email;
             cliente.Estudiante = clienteViewModel.Estudiante;
-            cliente.Nacionalidad = clienteViewModel.Nacionalidad;
+            cliente.Nacionalidad = clienteViewModel.SelectNacionalidad;
             cliente.Nombre = clienteViewModel.Nombre;
             cliente.Sexo = clienteViewModel.Sexo.Value;
             cliente.Telefono = clienteViewModel.Telefono;
@@ -332,7 +336,7 @@ namespace SAV.Controllers
                 return RedirectToAction("Details", "Viaje", new { id = idViaje });
         }
 
-        public ActionResult DeleteCliente(int id, string apellido, string nombre, string dni, string telefono, int? IdViaje)
+        public ActionResult DeleteCliente(int id, string apellido, string nombre, string numeroDocumento, string telefono, int? IdViaje)
         {
             Cliente cliente = db.Clientes.Find(id);
 
@@ -348,7 +352,7 @@ namespace SAV.Controllers
 
             ViewBag.nombre = nombre;
             ViewBag.apellido = apellido;
-            ViewBag.dni = dni;
+            ViewBag.numeroDocumento = numeroDocumento;
             ViewBag.telefono = telefono;
 
             if (IdViaje.HasValue)
@@ -356,12 +360,12 @@ namespace SAV.Controllers
 
             searchClienteViewModel.Apellido = ViewBag.apellido;
             searchClienteViewModel.Nombre = ViewBag.nombre;
-            searchClienteViewModel.DNI = ViewBag.dni;
+            searchClienteViewModel.NumeroDocumento = ViewBag.NumeroDocumento;
             searchClienteViewModel.Telefono = ViewBag.telefono;
 
             List<Cliente> clientes = db.Clientes.ToList<Cliente>();
 
-            clientes = ClienteHelper.searchClientes(clientes, ViewBag.apellido, ViewBag.nombre, ViewBag.dni, ViewBag.telefono);
+            clientes = ClienteHelper.searchClientes(clientes, ViewBag.apellido, ViewBag.nombre, ViewBag.NumeroDocumento, ViewBag.telefono);
 
             clientes = clientes.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList<Cliente>();
 
@@ -394,11 +398,11 @@ namespace SAV.Controllers
                 return PartialView("_Registro", new List<RegistroViaje>().ToPagedList(pageNumber.Value, int.Parse(ConfigurationSettings.AppSettings["PageSize"])));
         }
 
-        public ActionResult SearchPagingClientes(int? IdViaje, int? NumeroAsiento, int? pageNumber, string apellido, string nombre, string dni, string telefono)
+        public ActionResult SearchPagingClientes(int? IdViaje, int? NumeroAsiento, int? pageNumber, string apellido, string nombre, string numeroDocumento, string telefono)
         {
             ViewBag.nombre = nombre;
             ViewBag.apellido = apellido;
-            ViewBag.dni = dni;
+            ViewBag.NumeroDocumento = numeroDocumento;
             ViewBag.telefono = telefono;
             ViewBag.NumeroAsiento = NumeroAsiento;
 
@@ -407,7 +411,7 @@ namespace SAV.Controllers
 
             List<Cliente> cliente = db.Clientes.ToList<Cliente>();
 
-            cliente = ClienteHelper.searchClientes(cliente, apellido, nombre, dni, telefono);
+            cliente = ClienteHelper.searchClientes(cliente, apellido, nombre, numeroDocumento, telefono);
 
             cliente = cliente.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList<Cliente>();
 

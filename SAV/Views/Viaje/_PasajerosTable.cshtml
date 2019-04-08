@@ -24,7 +24,7 @@
                             <p>@Html.DisplayNameFor(model => model.First().Apellido) , @Html.DisplayNameFor(model => model.First().Nombre) </p>
                             <span class="ordenamiento"></span></th>
                          <th class="type2 type13">
-                            <p>@Html.DisplayNameFor(model => model.First().DNI)</p>
+                            <p>N° Doc</p>
                             <span class="ordenamiento"></span></th>
                          <th class="type2 type119">
                             <p>@Html.DisplayNameFor(model => model.First().Telefono)</p>
@@ -76,7 +76,7 @@
                                 <p>@Html.DisplayFor(modelItem => item.Apellido) , @Html.DisplayFor(modelItem => item.Nombre)</p>
                             </td>
                             <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type13 waiting">
-                                <p>@Html.DisplayFor(modelItem => item.DNI)</p>
+                                <p>@Html.DisplayFor(modelItem => item.NumeroDocumento)</p>
                             </td>
                             <td onclick="location.href='@Url.Action("Details", "Cliente", new { id = item.ClienteID, idViaje = ViewBag.idViaje, From = "Details" })'" class="type2 type119 waiting">
                                 <p>@Html.DisplayFor(modelItem => item.Telefono) @Html.DisplayFor(modelItem => item.TelefonoAlternativo)</p>

@@ -102,7 +102,7 @@ namespace SAV.Models
         public int ClienteID { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
-        public string DNI { get; set; }
+        public string NumeroDocumento { get; set; }
         public string Ascenso { get; set; }
         public string Descenso { get; set; }
         public string Telefono { get; set; }

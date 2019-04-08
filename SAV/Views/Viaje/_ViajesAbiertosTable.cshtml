@@ -55,7 +55,7 @@
                                     <td class="type6">
                                         <a onclick = "return confirmSpinner('Esta seguro que desea borrar el viaje?');" href="@Url.Action("Delete", new { id = item.ID })" ><span id="Span43" class="action retirar" title="Eliminar"/></a>
                                         <a href="@Url.Action("ExportViaje", new { id = item.ID })" ><span id="Span44" class="action exportar" title="Exportar"/></a>
-                                        <a onclick="Abrir('@Url.Action("ProgramacionTuristica", new { id = item.ID })')"><span id="Span44" class="action exportarCNRT" title="Exportar para CNRT" /></a>
+                                        <a href="@Url.Action("ExportViajeCNRT", new { id = item.ID })"><span id="Span44" class="action exportarCNRT" title="Exportar para CNRT" /></a>
                                     </td>
 						        </tr>
                             }
@@ -87,19 +87,3 @@
 			</div>
 		</div>
     </div>
-
-<script>
-    function Abrir(Url) {
-        var $dialog = $('<div style="overflow: hidden"; "></div>')
-                       .html('<iframe style="border: 0px; " src="' + Url + '" width="100%" height="100%" scrolling="no"></iframe>')
-                       .dialog({
-                           autoOpen: false,
-                           modal: true,
-                           resizable: false,
-                           height: 200,
-                           width: 1010,
-                           title: "Datos programación turística"
-                       });
-        $dialog.dialog('open');
-    }
-</script>

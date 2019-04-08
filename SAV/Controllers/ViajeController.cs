@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -209,43 +209,6 @@ namespace SAV.Controllers
             return View("Search", SearchViaje);
         }
 
-        public ActionResult ProgramacionTuristica(int id = 0)
-        {
-            Viaje viaje = db.Viajes.Find(id);
-            string origen;
-            string destino;
-            if (viaje.Servicio == ViajeTipoServicio.Cerrado)
-            {
-                origen = viaje.OrigenCerrado;
-                destino = viaje.DestinoCerrado;
-            }
-            else
-            {
-                origen = viaje.Origen.Nombre;
-                destino = viaje.Destino.Nombre;
-            }
-
-            ProgramacionTuristicaViewModel ProgramacionTuristicaViewModel = new ProgramacionTuristicaViewModel()
-            {
-                ViajeID = id,
-                ProgramacionTuristica = string.Format(ConfigurationManager.AppSettings["ProgramacionTuristica"], origen.ToUpper(), destino.ToUpper())
-            };
-
-            return View(ProgramacionTuristicaViewModel);
-        }
-
-        [HttpPost]
-        public ActionResult ProgramacionTuristica(ProgramacionTuristicaViewModel programacionTuristicaViewModel)
-        {
-            Viaje viaje = db.Viajes.Find(programacionTuristicaViewModel.ViajeID);
-            viaje.ProgramacionTuristica = programacionTuristicaViewModel.ProgramacionTuristica;
-
-            db.Entry(viaje).State = EntityState.Modified;
-            db.SaveChanges();
-
-            return RedirectToAction("ExportViajeCNRT", new { id = programacionTuristicaViewModel.ViajeID });
-        }
-
         public ActionResult ExportViaje(int id)
         {
             var viaje = db.Viajes.Find(id);
@@ -298,7 +261,7 @@ namespace SAV.Controllers
                     {
                         List<ICell> pasajerosCell = PasajerosSheet.GetRow(PasajerosRow).Cells;
                         pasajerosCell[1].SetCellValue(pasajero.Apellido + " " + pasajero.Nombre);
-                        pasajerosCell[2].SetCellValue(pasajero.DNI);
+                        pasajerosCell[2].SetCellValue(pasajero.NumeroDocumento);
                         pasajerosCell[3].SetCellValue(pasajero.Ascenso);
                         pasajerosCell[4].SetCellValue(pasajero.Descenso);
                         pasajerosCell[5].SetCellValue(string.IsNullOrEmpty(pasajero.TelefonoAlternativo)? pasajero.Telefono : $"{pasajero.Telefono}\n{pasajero.TelefonoAlternativo}");
@@ -310,7 +273,7 @@ namespace SAV.Controllers
                         List<ICell> pasajerosCell = PasajerosSheet.CopyRow(PasajerosRow - 2, PasajerosRow).Cells;
                         pasajerosCell[0].SetCellValue(PasajerosRow - 4);
                         pasajerosCell[1].SetCellValue(pasajero.Apellido + " " + pasajero.Nombre);
-                        pasajerosCell[2].SetCellValue(pasajero.DNI);
+                        pasajerosCell[2].SetCellValue(pasajero.NumeroDocumento);
                         pasajerosCell[3].SetCellValue(pasajero.Ascenso);
                         pasajerosCell[4].SetCellValue(pasajero.Descenso);
                         pasajerosCell[5].SetCellValue(string.IsNullOrEmpty(pasajero.TelefonoAlternativo) ? pasajero.Telefono : $"{pasajero.Telefono}\n{pasajero.TelefonoAlternativo}");
@@ -341,38 +304,11 @@ namespace SAV.Controllers
         {
             var viaje = db.Viajes.Find(id);
             Configuracion configuracion = db.Configuracion.First();
-            var datosEmpresa = db.DatosEmpresa.FirstOrDefault();
-
-            if (datosEmpresa == null)
-            {
-                datosEmpresa = new DatosEmpresa();
-            }
 
             string origen = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Origen.Nombre : viaje.OrigenCerrado;
-            string provinciaOrigen = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Origen.ID)).First().Codigo : viaje.ProvienciaOrigenCerrado.Codigo;
+            //string provinciaOrigen = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Origen.ID)).First().Codigo : viaje.ProvienciaOrigenCerrado.Codigo;
             string destino = viaje.Servicio != ViajeTipoServicio.Cerrado ? viaje.Destino.Nombre : viaje.DestinoCerrado;
-            string provinciaDestino = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Destino.ID)).First().Codigo : viaje.ProvienciaDestinoCerrado.Codigo;
-
-            CNRTViaje cnrtViaje = new CNRTViaje()
-            {
-                fecha_inicio = viaje.FechaSalida.ToString("dd/MM/yyyy HH:mm"),
-                fecha_fin = viaje.FechaArribo.ToString("dd/MM/yyyy HH:mm"),
-                origen = origen,
-                provincia_origen = provinciaOrigen,
-                destino = destino,
-                provincia_destino = provinciaDestino,
-                dominio = viaje.Patente,
-                dominio_suplente = viaje.PatenteSuplente,
-                tripulante_1_cuit = viaje.Conductor.CUIL != null ? viaje.Conductor.CUIL.Replace("-", "") : null,
-                tripulante_1_nombre = viaje.Conductor.Nombre,
-                tripulante_1_apellido = viaje.Conductor.Apellido,
-                tripulante_1_es_chofer = "1",
-                contratante_denominacion = datosEmpresa.ContratanteDenominacion,
-                contenido_programacion_turistica = viaje.ProgramacionTuristica,
-                contratante_cuit = datosEmpresa.ContrtanteCuit != null ? datosEmpresa.ContrtanteCuit.Replace("-", "") : null,
-                contratante_domicilio = (datosEmpresa.ContratanteDomicilio != null) ? string.Format("{0} {1}", datosEmpresa.ContratanteDomicilio.Calle, datosEmpresa.ContratanteDomicilio.Numero) : "",
-                modalidad_prestacion = viaje.ModalidadPrestacion?.Codigo
-            };
+            //string provinciaDestino = viaje.Servicio != ViajeTipoServicio.Cerrado ? db.Provincias.Where(x => x.Localidad.Any(y => y.ID == viaje.Destino.ID)).First().Codigo : viaje.ProvienciaDestinoCerrado.Codigo;
 
             List<CNRTPasajero> cnrtPasajeros = new List<CNRTPasajero>();
             int i = 0;
@@ -382,30 +318,20 @@ namespace SAV.Controllers
                 i++;
                 cnrtPasajeros.Add(new CNRTPasajero()
                 {
-                    tipo_documento = "1",
-                    numero_documento = clienteViaje.Cliente.DNI.ToString(),
-                    nombre = clienteViaje.Cliente.Nombre,
                     apellido = clienteViaje.Cliente.Apellido,
+                    nombre = clienteViaje.Cliente.Nombre,
+                    tipo_documento = clienteViaje.Cliente.TipoDocumento.ToString(),
+                    numero_documento = clienteViaje.Cliente.NumeroDocumento.ToString(),
                     sexo = clienteViaje.Cliente.Sexo == Sexo.Femenino ? "F" : clienteViaje.Cliente.Sexo == Sexo.Masculino ? "M" : "O",
                     menor = clienteViaje.Cliente.Edad == Edad.Menor ? "1" : "0",
-                    origen = origen,
-                    provincia_origen = provinciaOrigen,
-                    destino = destino,
-                    provincia_destino = provinciaDestino,
                     nacionalidad = clienteViaje.Cliente.Nacionalidad,
-                    numero_butaca = configuracion.UtilizarNumeroPasajes? clienteViaje.NumeroAsiento: i,
-                    numero_boleto = clienteViaje.ID
+                    tripulante = "0"
                 });
             }
 
             StringBuilder archivoCVS = new StringBuilder();
 
-            archivoCVS.AppendLine("clase_modalidad");
-            archivoCVS.AppendLine("TU");
-            archivoCVS.Append(ConvertirCVSHelper.ToCsv<CNRTViaje>(";", new List<CNRTViaje>() { cnrtViaje }));
-            archivoCVS.AppendLine("pasajeros_ini");
             archivoCVS.Append(ConvertirCVSHelper.ToCsv<CNRTPasajero>(";", cnrtPasajeros));
-            archivoCVS.AppendLine("pasajeros_fin");
 
             string name = String.Format("CNRT{0}_{1}_{2}_{3}", viaje.ID, origen, destino, viaje.FechaSalida.ToString("dd-MM_HH:mm"));
 

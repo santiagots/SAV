@@ -22,8 +22,16 @@
             </div>
 
             <div class="datosInputs">
-                <p class="edicion obligatorio">@Html.LabelFor(model => model.DNI)<b>(*)</b></p>
-                @Html.TextBoxFor(model => model.DNI)
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.TipoDocumento)<b>(*)</b></p>
+                @Html.DropDownListFor(model => model.TipoDocumento, from c in Enum.GetNames(typeof(SAV.Models.TipoDocumento))
+                                                           select new SelectListItem
+                                                           {
+                                                               Text = c,
+                                                               Value = c
+                                                           }, "Elija una opción")
+
+                <p class="edicion obligatorio">@Html.LabelFor(model => model.NumeroDocumento)<b>(*)</b></p>
+                @Html.TextBoxFor(model => model.NumeroDocumento)
             </div>
 
             <div class="datosInputs">
@@ -54,7 +62,7 @@
 
             <div class="datosInputs">
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Nacionalidad)<b>(*)</b></p>
-                @Html.EditorFor(model => model.Nacionalidad)
+                @Html.DropDownListFor(model => model.SelectNacionalidad, new SelectList(Model.Nacionalidad, "Key", "Value"), "Elija una opción")
 
                 <p class="edicion obligatorio">@Html.LabelFor(model => model.Email)</p>
                 @Html.EditorFor(model => model.Email)
@@ -242,7 +250,7 @@
         <div class="contenidoDatosError">
             <p>@Html.ValidationMessageFor(model => model.Apellido)</p>
             <p>@Html.ValidationMessageFor(model => model.Nombre)</p>
-            <p>@Html.ValidationMessageFor(model => model.DNI)</p>
+            <p>@Html.ValidationMessageFor(model => model.NumeroDocumento)</p>
             <p>@Html.ValidationMessageFor(model => model.Telefono)</p>
             <p>@Html.ValidationMessageFor(model => model.Sexo)</p>
             <p>@Html.ValidationMessageFor(model => model.Edad)</p>

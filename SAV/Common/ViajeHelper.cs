@@ -74,7 +74,7 @@ namespace SAV.Common
                 ClienteID = x.Cliente.ID,
                 Nombre = x.Cliente.Nombre,
                 Apellido = x.Cliente.Apellido,
-                DNI = x.Cliente.DNI,
+                NumeroDocumento = x.Cliente.NumeroDocumento,
                 Telefono = x.Cliente.Telefono,
                 TelefonoAlternativo = x.Cliente.TelefonoAlternativo,
                 Ascenso = getAscenso(x),

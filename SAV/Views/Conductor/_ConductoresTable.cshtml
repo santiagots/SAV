@@ -4,7 +4,7 @@
 
     <div class="alertTablesExtended" id="alertTablesExtended">
 		<div class="seccion">
-             @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingConductores", new { pageNumber = page, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, dni =  ViewBag.dni, telefono =  ViewBag.telefono })
+             @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchPagingConductores", new { pageNumber = page, apellido = ViewBag.apellido, nombre =  ViewBag.nombre, numeroDocumentodni =  ViewBag.NumeroDocumento, telefono =  ViewBag.telefono })
                                                                                                     , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never ,  DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
                                                                                                     , new AjaxOptions() { HttpMethod = "GET",OnBegin="enableSpinner", OnSuccess="disableSpinner", UpdateTargetId = "partialViewConductores" }))
 

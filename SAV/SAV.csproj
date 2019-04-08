@@ -252,7 +252,6 @@
     <Compile Include="Models\ClienteViewModel\ClienteViewModel.cs" />
     <Compile Include="Models\ClienteViewModel\SearchClienteViewModel.cs" />
     <Compile Include="Models\CNRTPasajero.cs" />
-    <Compile Include="Models\CNRTViaje.cs" />
     <Compile Include="Models\Comision.cs" />
     <Compile Include="Models\ComisionResponsable.cs" />
     <Compile Include="Models\ComisionViewModel\PagoComisionViewModel.cs" />
@@ -271,6 +270,7 @@
     <Compile Include="Models\ConfiguracionViewModel\TipoGastoViewModel.cs" />
     <Compile Include="Models\DomicilioViewModel\DomicilioViewModel.cs" />
     <Compile Include="Models\FormaPago.cs" />
+    <Compile Include="Models\Nacionalidad.cs" />
     <Compile Include="Models\RegistroViaje.cs" />
     <Compile Include="Models\TipoAdicionalConductor.cs" />
     <Compile Include="Models\UsuarioViewModel\EditViewModel.cs" />
@@ -554,6 +554,7 @@
     <Content Include="Views\Viaje\_CierreAdicionalConductor.cshtml" />
     <Content Include="Views\Configuracion\TipoAdicionalesConductor.cshtml" />
     <Content Include="Views\Configuracion\_TipoAdicionalesConductorTable.cshtml" />
+    <Content Include="Template\GastoTemplate.xls" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

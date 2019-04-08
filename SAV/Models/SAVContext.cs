@@ -44,6 +44,8 @@ namespace SAV.Models
 
         public DbSet<Pago> Pagos { get; set; }
 
+        public DbSet<Nacionalidad> Nacionalidad { get; set; }
+
         public DbSet<DatosEmpresa> DatosEmpresa { get; set; }
 
         public DbSet<TipoGasto> TipoGasto { get; set; }

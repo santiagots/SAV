@@ -1,9 +1,12 @@
-﻿using PagedList;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using PagedList;
 using SAV.Common;
 using SAV.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -90,6 +93,57 @@ namespace SAV.Controllers
             searchGastoViewModel.Gastos = gasto.OrderByDescending(x => x.ID).ToPagedList(1, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
             return View(searchGastoViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Export(SearchGastoViewModel searchGastoViewModel)
+        {
+
+            IQueryable<Gasto> gastoQueryable = db.Gastos.AsQueryable<Gasto>();
+            List<Gasto> gastos = GastoHelper.searchComisionGasto(gastoQueryable, searchGastoViewModel.Comentario, ComisionHelper.getFecha(searchGastoViewModel.Fecha), ComisionHelper.getMonto(searchGastoViewModel.Monto), searchGastoViewModel.SelectTipoGasto, searchGastoViewModel.SelectUsuarioAlta, searchGastoViewModel.SelectConcepto);
+
+            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Template/GastoTemplate.xls");
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+
+            HSSFWorkbook tamplateWorckbook = new HSSFWorkbook(fs, true);
+
+            ISheet gastosSheet = tamplateWorckbook.GetSheetAt(0);
+
+            ICellStyle style = tamplateWorckbook.CreateCellStyle();
+            style.BorderBottom = BorderStyle.Medium;
+            style.BorderLeft = BorderStyle.Medium;
+            style.BorderRight = BorderStyle.Medium;
+            style.BorderTop = BorderStyle.Medium;
+
+            int gastoRow = 3;
+
+            foreach (Gasto gasto in gastos)
+            {
+                IRow row = gastosSheet.CreateRow(gastoRow);
+                row.CreateCell(0).SetCellValue(gasto.FechaAlta.ToString("dd/MM/yy"));
+                row.Cells[0].CellStyle = style;
+                row.CreateCell(1).SetCellValue(gasto.ID);
+                row.Cells[1].CellStyle = style;
+                row.CreateCell(2).SetCellValue(gasto.Concepto.ToString());
+                row.Cells[2].CellStyle = style;
+                row.CreateCell(3).SetCellValue(gasto.TipoGasto.Descripcion);
+                row.Cells[3].CellStyle = style;
+                row.CreateCell(4).SetCellValue(gasto.Comentario);
+                row.Cells[4].CellStyle = style;
+                row.CreateCell(5).SetCellValue(gasto.Monto.ToString("C"));
+                row.Cells[5].CellStyle = style;
+                gastoRow++;
+            }
+
+            IRow rowTotal = gastosSheet.CreateRow(gastoRow);
+            rowTotal.CreateCell(5).SetCellValue(gastos.Sum(x => x.Monto).ToString("C"));
+
+            MemoryStream ms = new MemoryStream();
+
+            tamplateWorckbook.Write(ms);
+
+            return File(ms.ToArray(), "application/vnd.ms-excel", "Gastos.xls");
         }
 
         public ActionResult DeleteGasto(int id)
