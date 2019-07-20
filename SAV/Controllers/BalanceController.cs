@@ -191,7 +191,7 @@ namespace SAV.Controllers
             else
             {
                 List<FormaPago> FormasPago = db.FormaPago.ToList();
-                DateTime fechaHasta = ViajeHelper.getFecha(balanceComisionDiarioViewModel.FechaHasta);
+                DateTime fechaHasta = ViajeHelper.getFecha(fechaHastaBusqueda);
                 List<Comision> Comisiones = db.Comisiones.Where(x => x.CuentaCorriente == null && x.Pago && x.FechaPago.HasValue && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaPago).Value.CompareTo(fechaHasta) <= 0).ToList();
                 List<CuentaCorriente> CuentasCorrientePagos = db.CuentaCorriente.Include(x => x.Pagos).Where(x => x.Pagos.Any(y => DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fecha.Date) >= 0 && DbFunctions.TruncateTime(y.Fecha).Value.CompareTo(fechaHasta.Date) <= 0)).ToList();
                 List<Gasto> comisionGastos = db.Gastos.Where(x => x.viaje == null && x.Concepto == ConceptoGasto.Comision && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fecha) >= 0 && DbFunctions.TruncateTime(x.FechaAlta).Value.CompareTo(fechaHasta) <= 0).ToList<Gasto>();

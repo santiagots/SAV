@@ -26,7 +26,13 @@ namespace SAV.Models
         public string Monto { get; set; }
 
         [Display(Name = "Fecha Alta:")]
-        public string Fecha { get; set; }
+        public string FechaAlta { get; set; }
+
+        [Display(Name = "Fecha Desde:")]
+        public string FechaDesde { get; set; }
+
+        [Display(Name = "Fecha Hasta:")]
+        public string FechaHasta { get; set; }
 
         [Display(Name = "Usuario Alta:")]
         public List<KeyValuePair<string, string>> UsuarioAlta { get; set; }

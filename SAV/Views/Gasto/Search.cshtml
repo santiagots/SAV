@@ -32,8 +32,16 @@
             <p class="edicion">@Html.LabelFor(model => model.UsuarioAlta)</p>
             @Html.DropDownListFor(model => model.SelectUsuarioAlta, new SelectList(Model.UsuarioAlta, "Key", "Value"), "Elija una opción")
 
-            <p class="edicion">@Html.LabelFor(model => model.Fecha)</p>
-            @Html.TextBoxFor(model => model.Fecha, new { @class = "fecha", @id = "fecha", @name = "fecha", @readonly = true })
+            <p class="edicion">@Html.LabelFor(model => model.FechaAlta)</p>
+            @Html.TextBoxFor(model => model.FechaAlta, new { @class = "fecha", @id = "fechaAlta", @name = "fechaAlta", @readonly = true })
+        </div>
+
+        <div class="datosInputs">
+            <p class="edicion">@Html.LabelFor(model => model.FechaDesde)</p>
+            @Html.TextBoxFor(model => model.FechaDesde, new { @class = "fecha", @id = "fechaDesde", @name = "fechaDesde", @readonly = true })
+
+            <p class="edicion">@Html.LabelFor(model => model.FechaHasta)</p>
+            @Html.TextBoxFor(model => model.FechaHasta, new { @class = "fecha", @id = "fechaHasta", @name = "fechaHasta", @readonly = true })
         </div>
 
         <div class="botones">
@@ -60,7 +68,7 @@
 }
 
     <div id="gastosTable">
-        @Html.Partial("_GastosTable", Model.Gastos, new ViewDataDictionary { { "descripcion", Model.Comentario }, { "fechaAlta", Model.Fecha }, { "monto", Model.Monto }, { "usuarioAlta", Model.SelectUsuarioAlta }, { "tipoGasto", Model.SelectTipoGasto }, { "concepto", Model.SelectConcepto } })
+        @Html.Partial("_GastosTable", Model.Gastos, new ViewDataDictionary { { "descripcion", Model.Comentario }, { "fechaAlta", Model.FechaAlta }, { "monto", Model.Monto }, { "usuarioAlta", Model.SelectUsuarioAlta }, { "tipoGasto", Model.SelectTipoGasto }, { "concepto", Model.SelectConcepto } })
     </div>
 
     <div id="modal"></div>

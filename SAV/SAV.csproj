@@ -555,6 +555,8 @@
     <Content Include="Views\Configuracion\TipoAdicionalesConductor.cshtml" />
     <Content Include="Views\Configuracion\_TipoAdicionalesConductorTable.cshtml" />
     <Content Include="Template\GastoTemplate.xls" />
+    <Content Include="Views\Comision\_SpendingTable.cshtml" />
+    <Content Include="Views\Comision\Spending.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -395,7 +395,7 @@ namespace SAV.Common
                         {
                             balanceVendedor.Items.Add(new ItemBalanceVendedorViewModel()
                             {
-                                Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", cobro.Cliente.Apellido, cobro.Cliente.Nombre, cobro.Viaje.ID, cobro.Viaje.FechaSalida, cobro.Viaje.Servicio),
+                                Concepto = string.Format("{0} {1} - Cod. {2} Fecha {3}  Serv. {4}", cobro.Cliente.Apellido, cobro.Cliente.Nombre, cobro.Viaje?.ID, cobro.Viaje?.FechaSalida, cobro.Viaje?.Servicio),
                                 Monto = cobro.Costo
                             });
                         }

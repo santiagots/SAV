@@ -1,11 +1,11 @@
 ﻿@using PagedList
 @using PagedList.Mvc
-@model IPagedList<SAV.Models.Gasto>
+@model IPagedList<SAV.Models.ComisionGasto>
 
 <div class="alertTablesExtended" id="alertTablesExtended">
     <div class="seccion">
 
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("GastosPaging", new { descripcion = this.ViewData["descripcion"], fechaAlta = this.ViewData["fechaAlta"], fechaDesde = this.ViewData["fechaDesde"], fechaHasta = this.ViewData["fechaHasta"], monto = this.ViewData["monto"], tipoGasto = this.ViewData["tipoGasto"], usuarioAlta = this.ViewData["usuarioAlta"], concepto = this.ViewData["concepto"], pageNumber = page })
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SpendingPagingComision", new { descripcion = this.ViewData["descripcion"], fechaAlta = this.ViewData["fechaAlta"], monto = this.ViewData["monto"], pageNumber = page })
                                                                     , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions() { DisplayLinkToFirstPage = PagedListDisplayMode.Never, DisplayLinkToLastPage = PagedListDisplayMode.Never, DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded, DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded, DisplayLinkToIndividualPages = false, DisplayPageCountAndCurrentLocation = true, LinkToNextPageFormat = "", LinkToPreviousPageFormat = "", PageCountAndCurrentLocationFormat = "Mostrando Pagina {0} de {1}", }
                                                                     , new AjaxOptions() { HttpMethod = "GET", OnBegin = "enableSpinner", OnSuccess = "disableSpinner", UpdateTargetId = "gastosTable" }))
 
@@ -18,12 +18,9 @@
                 <thead>
                     <tr class="headTitles noBorder">
                         <th class="type2 type5"><p>Numero</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type5"><p>Concepto</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type106"><p>Tipo</p><span class="ordenamiento"></span></th>
+                        <th class="type212"><p>Descripción</p><span class="ordenamiento"></span></th>
                         <th class="type2 type119"><p>Monto</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type119"><p>Usuario Alta</p><span class="ordenamiento"></span></th>
                         <th class="type2 type119"><p>Fecha Alta</p><span class="ordenamiento"></span></th>
-                        <th class="type2 type39"><p>Comentario</p><span class="ordenamiento"></span></th>
                         <th class="type5"></th>
                     </tr>
 
@@ -33,13 +30,10 @@
                     {
                         <tr>
                             <td class="type2 type5"> <p>@Html.DisplayFor(modelItem => item.ID)</p></td>
-                            <td class="type2 type5"> <p>@Html.DisplayFor(modelItem => item.Concepto)</p></td>
-                            <td class="type2 type106"> <p>@Html.DisplayFor(modelItem => item.TipoGasto.Descripcion)</p></td>
+                            <td class="type212"> <p>@Html.DisplayFor(modelItem => item.Descripcion)</p></td>
                             <td class="type2 type119"> <p>@Html.DisplayFor(modelItem => item.Monto)</p></td>
-                            <td class="type2 type119"> <p>@Html.DisplayFor(modelItem => item.UsuarioAlta)</p></td>
                             @{var fecha = item.FechaAlta.ToString("dd/MM/yyyy");}
                             <td class="type2 type119"> <p>@Html.DisplayFor(modelItem => fecha)</p></td>
-                            <td class="type2 type39"> <p>@Html.DisplayFor(modelItem => item.Comentario)</p></td>
                             <td class="type5">
                                 <a onclick="return confirmSpinner('Esta seguro que desea borrar la gasto?');" href="@Url.Action("DeleteGasto", new { id = item.ID })"><span id="Span43" class="action retirar" title="Eliminar" /></a>
                             </td>
