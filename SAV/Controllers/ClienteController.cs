@@ -267,14 +267,14 @@ namespace SAV.Controllers
 
                         db.SaveChanges();
 
-                        return RedirectToAction("Details", new { id = cliente.ID, idViaje = idViaje, error = true, NumeroAsiento = NumeroAsiento});
+                        return RedirectToAction("Details", new { id = cliente.ID, idViaje = idViaje, error = true, NumeroAsiento = NumeroAsiento });
                     }
 
                 }
                 else
                 {
                     RegistroViaje registroViaje = RegistroViajeHelper.GetRegistro(User.Identity.Name.ToUpper(), clienteViaje, newClienteViaje);
-                    if(registroViaje != null)
+                    if (registroViaje != null)
                         clienteViaje.Registro.Add(registroViaje);
 
                     //actualizo la relacion de cliente viaje
@@ -316,7 +316,12 @@ namespace SAV.Controllers
 
             }
             else
+            {
+                db.Entry(cliente).State = EntityState.Modified;
+                db.SaveChanges();
+
                 return RedirectToAction("Search");
+            }
         }
 
         public ActionResult Delete(int id, int idViaje, string from)

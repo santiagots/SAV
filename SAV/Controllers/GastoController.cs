@@ -182,7 +182,7 @@ namespace SAV.Controllers
         {
             IQueryable<Gasto> gastoQueryable = db.Gastos.AsQueryable<Gasto>();
 
-            List<Gasto> gasto = GastoHelper.searchComisionGasto(gastoQueryable, comentario, ComisionHelper.getFecha(fechaAlta), ComisionHelper.getFecha(fechaDesde), ComisionHelper.getFecha(fechaHasta), ComisionHelper.getMonto(monto), tipoGasto, usuarioAlta.ToUpper(), concepto);
+            List<Gasto> gasto = GastoHelper.searchComisionGasto(gastoQueryable, comentario, ComisionHelper.getFecha(fechaAlta), ComisionHelper.getFecha(fechaDesde), ComisionHelper.getFecha(fechaHasta), ComisionHelper.getMonto(monto), tipoGasto, usuarioAlta?.ToUpper(), concepto);
 
             IPagedList<Gasto> comisionesPagos = gasto.OrderByDescending(x => x.ID).ToPagedList<Gasto>(pageNumber, int.Parse(ConfigurationSettings.AppSettings["PageSize"]));
 
@@ -191,7 +191,7 @@ namespace SAV.Controllers
             this.ViewData["fechaDesde"] = fechaDesde;
             this.ViewData["fechaHasta"] = fechaHasta;
             this.ViewData["monto"] = monto;
-            this.ViewData["usuarioAlta"] = usuarioAlta.ToUpper();
+            this.ViewData["usuarioAlta"] = usuarioAlta?.ToUpper();
             this.ViewData["tipoGasto"] = tipoGasto;
             this.ViewData["concepto"] = concepto;
 
